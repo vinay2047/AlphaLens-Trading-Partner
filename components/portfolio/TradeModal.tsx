@@ -88,92 +88,92 @@ const TradeModal = ({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
 
-            <div className="relative z-10 w-full max-w-md mx-4 rounded-2xl border border-gray-600 bg-gray-800 shadow-2xl overflow-hidden">
+            <div className="relative z-10 w-full max-w-md mx-4 rounded-[2xl] border border-gray-800 bg-[#000000] shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
                 {/* Header */}
-                <div className="relative px-6 pt-6 pb-4 border-b border-gray-600/50">
+                <div className="relative px-8 pt-8 pb-5 border-b border-gray-800">
                     <button
                         onClick={onClose}
-                        className="absolute top-4 right-4 p-1 rounded-lg hover:bg-gray-700/50 text-gray-400 hover:text-gray-200 transition-colors"
+                        className="absolute top-6 right-6 p-1.5 rounded-xl hover:bg-gray-900 border border-transparent hover:border-gray-800 text-gray-500 hover:text-white transition-all shadow-sm"
                     >
                         <X className="h-5 w-5" />
                     </button>
-                    <div className="mb-4">
-                        <h2 className="text-xl font-bold text-gray-100">Trade {symbol}</h2>
-                        <p className="text-sm text-gray-400 truncate">{company}</p>
+                    <div className="mb-5">
+                        <h2 className="text-2xl font-bold tracking-tight text-white">Trade {symbol}</h2>
+                        <p className="text-sm font-medium text-gray-500 truncate">{company}</p>
                     </div>
 
                     {/* Buy/Sell tabs */}
-                    <div className="flex bg-gray-700/50 rounded-xl p-1">
+                    <div className="flex bg-gray-900 rounded-[14px] p-1.5 border border-gray-800 shadow-inner">
                         <button
                             onClick={() => setType('BUY')}
                             disabled={!marketOpen}
-                            className={`flex-1 py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-all duration-200 ${
+                            className={`flex-1 py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 text-sm font-bold transition-all duration-200 ${
                                 type === 'BUY'
-                                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                                    : 'text-gray-400 hover:text-gray-300'
+                                    ? 'bg-[#22c55e] text-black shadow-lg shadow-[#22c55e]/30'
+                                    : 'text-gray-500 hover:text-white hover:bg-white/5'
                             } ${!marketOpen ? 'cursor-not-allowed opacity-50' : ''}`}
                         >
                             <TrendingUp className="h-4 w-4" />
-                            Buy
+                            BUY
                         </button>
                         <button
                             onClick={() => setType('SELL')}
                             disabled={!marketOpen}
-                            className={`flex-1 py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-all duration-200 ${
+                            className={`flex-1 py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 text-sm font-bold transition-all duration-200 ${
                                 type === 'SELL'
-                                    ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-                                    : 'text-gray-400 hover:text-gray-300'
+                                    ? 'bg-red-500 text-white shadow-lg shadow-red-500/30'
+                                    : 'text-gray-500 hover:text-white hover:bg-white/5'
                             } ${!marketOpen ? 'cursor-not-allowed opacity-50' : ''}`}
                         >
                             <TrendingDown className="h-4 w-4" />
-                            Sell
+                            SELL
                         </button>
                     </div>
                 </div>
 
-                <div className="px-6 pb-6 pt-4 space-y-4">
+                <div className="px-8 pb-8 pt-5 space-y-5">
                     {/* Current Price */}
-                    <div className="flex items-center justify-between py-2">
-                        <span className="text-sm text-gray-400">Market Price</span>
-                        <span className="text-lg font-bold text-gray-100">${currentPrice.toFixed(2)}</span>
+                    <div className="flex items-center justify-between py-1">
+                        <span className="text-xs uppercase tracking-widest font-bold text-gray-500">Market Price</span>
+                        <span className="text-xl font-bold tracking-tight text-white">${currentPrice.toFixed(2)}</span>
                     </div>
 
                     {/* Info bar */}
-                    <div className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-700/30 border border-gray-600/50">
-                        <span className="text-xs text-gray-500">
-                            {type === 'BUY' ? 'Available' : 'Your Shares'}
+                    <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-900 border border-gray-800 shadow-inner">
+                        <span className="text-xs uppercase tracking-widest font-bold text-gray-500">
+                            {type === 'BUY' ? 'Available Funds' : 'Your Shares'}
                         </span>
-                        <span className="text-sm font-medium text-gray-300">
+                        <span className="text-sm font-extrabold text-white">
                             {type === 'BUY'
-                                ? `$${balance.toLocaleString('en-US', { minimumFractionDigits: 2 })} (max ${maxBuyShares} shares)`
+                                ? `$${balance.toLocaleString('en-US', { minimumFractionDigits: 2 })} (max ${maxBuyShares})`
                                 : `${currentShares} shares`
                             }
                         </span>
                     </div>
 
                     {!marketOpen && (
-                        <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-300">
+                        <div className="rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-xs font-medium text-amber-500">
                             Market is closed. Trading is available Monday to Friday, 9:30 AM to 4:00 PM ET.
                         </div>
                     )}
 
                     {/* Shares input */}
                     <div>
-                        <label className="text-sm font-medium text-gray-400 mb-2 block">Number of Shares</label>
+                        <label className="text-xs uppercase tracking-widest font-bold text-gray-500 mb-2 block ml-1">Order Quantity</label>
                         <input
                             type="number"
                             placeholder="0"
                             value={shares}
                             onChange={(e) => setShares(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-gray-700/50 border border-gray-600 text-gray-200 placeholder:text-gray-600 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500/50 text-lg font-semibold"
+                            className="w-full px-5 py-4 rounded-2xl bg-gray-900 border border-gray-800 text-white placeholder:text-gray-800 focus:border-[#22c55e] focus:outline-none focus:bg-[#000000] text-xl font-black shadow-inner transition-colors"
                             min="1"
                             max={type === 'SELL' ? currentShares : maxBuyShares}
                             disabled={!marketOpen}
                         />
                         {/* Quick fill buttons */}
-                        <div className="flex gap-2 mt-2">
+                        <div className="flex gap-2 mt-3">
                             {type === 'BUY' ? (
                                 <>
                                     {[25, 50, 75, 100].map((pct) => {
@@ -183,7 +183,7 @@ const TradeModal = ({
                                                 key={pct}
                                                 onClick={() => setShares(s.toString())}
                                                 disabled={!marketOpen}
-                                                className="flex-1 py-1.5 text-xs font-medium rounded-lg bg-gray-700/50 border border-gray-600 text-gray-400 hover:text-teal-400 hover:border-teal-500/30 transition-colors"
+                                                className="flex-1 py-1.5 text-xs font-bold rounded-lg bg-gray-900 border border-gray-800 text-gray-500 hover:text-[#22c55e] hover:border-[#22c55e]/50 hover:bg-[#22c55e]/5 transition-all outline-none"
                                             >
                                                 {pct}%
                                             </button>
@@ -199,7 +199,7 @@ const TradeModal = ({
                                                 key={pct}
                                                 onClick={() => setShares(s.toString())}
                                                 disabled={!marketOpen}
-                                                className="flex-1 py-1.5 text-xs font-medium rounded-lg bg-gray-700/50 border border-gray-600 text-gray-400 hover:text-red-400 hover:border-red-500/30 transition-colors"
+                                                className="flex-1 py-1.5 text-xs font-bold rounded-lg bg-gray-900 border border-gray-800 text-gray-500 hover:text-red-500 hover:border-red-500/50 hover:bg-red-500/5 transition-all outline-none"
                                             >
                                                 {pct}%
                                             </button>
@@ -211,9 +211,9 @@ const TradeModal = ({
                     </div>
 
                     {/* Estimated total */}
-                    <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-700/30 border border-gray-600/50">
-                        <span className="text-sm font-medium text-gray-400">Estimated Total</span>
-                        <span className={`text-xl font-bold ${type === 'BUY' ? 'text-amber-400' : 'text-emerald-400'}`}>
+                    <div className="flex items-center justify-between py-5 px-5 rounded-2xl bg-[#000000] border-2 border-gray-900">
+                        <span className="text-xs uppercase tracking-widest font-bold text-gray-500">Estimated Total</span>
+                        <span className={`text-2xl font-black tracking-tight ${type === 'BUY' ? 'text-[#22c55e]' : 'text-white'}`}>
                             ${estimatedTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                     </div>
@@ -222,22 +222,17 @@ const TradeModal = ({
                     <Button
                         onClick={handleTrade}
                         disabled={loading || shareCount <= 0 || !marketOpen}
-                        className={`w-full h-12 font-semibold text-base rounded-xl shadow-lg transition-all duration-200 ${
+                        className={`w-full h-14 font-black tracking-tight text-lg rounded-2xl shadow-xl transition-all duration-300 mt-2 ${
                             type === 'BUY'
-                                ? 'bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-gray-900'
-                                : 'bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 text-white'
+                                ? 'bg-[#22c55e] hover:bg-[#1da850] text-[#000000] shadow-[#22c55e]/20 hover:shadow-[#22c55e]/40 hover:-translate-y-0.5'
+                                : 'bg-red-500 hover:bg-red-600 text-white shadow-red-500/20 hover:shadow-red-500/40 hover:-translate-y-0.5'
                         }`}
                     >
                         {loading ? (
                             <Loader2 className="h-5 w-5 animate-spin" />
                         ) : (
                             <>
-                                {type === 'BUY' ? (
-                                    <TrendingUp className="h-5 w-5 mr-2" />
-                                ) : (
-                                    <TrendingDown className="h-5 w-5 mr-2" />
-                                )}
-                                {type === 'BUY' ? 'Buy' : 'Sell'} {shareCount > 0 ? `${shareCount} Shares` : symbol}
+                                {type === 'BUY' ? 'EXECUTE BUY' : 'EXECUTE SELL'}
                             </>
                         )}
                     </Button>

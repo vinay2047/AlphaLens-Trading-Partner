@@ -114,9 +114,9 @@ const PortfolioPage = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
-                <div className="flex flex-col items-center gap-4">
-                    <Loader2 className="h-10 w-10 text-teal-500 animate-spin" />
-                    <p className="text-gray-400 text-lg">Loading your portfolio...</p>
+                <div className="flex flex-col items-center gap-4 border border-teal-500/20 bg-gray-800/50 p-8 rounded-3xl backdrop-blur-md shadow-[0_0_30px_rgba(16,229,90,0.1)]">
+                    <Loader2 className="h-10 w-10 text-teal-400 animate-spin" />
+                    <p className="text-gray-400 text-lg font-medium">Booting your portfolio...</p>
                 </div>
             </div>
         );
@@ -131,35 +131,38 @@ const PortfolioPage = () => {
     }
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-10 relative">
+             {/* Subtle ambient lighting inner page */}
+             <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-teal-500/5 blur-[120px] rounded-full pointer-events-none mix-blend-screen overflow-hidden"></div>
+
             {/* Header */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-100">Portfolio</h1>
-                    <p className="text-gray-500 mt-1">Manage your AlphaFunds & Holdings</p>
+                    <h1 className="text-4xl font-bold tracking-tight text-white mb-1">Portfolio</h1>
+                    <p className="text-gray-400 font-medium text-lg">Manage your AlphaFunds & Analytics</p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 relative z-10">
                     <Button
                         onClick={() => loadData(true)}
                         disabled={refreshing}
-                        className="bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-xl px-4"
+                        className="bg-[#000000] border border-gray-700 hover:bg-gray-800 text-gray-300 rounded-xl px-4 py-5 transition-colors shadow-none"
                         size="sm"
                     >
-                        <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+                        <RefreshCw className={`h-4 w-4 mr-2 text-teal-400 ${refreshing ? 'animate-spin' : ''}`} />
                         Refresh
                     </Button>
                     <Button
                         onClick={() => setAddFundsOpen(true)}
                         disabled={verifyingDeposit}
-                        className="bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-gray-900 font-semibold rounded-xl px-5 shadow-lg hover:shadow-teal-500/20 transition-all"
+                        className="bg-teal-400 hover:bg-teal-300 text-black font-extrabold rounded-xl px-5 py-5 shadow-[0_0_20px_rgba(16,229,90,0.2)] transition-all"
                         size="sm"
                     >
                         {verifyingDeposit ? (
                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                         ) : (
-                            <Plus className="h-4 w-4 mr-2" />
+                            <Plus className="h-5 w-5 mr-1" />
                         )}
-                        {verifyingDeposit ? 'Verifying Deposit...' : 'Add Funds'}
+                        {verifyingDeposit ? 'Verifying...' : 'Add Funds'}
                     </Button>
                 </div>
             </div>
@@ -169,15 +172,17 @@ const PortfolioPage = () => {
 
             {/* Analytics Charts */}
             {portfolio.holdings.length > 0 && (
-                <PortfolioCharts holdings={portfolio.holdings} />
+                <div className="relative z-10 w-full overflow-hidden">
+                    <PortfolioCharts holdings={portfolio.holdings} />
+                </div>
             )}
 
             {/* Holdings & Transactions */}
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 relative z-10">
                 <div className="xl:col-span-2 space-y-4">
-                    <div className="flex items-center justify-between">
-                        <h2 className="text-xl font-bold text-gray-100">Your Holdings</h2>
-                        <span className="text-sm text-gray-500">{portfolio.holdings.length} stocks</span>
+                    <div className="flex items-center justify-between px-1">
+                        <h2 className="text-2xl font-bold tracking-tight text-white mb-2">Your Holdings</h2>
+                        <span className="text-sm font-medium text-teal-400 bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/20">{portfolio.holdings.length} Active Positions</span>
                     </div>
                     <HoldingsTable holdings={portfolio.holdings} />
 
@@ -190,7 +195,7 @@ const PortfolioPage = () => {
                                     onClick={() => handleSellFromTable(h)}
                                     variant="outline"
                                     size="sm"
-                                    className="bg-gray-700/50 border-gray-600 text-gray-400 hover:text-red-400 hover:border-red-500/30 rounded-lg text-xs"
+                                    className="bg-[#000000] border border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white hover:border-gray-500 rounded-xl text-xs px-4 font-semibold transition-all h-9"
                                 >
                                     Sell {h.symbol}
                                 </Button>
@@ -199,10 +204,10 @@ const PortfolioPage = () => {
                     )}
                 </div>
 
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                        <h2 className="text-xl font-bold text-gray-100">Recent Activity</h2>
-                        <span className="text-sm text-gray-500">{transactions.length} transactions</span>
+                <div className="space-y-6">
+                    <div className="flex items-center justify-between px-1">
+                        <h2 className="text-2xl font-bold tracking-tight text-white mb-2">Activities</h2>
+                        <span className="text-sm font-medium text-gray-400">{transactions.length} Records</span>
                     </div>
                     <TransactionHistory transactions={transactions} />
 
@@ -212,15 +217,16 @@ const PortfolioPage = () => {
             </div>
 
             {/* How to trade info */}
-            <div className="rounded-xl border border-gray-600/50 bg-gradient-to-br from-gray-800 to-gray-800/50 p-6">
-                <div className="flex items-start gap-4">
-                    <div className="p-3 rounded-xl bg-teal-500/10 border border-teal-500/20">
-                        <Search className="h-5 w-5 text-teal-400" />
+            <div className="rounded-[2xl] border border-gray-800 bg-[#000000] p-8 shadow-2xl relative z-10 transition-all hover:border-teal-500/30 group overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="flex items-start gap-5 relative z-10">
+                    <div className="p-4 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-400 shadow-[0_0_15px_rgba(16,229,90,0.15)] mt-1">
+                        <Search className="h-6 w-6 stroke-[2.5px]" />
                     </div>
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-200 mb-1">Want to buy stocks?</h3>
-                        <p className="text-gray-400 text-sm">
-                            Search for any stock using the search bar in the navigation, then visit the stock detail page to buy or sell shares using your AlphaFunds balance.
+                        <h3 className="text-xl font-bold text-white mb-2">Want to discover new assets?</h3>
+                        <p className="text-gray-400 text-base leading-relaxed max-w-3xl">
+                            Search for any stock using the global spotlight search bar. Add it to your watchlist or perform split-second execution directly using your AlphaFunds seamlessly.
                         </p>
                     </div>
                 </div>

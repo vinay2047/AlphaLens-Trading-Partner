@@ -5,26 +5,57 @@ import { connectToDatabase } from "@/database/mongoose";
 import { Portfolio } from "@/database/models/portfolio.model";
 import { Holding } from "@/database/models/holding.model";
 import { Transaction } from "@/database/models/transaction.model";
+import {
+    leaderboardCacheKey,
+    portfolioCacheKey,
+    PORTFOLIO_CACHE_TTL_SECONDS,
+    QUOTE_CACHE_TTL_SECONDS,
+    quoteCacheKey,
+    transactionsCacheKey,
+    TRANSACTIONS_CACHE_TTL_SECONDS,
+} from "@/lib/cache-keys";
+import { deleteCacheKeys, getCacheJson, setCacheJson } from "@/lib/redis-cache";
 
 const FINNHUB_API_KEY = process.env.NEXT_PUBLIC_FINNHUB_API_KEY;
 const FINNHUB_BASE = process.env.FINNHUB_BASE_URL || 'https://finnhub.io/api/v1';
 
 async function getStockPrice(symbol: string): Promise<number> {
+    const normalizedSymbol = symbol.toUpperCase();
+    const cachedPrice = await getCacheJson<number>(quoteCacheKey(normalizedSymbol));
+    if (cachedPrice !== null) {
+        return cachedPrice;
+    }
+
     try {
-        const res = await fetch(`${FINNHUB_BASE}/quote?symbol=${symbol}&token=${FINNHUB_API_KEY}`, {
+        const res = await fetch(`${FINNHUB_BASE}/quote?symbol=${normalizedSymbol}&token=${FINNHUB_API_KEY}`, {
             next: { revalidate: 30 },
         });
         const data = await res.json();
-        return data?.c || 0;
+        const price = data?.c || 0;
+        await setCacheJson(quoteCacheKey(normalizedSymbol), price, QUOTE_CACHE_TTL_SECONDS);
+        return price;
     } catch {
         return 0;
     }
+}
+
+async function invalidatePortfolioCaches(userId: string) {
+    await deleteCacheKeys([
+        portfolioCacheKey(userId),
+        transactionsCacheKey(userId),
+        leaderboardCacheKey(),
+    ]);
 }
 
 export async function getOrCreatePortfolio(): Promise<{ success: boolean; data?: PortfolioData; error?: string }> {
     try {
         const { userId } = await auth();
         if (!userId) return { success: false, error: 'Not authenticated' };
+
+        const cachedPortfolio = await getCacheJson<PortfolioData>(portfolioCacheKey(userId));
+        if (cachedPortfolio) {
+            return { success: true, data: cachedPortfolio };
+        }
 
         await connectToDatabase();
 
@@ -60,16 +91,20 @@ export async function getOrCreatePortfolio(): Promise<{ success: boolean; data?:
         const totalPnL = holdingsWithPrices.reduce((sum, h) => sum + h.pnl, 0);
         const totalPnLPercent = portfolio.totalInvested > 0 ? (totalPnL / portfolio.totalInvested) * 100 : 0;
 
+        const data: PortfolioData = {
+            balance: portfolio.balance,
+            totalInvested: portfolio.totalInvested,
+            holdings: holdingsWithPrices,
+            totalPortfolioValue,
+            totalPnL,
+            totalPnLPercent,
+        };
+
+        await setCacheJson(portfolioCacheKey(userId), data, PORTFOLIO_CACHE_TTL_SECONDS);
+
         return {
             success: true,
-            data: {
-                balance: portfolio.balance,
-                totalInvested: portfolio.totalInvested,
-                holdings: holdingsWithPrices,
-                totalPortfolioValue,
-                totalPnL,
-                totalPnLPercent,
-            },
+            data,
         };
     } catch (e) {
         console.error('getOrCreatePortfolio error:', e);
@@ -81,6 +116,11 @@ export async function getTransactions(): Promise<{ success: boolean; data?: Tran
     try {
         const { userId } = await auth();
         if (!userId) return { success: false, error: 'Not authenticated' };
+
+        const cachedTransactions = await getCacheJson<TransactionData[]>(transactionsCacheKey(userId));
+        if (cachedTransactions) {
+            return { success: true, data: cachedTransactions };
+        }
 
         await connectToDatabase();
 
@@ -100,6 +140,8 @@ export async function getTransactions(): Promise<{ success: boolean; data?: Tran
             status: t.status,
             createdAt: t.createdAt?.toISOString?.() || new Date().toISOString(),
         }));
+
+        await setCacheJson(transactionsCacheKey(userId), data, TRANSACTIONS_CACHE_TTL_SECONDS);
 
         return { success: true, data };
     } catch (e) {
@@ -162,6 +204,8 @@ export async function buyStock(symbol: string, company: string, shares: number):
             status: 'COMPLETED',
         });
 
+        await invalidatePortfolioCaches(userId);
+
         return { success: true };
     } catch (e) {
         console.error('buyStock error:', e);
@@ -219,6 +263,8 @@ export async function sellStock(symbol: string, shares: number): Promise<{ succe
             status: 'COMPLETED',
         });
 
+        await invalidatePortfolioCaches(userId);
+
         return { success: true };
     } catch (e) {
         console.error('sellStock error:', e);
@@ -249,6 +295,8 @@ export async function addFundsToPortfolio(amount: number, stripePaymentId: strin
             status: 'COMPLETED',
         });
 
+        await invalidatePortfolioCaches(userId);
+
         return { success: true };
     } catch (e) {
         console.error('addFundsToPortfolio error:', e);
@@ -260,6 +308,14 @@ export async function getUserHoldingForSymbol(symbol: string): Promise<{ shares:
     try {
         const { userId } = await auth();
         if (!userId) return null;
+
+        const cachedPortfolio = await getCacheJson<PortfolioData>(portfolioCacheKey(userId));
+        if (cachedPortfolio) {
+            const holding = cachedPortfolio.holdings.find((item) => item.symbol === symbol.toUpperCase());
+            if (!holding || holding.shares <= 0) return null;
+
+            return { shares: holding.shares, avgBuyPrice: holding.avgBuyPrice };
+        }
 
         await connectToDatabase();
 
@@ -276,6 +332,11 @@ export async function getPortfolioBalance(): Promise<number> {
     try {
         const { userId } = await auth();
         if (!userId) return 0;
+
+        const cachedPortfolio = await getCacheJson<PortfolioData>(portfolioCacheKey(userId));
+        if (cachedPortfolio) {
+            return cachedPortfolio.balance || 0;
+        }
 
         await connectToDatabase();
 

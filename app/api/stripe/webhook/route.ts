@@ -3,6 +3,8 @@ import { stripe } from '@/lib/stripe';
 import { connectToDatabase } from '@/database/mongoose';
 import { Portfolio } from '@/database/models/portfolio.model';
 import { Transaction } from '@/database/models/transaction.model';
+import { deleteCacheKeys } from '@/lib/redis-cache';
+import { leaderboardCacheKey, portfolioCacheKey, transactionsCacheKey } from '@/lib/cache-keys';
 
 export async function POST(request: NextRequest) {
     const body = await request.text();
@@ -60,6 +62,12 @@ export async function POST(request: NextRequest) {
                     stripePaymentId,
                     status: 'COMPLETED',
                 });
+
+                await deleteCacheKeys([
+                    portfolioCacheKey(userId),
+                    transactionsCacheKey(userId),
+                    leaderboardCacheKey(),
+                ]);
 
                 console.log(`Stripe deposit completed: $${amount} credited to user ${userId}`);
             } catch (error) {
