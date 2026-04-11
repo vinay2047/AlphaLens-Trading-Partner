@@ -14,8 +14,8 @@ import {
 } from 'lucide-react';
 
 export const metadata = {
-    title: 'About Us | OpenStock',
-    description: 'The story behind OpenStock and the Open Dev Society.',
+    title: 'About Us | AlphaLens',
+    description: 'The story behind AlphaLens and the Open Dev Society.',
 };
 
 export default function AboutPage() {
@@ -34,7 +34,7 @@ export default function AboutPage() {
                 </h1>
                 <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-light">
                     We believe financial intelligence shouldn't be locked behind paywalls.
-                    OpenStock is built by the community, for the community.
+                    AlphaLens is built by the community, for the community.
                 </p>
             </section>
 
@@ -65,7 +65,7 @@ export default function AboutPage() {
                 <div className="space-y-6">
                     <h2 className="text-3xl font-bold text-white">The Open Dev Society</h2>
                     <p className="text-gray-400 leading-relaxed text-lg">
-                        OpenStock was born from a simple frustration: why are powerful financial tools so expensive?
+                        AlphaLens was born from a simple frustration: why are powerful financial tools so expensive?
                     </p>
                     <p className="text-gray-400 leading-relaxed text-lg">
                         We are a collective of developers, designers, and financial enthusiasts working under the <span className="text-teal-400 font-semibold">Open Dev Society</span> banner. Our mission is to democratize software by building high-quality, open-source alternatives to proprietary platforms.

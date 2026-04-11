@@ -30,15 +30,15 @@ export default function RootLayout({
             appearance={{
                 variables: {
                     colorPrimary: '#0FEDBE',
-                    colorBackground: '#141414',
-                    colorInputBackground: '#212328',
-                    colorInputText: '#CCDADC',
-                    colorText: '#CCDADC',
-                    colorTextSecondary: '#9095A1',
+                    colorBackground: '#111113',
+                    colorInputBackground: '#1A1A1F',
+                    colorInputText: '#D4D4D8',
+                    colorText: '#D4D4D8',
+                    colorTextSecondary: '#71717A',
                 },
                 elements: {
-                    card: 'bg-gray-900 border-gray-600',
-                    socialButtonsBlockButton: 'bg-gray-800 border-gray-600 text-gray-400',
+                    card: 'bg-gray-800 border-gray-700',
+                    socialButtonsBlockButton: 'bg-gray-700 border-gray-600 text-gray-400',
                 },
             }}
         >

@@ -112,21 +112,21 @@
     --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
-/* === CUSTOM COLOR THEME === */
+/* === AlphaLens Design System === */
 @theme {
-    /* Extended Gray Scale */
-    --color-gray-900: #050505;
-    --color-gray-800: #141414;
-    --color-gray-700: #212328;
-    --color-gray-600: #30333A;
-    --color-gray-500: #9095A1;
-    --color-gray-400: #CCDADC;
+    --color-gray-900: #0A0A0B;
+    --color-gray-800: #111113;
+    --color-gray-700: #1A1A1F;
+    --color-gray-600: #2A2A32;
+    --color-gray-500: #71717A;
+    --color-gray-400: #A1A1AA;
+    --color-gray-300: #D4D4D8;
 
-    /* Vibrant Colors */
     --color-blue-600: #5862FF;
     --color-yellow-400: #FDD458;
     --color-yellow-500: #E8BA40;
     --color-teal-400: #0FEDBE;
+    --color-teal-500: #10D9A6;
     --color-red-500: #FF495B;
     --color-orange-500: #FF8243;
     --color-purple-500: #D13BFF;
@@ -137,28 +137,28 @@
         @apply border-border outline-ring/50;
     }
     body {
-        @apply bg-gray-900 text-foreground;
+        @apply bg-gray-900 text-foreground antialiased;
     }
 }
 
 @layer utilities {
     .container {
-        @apply mx-auto max-w-screen-2xl px-4 md:px-6 lg:px-8;
+        @apply mx-auto max-w-screen-2xl px-4 md:px-6;
     }
     .yellow-btn {
-        @apply h-12 cursor-pointer bg-gradient-to-b from-teal-400 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-gray-800 font-medium text-base rounded-lg shadow-lg disabled:opacity-50;
+        @apply h-10 cursor-pointer bg-gradient-to-b from-teal-400 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-gray-900 font-semibold text-sm rounded-lg disabled:opacity-50;
     }
     .home-wrapper {
-        @apply text-gray-400 flex-col gap-4 md:gap-10 items-center sm:items-start;
+        @apply text-gray-400 flex-col gap-4 md:gap-6 items-center sm:items-start;
     }
     .home-section {
-        @apply w-full gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-3;
+        @apply w-full gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3;
     }
     .header {
-        @apply z-50 w-full h-[70px] bg-gray-800;
+        @apply z-50 w-full h-14 bg-gray-900/80 backdrop-blur-xl border-b border-gray-700/50;
     }
     .header-wrapper {
-        @apply flex justify-between items-center px-6 py-4 text-gray-500;
+        @apply flex justify-between items-center px-4 py-2.5 text-gray-500;
     }
     .auth-layout {
         @apply flex flex-col justify-between lg:flex-row h-screen bg-gray-900 relative overflow-hidden;
@@ -182,19 +182,19 @@
         @apply border-6 border-gray-800 left-0 hidden w-[1024px] h-auto max-w-none lg:block rounded-xl shadow-2xl;
     }
     .form-title {
-        @apply text-4xl font-bold text-gray-400 mb-10;
+        @apply text-3xl font-bold text-gray-100 mb-8;
     }
     .form-label {
         @apply text-sm font-medium text-gray-400;
     }
     .form-input {
-        @apply h-12 px-3 py-3 text-white text-base placeholder:text-gray-600 border-gray-600  rounded-lg focus:!border-teal-500 focus:ring-0 ;
+        @apply h-10 px-3 py-2 text-white text-sm placeholder:text-gray-600 border-gray-600 rounded-lg focus:!border-teal-500 focus:ring-0;
     }
     .select-trigger {
-        @apply w-full !h-12 px-3 py-3 text-base border-gray-600 bg-gray-800 text-white rounded-lg focus:!border-teal-500 focus:ring-0;
+        @apply w-full !h-10 px-3 py-2 text-sm border-gray-600 bg-gray-800 text-white rounded-lg focus:!border-teal-500 focus:ring-0;
     }
     .country-select-trigger {
-        @apply h-12 px-3 py-3 text-base w-full justify-between font-normal border-gray-600 bg-gray-800 text-gray-400 rounded-lg focus:!border-teal-500 focus:ring-0;
+        @apply h-10 px-3 py-2 text-sm w-full justify-between font-normal border-gray-600 bg-gray-800 text-gray-400 rounded-lg focus:!border-teal-500 focus:ring-0;
     }
     .country-select-input {
         @apply !bg-gray-800 text-gray-400 border-0 border-b border-gray-600 rounded-none focus:ring-0 placeholder:text-gray-500;
@@ -206,16 +206,16 @@
         @apply text-white cursor-pointer px-3 py-2 rounded-sm bg-gray-800 hover:!bg-gray-600;
     }
     .footer-link {
-        @apply text-gray-400 font-medium hover:text-teal-400 hover:underline transition-colors;
+        @apply text-gray-500 font-medium hover:text-gray-300 transition-colors;
     }
     .search-text {
-        @apply cursor-pointer hover:text-teal-500;
+        @apply cursor-pointer text-sm text-gray-500 hover:text-gray-300 px-3 py-1.5 rounded-md transition-colors;
     }
     .search-btn {
-        @apply cursor-pointer px-4 py-2 w-fit flex items-center gap-2 text-sm md:text-base bg-teal-500 hover:bg-teal-500 text-black font-medium rounded;
+        @apply cursor-pointer px-3 py-1.5 w-fit flex items-center gap-2 text-sm bg-teal-500/10 border border-teal-500/20 text-teal-400 hover:bg-teal-500/20 rounded-lg;
     }
     .search-dialog {
-        @apply !bg-gray-800 lg:min-w-[800px] border-gray-600 fixed top-10 left-1/2 -translate-x-1/2 translate-y-10;
+        @apply !bg-gray-800 lg:min-w-[700px] border-gray-600 fixed top-10 left-1/2 -translate-x-1/2 translate-y-10;
     }
     .search-field {
         @apply !bg-gray-800 border-b border-gray-600 relative;
@@ -224,266 +224,242 @@
         @apply !bg-gray-800 max-h-[400px];
     }
     .search-list-indicator {
-        @apply px-5 py-2
+        @apply px-5 py-2;
     }
     .search-list-empty {
         @apply py-6 !bg-transparent text-center text-gray-500;
     }
     .search-input {
-        @apply !bg-gray-800 border-0 text-gray-400 placeholder:text-gray-500 focus:ring-0 text-base h-14 pr-10;
+        @apply !bg-gray-800 border-0 text-gray-300 placeholder:text-gray-500 focus:ring-0 text-sm h-12 pr-10;
     }
     .search-loader {
         @apply absolute right-12 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 animate-spin;
     }
     .search-count {
-        @apply py-2 px-4 text-sm font-medium text-gray-400 bg-gray-700 border-b border-gray-700;
+        @apply py-1.5 px-4 text-xs font-medium text-gray-500 bg-gray-700/50 border-b border-gray-700;
     }
     .search-item {
-        @apply rounded-none my-3 px-1 w-full data-[selected=true]:bg-gray-600;
+        @apply rounded-none my-2 px-1 w-full data-[selected=true]:bg-gray-700/50;
     }
     .search-item-link {
-        @apply px-2 w-full cursor-pointer border-b border-gray-600 last:border-b-0 transition-colors flex items-center gap-3;
+        @apply px-2 w-full cursor-pointer border-b border-gray-700/50 last:border-b-0 transition-colors flex items-center gap-3;
     }
     .search-item-name {
-        @apply font-medium text-base text-gray-400;
+        @apply font-medium text-sm text-gray-300;
     }
     .nav-list {
-        @apply flex flex-col sm:flex-row p-2 gap-3 sm:gap-10 font-medium;
+        @apply flex items-center gap-1;
     }
     .stock-details-container {
-        @apply w-full grid-cols-1 gap-6 xl:grid-cols-3 space-y-6 sm:space-y-8;
+        @apply w-full grid-cols-1 gap-4 xl:grid-cols-3 space-y-4 sm:space-y-6;
     }
     .watchlist-btn {
-        @apply bg-teal-500 text-base hover:bg-teal-500 text-gray-900 w-full rounded h-11 font-semibold cursor-pointer;
+        @apply bg-teal-500 text-sm hover:bg-teal-500 text-gray-900 w-full rounded-lg h-9 font-semibold cursor-pointer;
     }
     .watchlist-remove {
         @apply bg-red-500! hover:bg-red-500! text-gray-900!
     }
     .watchlist-empty-container {
-        @apply container gap-8 flex-col items-center md:mt-10 p-6 text-center;
+        @apply container gap-6 flex-col items-center md:mt-10 p-6 text-center;
     }
     .watchlist-empty {
         @apply flex flex-col items-center justify-center text-center;
     }
     .watchlist-star {
-        @apply h-16 w-16 text-gray-500 mb-4;
+        @apply h-12 w-12 text-gray-600 mb-3;
     }
     .empty-title {
-        @apply text-xl font-semibold text-gray-400 mb-2;
+        @apply text-lg font-semibold text-gray-300 mb-1;
     }
     .empty-description {
-        @apply text-gray-500 mb-6 max-w-md;
+        @apply text-gray-500 text-sm mb-4 max-w-sm;
     }
     .watchlist-container {
-        @apply flex flex-col-reverse lg:grid lg:grid-cols-3 gap-8;
+        @apply flex flex-col-reverse lg:grid lg:grid-cols-3 gap-6;
     }
     .watchlist {
-        @apply lg:col-span-2 space-y-8;
+        @apply lg:col-span-2 space-y-6;
     }
     .watchlist-alerts {
-        @apply items-start gap-6 h-full flex-col w-full lg:col-span-1;
+        @apply items-start gap-4 h-full flex-col w-full lg:col-span-1;
     }
     .watchlist-icon-btn {
-        @apply w-fit cursor-pointer hover:bg-transparent! text-gray-400 hover:text-teal-500;
+        @apply w-fit cursor-pointer hover:bg-transparent! text-gray-500 hover:text-teal-400;
     }
     .watchlist-icon-added {
-        @apply !text-teal-500 hover:!text-teal-600;
+        @apply !text-teal-400 hover:!text-teal-500;
     }
     .watchlist-icon {
-        @apply w-8 h-8 rounded-full flex items-center justify-center bg-gray-700/50;
+        @apply w-7 h-7 rounded-full flex items-center justify-center bg-gray-700/50;
     }
     .trash-icon {
-        @apply h-4 w-4 text-gray-400 hover:text-red-400;
+        @apply h-3.5 w-3.5 text-gray-500 hover:text-red-400;
     }
     .star-icon {
-        @apply h-4 w-4;
+        @apply h-3.5 w-3.5;
     }
     .watchlist-title {
-        @apply text-xl md:text-2xl font-bold text-gray-100;
+        @apply text-lg font-bold text-gray-100;
     }
     .watchlist-table {
-        @apply !relative overflow-hidden !w-full bg-gray-800 border !border-gray-600 !rounded-lg;
+        @apply !relative overflow-hidden !w-full bg-gray-800 border !border-gray-700/50 !rounded-xl;
     }
     .table-header-row {
-        @apply text-gray-400 font-medium bg-gray-700 border-b border-gray-600 hover:bg-gray-700;
+        @apply text-gray-500 font-medium text-xs bg-gray-700/30 border-b border-gray-700/50 hover:bg-gray-700/30;
     }
     .table-header:first-child {
         @apply pl-4;
     }
     .table-row {
-        @apply border-b cursor-pointer text-gray-100 border-gray-600 hover:bg-gray-700/50 transition-colors;
+        @apply border-b cursor-pointer text-gray-200 border-gray-700/50 hover:bg-gray-700/20 transition-colors;
     }
     .table-cell {
-        @apply font-medium text-base
+        @apply font-medium text-sm;
     }
     .add-alert {
-        @apply flex text-sm items-center whitespace-nowrap gap-1.5 px-3 w-fit py-2 text-teal-600 border border-teal-600/20 rounded font-medium bg-transparent hover:bg-transparent cursor-pointer transition-colors;
+        @apply flex text-xs items-center whitespace-nowrap gap-1.5 px-3 w-fit py-1.5 text-teal-400 border border-teal-500/20 rounded-lg font-medium bg-transparent hover:bg-teal-500/5 cursor-pointer transition-colors;
     }
     .watchlist-news {
-        @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+        @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3;
     }
     .news-item {
-        @apply bg-gray-800 rounded-lg border w-full border-gray-600  p-4 duration-200 hover:border-gray-600 cursor-pointer;
+        @apply bg-gray-800 rounded-xl border w-full border-gray-700/50 p-4 transition-all hover:border-gray-600 cursor-pointer;
     }
     .news-tag {
-        @apply inline-block w-fit px-2 py-1 mb-5 rounded bg-gray-600/60 text-green-500 text-sm font-mono font-medium;
+        @apply inline-block w-fit px-2 py-0.5 mb-3 rounded-md bg-gray-700/50 text-teal-400 text-xs font-medium;
     }
     .news-title {
-        @apply text-lg  font-semibold text-gray-100 leading-tight mb-3 line-clamp-2;
+        @apply text-sm font-semibold text-gray-200 leading-tight mb-2 line-clamp-2;
     }
     .news-meta {
-        @apply flex items-center text-sm text-gray-500 mb-1;
+        @apply flex items-center text-xs text-gray-500 mb-1;
     }
     .news-summary {
-        @apply text-gray-400 flex-1 text-base leading-relaxed mb-3 line-clamp-3;
+        @apply text-gray-400 text-sm leading-relaxed mb-2 line-clamp-3;
     }
     .news-cta {
-        @apply text-sm align-bottom text-teal-500 hover:text-gray-400;
+        @apply text-xs text-teal-400 hover:text-teal-300;
     }
     .alert-dialog {
-        @apply bg-gray-800 border-gray-600 text-gray-400 max-w-md;
+        @apply bg-gray-800 border-gray-700 text-gray-400 max-w-md;
     }
     .alert-title {
-        @apply text-xl font-semibold text-gray-100;
+        @apply text-base font-semibold text-gray-100;
     }
     .alert-list {
-        @apply overflow-y-auto w-full max-h-[911px] rounded-lg flex border border-gray-600 flex-col gap-4 bg-gray-800 p-3 flex-1;
+        @apply overflow-y-auto w-full max-h-[800px] rounded-xl flex border border-gray-700/50 flex-col gap-3 bg-gray-800 p-3 flex-1;
     }
     .alert-empty {
-        @apply px-6 py-8 text-center text-gray-500/50;
+        @apply px-6 py-8 text-center text-gray-600;
     }
     .alert-item {
-        @apply p-4 rounded-lg bg-gray-700 border border-gray-600;
+        @apply p-3 rounded-lg bg-gray-700/30 border border-gray-700/50;
     }
     .alert-name {
-        @apply mb-2 text-lg text-teal-500 font-semibold;
+        @apply mb-1.5 text-sm text-teal-400 font-semibold;
     }
     .alert-details {
-        @apply flex border-b pb-3 items-center justify-between gap-3 mb-2;
+        @apply flex border-b pb-2 border-gray-700/50 items-center justify-between gap-3 mb-2;
     }
     .alert-company {
-        @apply text-gray-400 text-base;
+        @apply text-gray-400 text-sm;
     }
     .alert-price {
-        @apply text-gray-100 font-bold;
+        @apply text-gray-100 text-sm font-bold;
     }
     .alert-actions {
         @apply flex items-end justify-between;
     }
     .alert-update-btn {
-        @apply text-gray-400 rounded-full bg-transparent hover:bg-green-500/15 cursor-pointer;
+        @apply text-gray-500 rounded-full bg-transparent hover:bg-green-500/10 cursor-pointer;
     }
     .alert-delete-btn {
-        @apply text-gray-400 rounded-full hover:bg-red-600/15 bg-transparent cursor-pointer transition-colors;
+        @apply text-gray-500 rounded-full hover:bg-red-500/10 bg-transparent cursor-pointer transition-colors;
     }
 }
 
-/* Market News Component Styles */
+/* Scrollbar utilities */
 .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
-
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
 
-/* TradingView Advanced Chart Widget Styles */
+/* TradingView Widget Styles */
 .tradingview-widget-container {
     position: relative;
-    background-color: #141414 !important;
-    border-radius: 8px !important;
+    background-color: #111113 !important;
+    border-radius: 12px !important;
     overflow: hidden !important;
 }
-
 .tv-embed-widget-wrapper__body {
-    background-color: #141414 !important;
+    background-color: #111113 !important;
 }
-
 .tradingview-widget-container__widget {
-    background-color: #141414 !important;
+    background-color: #111113 !important;
     height: 100% !important;
-
 }
-
 .widget-stock-heatmap-container .screenerMapWrapper-BBVfGP0b {
     overflow: hidden !important;
-    background: #141414 !important;
-    background-color: #141414 !important;
+    background: #111113 !important;
 }
-
 .canvasContainer-tyaAU8aH {
-    background: #141414 !important;
-    background-color: #141414 !important;
+    background: #111113 !important;
 }
-
 .tv-site-widget--bg_none {
     background-color: transparent !important;
 }
-
 .tradingview-widget-copyright {
-    font-size: 11px;
-    color: #9ca3af;
+    font-size: 10px;
+    color: #71717A;
     text-align: center;
-    padding: 4px 0;
+    padding: 3px 0;
     background-color: transparent;
 }
-
 .tradingview-widget-copyright a {
-    color: #60a5fa;
+    color: #0FEDBE;
     text-decoration: none;
     transition: color 0.2s ease;
 }
-
 .tradingview-widget-copyright a:hover {
-    color: #93c5fd;
-    text-decoration: underline;
+    color: #10D9A6;
 }
-
 .tv-embed-widget-wrapper .tv-embed-widget-wrapper__body {
-    background: #141414 !important;
-    background-color: #141414 !important;
+    background: #111113 !important;
 }
-
 .tradingview-widget-container iframe {
-    background-color: #141414 !important;
+    background-color: #111113 !important;
     width: 100% !important;
 }
-
 .custom-chart.tradingview-widget-container iframe {
-    border: 1px solid #30333A;
-    border-radius: 8px !important;
+    border: 1px solid #1A1A1F;
+    border-radius: 12px !important;
     overflow: hidden !important;
 }
 
-/* Custom scrollbar that shows on hover */
+/* Subtle scrollbar on hover */
 .scrollbar-hide-default {
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
 }
-
 .scrollbar-hide-default::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
-
 .scrollbar-hide-default::-webkit-scrollbar-track {
     background: transparent;
 }
-
 .scrollbar-hide-default::-webkit-scrollbar-thumb {
     background-color: transparent;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+    border-radius: 3px;
 }
-
 .scrollbar-hide-default:hover {
-    scrollbar-color: #30333A transparent;
+    scrollbar-color: #2A2A32 transparent;
 }
-
 .scrollbar-hide-default:hover::-webkit-scrollbar-thumb {
-    background-color: #30333A;
+    background-color: #2A2A32;
 }
-
 .scrollbar-hide-default::-webkit-scrollbar-thumb:hover {
-    background-color: #9095A1;
+    background-color: #71717A;
 }

@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react';
 import { getOrCreatePortfolio, getTransactions } from '@/lib/actions/portfolio.actions';
 import PortfolioSummary from '@/components/portfolio/PortfolioSummary';
+import PortfolioCharts from '@/components/portfolio/PortfolioCharts';
 import HoldingsTable from '@/components/portfolio/HoldingsTable';
 import TransactionHistory from '@/components/portfolio/TransactionHistory';
 import AddFundsModal from '@/components/portfolio/AddFundsModal';
 import TradeModal from '@/components/portfolio/TradeModal';
+import DCAManager from '@/components/portfolio/DCAManager';
 import { Button } from '@/components/ui/button';
 import { Plus, RefreshCw, Search, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -118,6 +120,11 @@ const PortfolioPage = () => {
             {/* Summary Cards */}
             <PortfolioSummary portfolio={portfolio} />
 
+            {/* Analytics Charts */}
+            {portfolio.holdings.length > 0 && (
+                <PortfolioCharts holdings={portfolio.holdings} />
+            )}
+
             {/* Holdings & Transactions */}
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 <div className="xl:col-span-2 space-y-4">
@@ -151,6 +158,9 @@ const PortfolioPage = () => {
                         <span className="text-sm text-gray-500">{transactions.length} transactions</span>
                     </div>
                     <TransactionHistory transactions={transactions} />
+
+                    {/* DCA Auto-Invest Manager */}
+                    <DCAManager />
                 </div>
             </div>
 

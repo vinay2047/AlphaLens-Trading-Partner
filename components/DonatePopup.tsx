@@ -11,9 +11,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { Heart, Github } from 'lucide-react';
 
-const DONATE_POPUP_KEY = 'opendevsociety-donate-popup-dismissed';
-const DONATE_POPUP_DELAY = 3000; // Show after 3 seconds
-const DONATE_POPUP_COOLDOWN = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+const DONATE_POPUP_KEY = 'alphalens-donate-popup-dismissed';
+const DONATE_POPUP_DELAY = 5000;
+const DONATE_POPUP_COOLDOWN = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 const GITHUB_SPONSOR_URL = 'https://github.com/sponsors/ravixalgorithm';
 
@@ -21,27 +21,17 @@ export default function DonatePopup() {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        // Check if user has dismissed popup
         const dismissed = localStorage.getItem(DONATE_POPUP_KEY);
-        
+
         if (dismissed) {
             const dismissedTime = parseInt(dismissed, 10);
-            const now = Date.now();
-            // Show again after cooldown period
-            if (now - dismissedTime < DONATE_POPUP_COOLDOWN) {
-                return;
-            }
+            if (Date.now() - dismissedTime < DONATE_POPUP_COOLDOWN) return;
         }
 
-        // Show popup after delay
-        const timer = setTimeout(() => {
-            setOpen(true);
-        }, DONATE_POPUP_DELAY);
-
+        const timer = setTimeout(() => setOpen(true), DONATE_POPUP_DELAY);
         return () => clearTimeout(timer);
     }, []);
 
-    // Listen for custom event from donate button
     useEffect(() => {
         const handleOpenPopup = () => setOpen(true);
         window.addEventListener('open-donate-popup', handleOpenPopup);
@@ -50,7 +40,6 @@ export default function DonatePopup() {
 
     const handleDismiss = () => {
         setOpen(false);
-        // Store dismissal time
         localStorage.setItem(DONATE_POPUP_KEY, Date.now().toString());
     };
 
@@ -61,45 +50,37 @@ export default function DonatePopup() {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="!bg-gray-800 !border-teal-600/50 text-gray-100 max-w-md mx-4 sm:mx-auto sm:w-full sm:max-w-lg">
+            <DialogContent className="!bg-gray-800 !border-gray-600 text-gray-100 max-w-sm">
                 <DialogHeader>
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="p-2 bg-teal-500/20 rounded-lg">
-                            <Heart className="h-6 w-6 text-teal-400 fill-teal-400" />
+                    <div className="flex items-center gap-2.5 mb-1">
+                        <div className="p-1.5 bg-teal-500/15 rounded-lg">
+                            <Heart className="h-4 w-4 text-teal-400 fill-teal-400" />
                         </div>
-                        <DialogTitle className="text-2xl font-bold text-gray-100">
-                            Keep OpenStock Free
+                        <DialogTitle className="text-lg font-bold text-gray-100">
+                            Support AlphaLens
                         </DialogTitle>
                     </div>
-                    <DialogDescription className="text-gray-400 text-base leading-relaxed pt-2">
-                        Your overwhelming love for OpenStock and Open Dev Society has helped us grow, 
-                        but we're hitting Vercel's free tier limits. 
-                        <br /><br />
-                        Help us keep OpenStock free and accessible for everyone by supporting us on GitHub Sponsors. 
-                        Every contribution, no matter how small, makes a difference! 💙
+                    <DialogDescription className="text-gray-400 text-sm leading-relaxed pt-1">
+                        AlphaLens is free and open-source. Help us keep it running by sponsoring on GitHub.
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                <div className="flex gap-2.5 mt-4">
                     <Button
                         onClick={handleDonate}
-                        className="flex-1 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white font-semibold h-11 transition-all duration-200 transform hover:scale-105"
+                        className="flex-1 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-gray-900 font-semibold h-9 text-sm"
                     >
-                        <Github className="h-4 w-4 mr-2" />
-                        Sponsor on GitHub
+                        <Github className="h-3.5 w-3.5 mr-1.5" />
+                        Sponsor
                     </Button>
                     <Button
                         onClick={handleDismiss}
                         variant="outline"
-                        className="flex-1 border-teal-600/50 text-teal-400 hover:bg-teal-600/10 hover:text-teal-300 h-11 transition-all duration-200"
+                        className="border-gray-600 text-gray-400 hover:bg-gray-700 h-9 text-sm"
                     >
-                        Maybe Later
+                        Later
                     </Button>
                 </div>
-
-                <p className="text-xs text-gray-500 text-center mt-4">
-                    This popup won't appear again for 24 hours after dismissing
-                </p>
             </DialogContent>
         </Dialog>
     );

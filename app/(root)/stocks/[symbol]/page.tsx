@@ -2,6 +2,7 @@ import TradingViewWidget from "@/components/TradingViewWidget";
 import WatchlistButton from "@/components/WatchlistButton";
 import StockSentimentCard from "@/components/stocks/StockSentimentCard";
 import StockTradePanel from "@/components/stocks/StockTradePanel";
+import AIStockAnalysis from "@/components/stocks/AIStockAnalysis";
 import {
     SYMBOL_INFO_WIDGET_CONFIG,
     CANDLE_CHART_WIDGET_CONFIG,
@@ -76,6 +77,9 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
                         balance={balance}
                         currentShares={holding?.shares || 0}
                     />
+
+                    {/* AI Analysis */}
+                    <AIStockAnalysis symbol={symbol.toUpperCase()} />
 
                     <StockSentimentCard insight={sentimentInsights} />
 

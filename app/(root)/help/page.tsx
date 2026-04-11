@@ -10,14 +10,14 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Help Center | OpenStock',
-  description: 'Community-driven support for OpenStock. No paywalls, just help.',
+  title: 'Help Center | AlphaLens',
+  description: 'Community-driven support for AlphaLens. No paywalls, just help.',
 };
 
 export default function HelpPage() {
   const faqs = [
     {
-      question: "Is OpenStock really free forever?",
+      question: "Is AlphaLens really free forever?",
       answer: "Yes! We run on donations and community contribution. Core features (tracking, alerts, analysis) will remain free. We believe financial tools shouldn't be luxury items."
     },
     {
@@ -70,7 +70,7 @@ export default function HelpPage() {
           icon={<Github className="text-white" />}
           title="Report Bugs"
           desc="Found an issue? Let our developers know."
-          link="https://github.com/Open-Dev-Society/OpenStock/issues"
+          link="https://github.com/Open-Dev-Society/AlphaLens/issues"
           linkText="Open Issue"
         />
       </div>
