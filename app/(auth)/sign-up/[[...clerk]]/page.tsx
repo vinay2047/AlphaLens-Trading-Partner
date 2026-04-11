@@ -20,7 +20,7 @@ const SignUpPage = () => {
                                 'h-12 bg-gray-800 border-gray-600 text-gray-400 hover:bg-gray-700 hover:text-teal-400 transition-colors rounded-lg',
                             socialButtonsBlockButtonText: 'text-base font-medium',
                             dividerLine: 'bg-gray-600',
-                            dividerText: 'text-gray-500',
+                            dividerText: 'bg-gray-500',
                             formFieldLabel: 'form-label',
                             formFieldInput: 'form-input bg-transparent',
                             formButtonPrimary:

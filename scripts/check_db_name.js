@@ -15,10 +15,10 @@ async function checkDBs() {
         const conn = await mongoose.createConnection(uri).asPromise();
         console.log("Connected.");
 
-        // Check 'openstock' (current target)
-        const openstockDB = conn.useDb('openstock');
-        const countOpenStock = await openstockDB.collection('user').countDocuments();
-        console.log(`\n📂 Database 'openstock': ${countOpenStock} users`);
+        // Check the AlphaLens database (current target)
+        const alphaLensDB = conn.useDb('openstock');
+        const countAlphaLensUsers = await alphaLensDB.collection('user').countDocuments();
+        console.log(`\n📂 AlphaLens users: ${countAlphaLensUsers}`);
 
         // Check 'test' (default target)
         const testDB = conn.useDb('test');

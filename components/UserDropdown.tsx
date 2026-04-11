@@ -12,11 +12,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LogOut, Briefcase } from "lucide-react";
-import NavItems from "@/components/NavItems";
 import { useClerk } from "@clerk/nextjs";
 import Link from "next/link";
 
-const UserDropdown = ({ user, initialStocks }: {user: User, initialStocks: StockWithWatchlistStatus[]}) => {
+const UserDropdown = ({ user }: {user: User}) => {
     const router = useRouter();
     const { signOut } = useClerk();
 
@@ -70,10 +69,17 @@ const UserDropdown = ({ user, initialStocks }: {user: User, initialStocks: Stock
                     <LogOut className="h-4 w-4 mr-2 hidden sm:block" />
                     Logout
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="block sm:hidden bg-gray-600"/>
-                <nav className="sm:hidden">
-                    <NavItems initialStocks={initialStocks} />
-                </nav>
+                <DropdownMenuSeparator className="bg-gray-600"/>
+                <DropdownMenuItem asChild className="text-gray-100 text-md font-medium focus:bg-transparent focus:text-teal-500 transition-colors cursor-pointer">
+                    <Link href="/watchlist" className="flex items-center">
+                        Watchlist
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="text-gray-100 text-md font-medium focus:bg-transparent focus:text-teal-500 transition-colors cursor-pointer">
+                    <Link href="/" className="flex items-center">
+                        Dashboard
+                    </Link>
+                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )

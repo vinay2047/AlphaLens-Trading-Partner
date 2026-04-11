@@ -1,19 +1,20 @@
 import Link from "next/link";
 import React from "react";
-import Image from "next/image";
+import { Star } from "lucide-react";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
     const { userId } = await auth();
 
-    if (userId) redirect('/');
+    if (userId) redirect('/dashboard');
 
     return (
         <main className="auth-layout">
             <section className="auth-left-section scrollbar-hide-default">
-                <Link href="/" className="auth-logo flex items-center gap-2">
-                    <Image src="/assets/images/logo.png" alt="AlphaLens" width={200} height={50}/>
+                <Link href="/" className="auth-logo flex items-center gap-3 text-white text-2xl font-semibold">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-400 text-slate-950 font-bold">α</span>
+                    AlphaLens
                 </Link>
 
                 <div className="pb-6 lg:pb-8 flex-1">
@@ -30,15 +31,12 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
                             <cite className="auth-testimonial-author">- AlphaLens Team</cite>
                             <p className="max-md:text-xs text-gray-500">Your Trading Partner</p>
                         </div>
-                        <div className="flex items-center gap-0.5">
+                        <div className="flex items-center gap-0.5 text-emerald-400">
                             {[1,2,3,4,5].map((star) => (
-                                <Image src="/assets/icons/star.svg" alt="star" key={star} width={20} height={20} className="w-4 h-4"/>
+                                <Star key={star} className="w-4 h-4" />
                             ))}
                         </div>
                     </div>
-                </div>
-                <div className="flex-1 relative">
-                    <Image src="/assets/images/dashboard.png" alt="Dashboard Preview" width={1440} height={1150} className="auth-dashboard-preview absolute top-0" />
                 </div>
             </section>
         </main>
