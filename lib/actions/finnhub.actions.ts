@@ -229,3 +229,92 @@ export const searchStocks = cache(async (query?: string): Promise<StockWithWatch
         return [];
     }
 });
+
+// ── Anomaly Detection Data Helpers ─────────────────────────────────────────
+
+/**
+ * Fetch OHLCV candle data from Finnhub for anomaly detection.
+ * Returns up to 90 days of daily bars by default.
+ * Finnhub candle endpoint: /stock/candle?symbol=&resolution=D&from=&to=
+ */
+export async function getStockCandles(
+    symbol: string,
+    daysBack = 90
+): Promise<OHLCBar[]> {
+    try {
+        const token = NEXT_PUBLIC_FINNHUB_API_KEY;
+        if (!token) return [];
+
+        const to   = Math.floor(Date.now() / 1000);                  // unix now
+        const from = to - daysBack * 24 * 60 * 60;                   // daysBack ago
+
+        const url =
+            `${FINNHUB_BASE_URL}/stock/candle` +
+            `?symbol=${encodeURIComponent(symbol)}` +
+            `&resolution=D` +
+            `&from=${from}` +
+            `&to=${to}` +
+            `&token=${token}`;
+
+        // Cache for 5 minutes – near real-time but avoids hammering the API
+        const data = await fetchJSON<{
+            s: string;       // status: 'ok' | 'no_data'
+            t?: number[];    // timestamps
+            o?: number[];    // open
+            h?: number[];    // high
+            l?: number[];    // low
+            c?: number[];    // close
+            v?: number[];    // volume
+        }>(url, 300);
+
+        if (data?.s !== 'ok' || !data.t) return [];
+
+        const bars: OHLCBar[] = data.t.map((ts, i) => ({
+            t: ts,
+            o: data.o?.[i] ?? 0,
+            h: data.h?.[i] ?? 0,
+            l: data.l?.[i] ?? 0,
+            c: data.c?.[i] ?? 0,
+            v: data.v?.[i] ?? 0,
+        }));
+
+        return bars;
+    } catch (e) {
+        console.error('Error fetching candles for', symbol, e);
+        return [];
+    }
+}
+
+/**
+ * Fetch news sentiment score from Finnhub.
+ * Returns buzz score (0–1) and bullish percent (0–1), or null on failure.
+ */
+export async function getSentimentScore(
+    symbol: string
+): Promise<{ buzz: number; bullishPercent: number } | null> {
+    try {
+        const token = NEXT_PUBLIC_FINNHUB_API_KEY;
+        if (!token) return null;
+
+        const url =
+            `${FINNHUB_BASE_URL}/news-sentiment` +
+            `?symbol=${encodeURIComponent(symbol)}` +
+            `&token=${token}`;
+
+        // Cache for 10 minutes
+        const data = await fetchJSON<{
+            buzz?: { weeklyAverage?: number };
+            sentiment?: { bullishPercent?: number };
+        }>(url, 600);
+
+        if (!data?.buzz && !data?.sentiment) return null;
+
+        return {
+            buzz: data.buzz?.weeklyAverage ?? 0,
+            bullishPercent: data.sentiment?.bullishPercent ?? 0.5,
+        };
+    } catch (e) {
+        console.error('Error fetching sentiment for', symbol, e);
+        return null;
+    }
+}

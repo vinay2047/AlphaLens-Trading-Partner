@@ -258,6 +258,38 @@ declare global {
         currentPrice: number;
         type: 'BUY' | 'SELL';
     };
+
+    // ─── Anomaly Detection types ───────────────────────────────────
+    type OHLCBar = {
+        t: number;  // unix timestamp (seconds)
+        o: number;  // open
+        h: number;  // high
+        l: number;  // low
+        c: number;  // close
+        v: number;  // volume
+    };
+
+    type AnomalyResult = {
+        anomaly_detected: boolean;
+        confidence_score: number;               // 0–100
+        anomaly_type: string;                   // e.g. "High Risk Spike"
+        severity: 'low' | 'medium' | 'high';
+        reason: string;
+        suggested_action: 'hold' | 'caution' | 'watch closely';
+    };
+
+    type StatisticalSignals = {
+        priceZScore: number;
+        volumeZScore: number;
+        priceChangePercent: number;
+        volumeRatioToAvg: number;
+        isPriceSpike: boolean;
+        isVolumeAnomaly: boolean;
+        isPriceVolumeDivergence: boolean;
+        isPumpDump: boolean;
+        latestBar: OHLCBar | null;
+        historyLength: number;
+    };
 }
 
 export {};

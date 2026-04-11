@@ -3,6 +3,7 @@ import WatchlistButton from "@/components/WatchlistButton";
 import StockSentimentCard from "@/components/stocks/StockSentimentCard";
 import StockTradePanel from "@/components/stocks/StockTradePanel";
 import AIStockAnalysis from "@/components/stocks/AIStockAnalysis";
+import AnomalyBanner from "@/components/stocks/AnomalyBanner";
 import {
     SYMBOL_INFO_WIDGET_CONFIG,
     CANDLE_CHART_WIDGET_CONFIG,
@@ -37,6 +38,9 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
             <section className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
                 {/* Left column */}
                 <div className="flex flex-col gap-6">
+                    {/* Anomaly Detection Banner – fires on mount, auto-refreshes every 5 min */}
+                    <AnomalyBanner symbol={symbol.toUpperCase()} />
+
                     <TradingViewWidget
                         scriptUrl={`${scriptUrl}symbol-info.js`}
                         config={SYMBOL_INFO_WIDGET_CONFIG(tvSymbol)}
