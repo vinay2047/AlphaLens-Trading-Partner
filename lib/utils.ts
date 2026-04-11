@@ -154,6 +154,34 @@ export const getFormattedTodayDate = () => new Date().toLocaleDateString('en-US'
     timeZone: 'UTC',
 });
 
+export function getUsMarketStatus(now: Date = new Date()) {
+    const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        weekday: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+    });
+
+    const parts = formatter.formatToParts(now);
+    const weekday = parts.find((part) => part.type === 'weekday')?.value ?? '';
+    const hour = Number(parts.find((part) => part.type === 'hour')?.value ?? '0');
+    const minute = Number(parts.find((part) => part.type === 'minute')?.value ?? '0');
+    const minutesSinceMidnight = hour * 60 + minute;
+
+    const isWeekday = !['Sat', 'Sun'].includes(weekday);
+    const marketOpenMinutes = 9 * 60 + 30;
+    const marketCloseMinutes = 16 * 60;
+    const isOpen = isWeekday && minutesSinceMidnight >= marketOpenMinutes && minutesSinceMidnight < marketCloseMinutes;
+
+    return {
+        isOpen,
+        label: isOpen
+            ? 'Market open until 4:00 PM ET'
+            : 'Market closed. Trading is available Monday to Friday, 9:30 AM to 4:00 PM ET',
+    };
+}
+
 /**
  * Maps Finnhub exchange suffixes to TradingView exchange prefixes.
  * Finnhub symbols use a dot-suffix convention (e.g. "2330.TW"),

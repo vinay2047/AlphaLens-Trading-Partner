@@ -79,55 +79,55 @@
 }
 
 .dark {
-    --background: oklch(0.129 0.042 264.695);
-    --foreground: oklch(0.984 0.003 247.858);
-    --card: oklch(0.208 0.042 265.755);
-    --card-foreground: oklch(0.984 0.003 247.858);
-    --popover: oklch(0.208 0.042 265.755);
-    --popover-foreground: oklch(0.984 0.003 247.858);
-    --primary: oklch(0.929 0.013 255.508);
-    --primary-foreground: oklch(0.208 0.042 265.755);
-    --secondary: oklch(0.279 0.041 260.031);
-    --secondary-foreground: oklch(0.984 0.003 247.858);
-    --muted: oklch(0.279 0.041 260.031);
-    --muted-foreground: oklch(0.704 0.04 256.788);
-    --accent: oklch(0.279 0.041 260.031);
-    --accent-foreground: oklch(0.984 0.003 247.858);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.551 0.027 264.364);
-    --chart-1: oklch(0.488 0.243 264.376);
-    --chart-2: oklch(0.696 0.17 162.48);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.208 0.042 265.755);
-    --sidebar-foreground: oklch(0.984 0.003 247.858);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-    --sidebar-accent: oklch(0.279 0.041 260.031);
-    --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.551 0.027 264.364);
+    --background: #06140A;
+    --foreground: #FFFFFF;
+    --card: #000000;
+    --card-foreground: #FFFFFF;
+    --popover: #000000;
+    --popover-foreground: #FFFFFF;
+    --primary: #10E55A;
+    --primary-foreground: #000000;
+    --secondary: #0C1C11;
+    --secondary-foreground: #FFFFFF;
+    --muted: #0C1C11;
+    --muted-foreground: #7DA38B;
+    --accent: #0C1C11;
+    --accent-foreground: #10E55A;
+    --destructive: #FF3B30;
+    --border: #0C1C11;
+    --input: #0C1C11;
+    --ring: rgba(16, 229, 90, 0.5);
+    --chart-1: #10E55A;
+    --chart-2: #00CC47;
+    --chart-3: #7DA38B;
+    --chart-4: #3E5746;
+    --chart-5: #1B2B1F;
+    --sidebar: #000000;
+    --sidebar-foreground: #FFFFFF;
+    --sidebar-primary: #10E55A;
+    --sidebar-primary-foreground: #000000;
+    --sidebar-accent: #0C1C11;
+    --sidebar-accent-foreground: #10E55A;
+    --sidebar-border: #0C1C11;
+    --sidebar-ring: rgba(16, 229, 90, 0.5);
 }
 
 /* === AlphaLens Design System === */
 @theme {
-    --color-gray-900: #0A0A0B;
-    --color-gray-800: #111113;
-    --color-gray-700: #1A1A1F;
-    --color-gray-600: #2A2A32;
-    --color-gray-500: #71717A;
-    --color-gray-400: #A1A1AA;
-    --color-gray-300: #D4D4D8;
+    --color-gray-900: #06140A;
+    --color-gray-800: #000000;
+    --color-gray-700: #0C1C11;
+    --color-gray-600: #1B2B1F;
+    --color-gray-500: #3E5746;
+    --color-gray-400: #7DA38B;
+    --color-gray-300: #B7D1C1;
 
     --color-blue-600: #5862FF;
     --color-yellow-400: #FDD458;
     --color-yellow-500: #E8BA40;
-    --color-teal-400: #0FEDBE;
-    --color-teal-500: #10D9A6;
-    --color-red-500: #FF495B;
+    --color-teal-400: #10E55A;
+    --color-teal-500: #00CC47;
+    --color-red-500: #FF3B30;
     --color-orange-500: #FF8243;
     --color-purple-500: #D13BFF;
 }
@@ -390,51 +390,51 @@
 /* TradingView Widget Styles */
 .tradingview-widget-container {
     position: relative;
-    background-color: #111113 !important;
+    background-color: #000000 !important;
     border-radius: 12px !important;
     overflow: hidden !important;
 }
 .tv-embed-widget-wrapper__body {
-    background-color: #111113 !important;
+    background-color: #000000 !important;
 }
 .tradingview-widget-container__widget {
-    background-color: #111113 !important;
+    background-color: #000000 !important;
     height: 100% !important;
 }
 .widget-stock-heatmap-container .screenerMapWrapper-BBVfGP0b {
     overflow: hidden !important;
-    background: #111113 !important;
+    background: #000000 !important;
 }
 .canvasContainer-tyaAU8aH {
-    background: #111113 !important;
+    background: #000000 !important;
 }
 .tv-site-widget--bg_none {
     background-color: transparent !important;
 }
 .tradingview-widget-copyright {
     font-size: 10px;
-    color: #71717A;
+    color: #7DA38B;
     text-align: center;
     padding: 3px 0;
     background-color: transparent;
 }
 .tradingview-widget-copyright a {
-    color: #0FEDBE;
+    color: #10E55A;
     text-decoration: none;
     transition: color 0.2s ease;
 }
 .tradingview-widget-copyright a:hover {
-    color: #10D9A6;
+    color: #00CC47;
 }
 .tv-embed-widget-wrapper .tv-embed-widget-wrapper__body {
-    background: #111113 !important;
+    background: #000000 !important;
 }
 .tradingview-widget-container iframe {
-    background-color: #111113 !important;
+    background-color: #000000 !important;
     width: 100% !important;
 }
 .custom-chart.tradingview-widget-container iframe {
-    border: 1px solid #1A1A1F;
+    border: 1px solid #0C1C11;
     border-radius: 12px !important;
     overflow: hidden !important;
 }

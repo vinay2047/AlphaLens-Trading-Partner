@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
                 },
             ],
             mode: 'payment',
-            success_url: `${request.nextUrl.origin}/portfolio?payment=success&amount=${amount}`,
+            success_url: `${request.nextUrl.origin}/portfolio?payment=success&amount=${amount}&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${request.nextUrl.origin}/portfolio?payment=cancelled`,
             metadata: {
                 userId,

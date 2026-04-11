@@ -35,7 +35,7 @@ const SignUpPage = () => {
                     routing="path"
                     path="/sign-up"
                     signInUrl="/sign-in"
-                    forceRedirectUrl="/"
+                    forceRedirectUrl="/dashboard"
                 />
             </div>
         </>

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { TrendingUp, TrendingDown, Wallet, BarChart3 } from 'lucide-react';
 import TradeModal from '@/components/portfolio/TradeModal';
 import Link from 'next/link';
+import { getUsMarketStatus } from '@/lib/utils';
 
 type StockTradePanelProps = {
     symbol: string;
@@ -17,6 +18,7 @@ const StockTradePanel = ({ symbol, balance, currentShares }: StockTradePanelProp
     const [tradeType, setTradeType] = useState<'BUY' | 'SELL'>('BUY');
     const [currentPrice, setCurrentPrice] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [marketStatus, setMarketStatus] = useState(() => getUsMarketStatus());
 
     useEffect(() => {
         const fetchPrice = async () => {
@@ -34,6 +36,15 @@ const StockTradePanel = ({ symbol, balance, currentShares }: StockTradePanelProp
         };
         fetchPrice();
     }, [symbol]);
+
+    useEffect(() => {
+        const syncMarketStatus = () => setMarketStatus(getUsMarketStatus());
+
+        syncMarketStatus();
+        const intervalId = window.setInterval(syncMarketStatus, 60_000);
+
+        return () => window.clearInterval(intervalId);
+    }, []);
 
     const openBuy = () => {
         setTradeType('BUY');
@@ -90,7 +101,7 @@ const StockTradePanel = ({ symbol, balance, currentShares }: StockTradePanelProp
                     <div className="grid grid-cols-2 gap-3">
                         <Button
                             onClick={openBuy}
-                            disabled={loading}
+                            disabled={loading || !marketStatus.isOpen}
                             className="h-11 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-gray-900 font-semibold rounded-xl shadow-lg hover:shadow-emerald-500/20 transition-all"
                         >
                             <TrendingUp className="h-4 w-4 mr-2" />
@@ -98,12 +109,20 @@ const StockTradePanel = ({ symbol, balance, currentShares }: StockTradePanelProp
                         </Button>
                         <Button
                             onClick={openSell}
-                            disabled={loading || currentShares <= 0}
+                            disabled={loading || currentShares <= 0 || !marketStatus.isOpen}
                             className="h-11 bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-red-500/20 transition-all disabled:opacity-40"
                         >
                             <TrendingDown className="h-4 w-4 mr-2" />
                             Sell
                         </Button>
+                    </div>
+
+                    <div className={`rounded-lg border px-3 py-2 text-xs ${
+                        marketStatus.isOpen
+                            ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300'
+                            : 'border-amber-500/20 bg-amber-500/10 text-amber-300'
+                    }`}>
+                        {marketStatus.label}
                     </div>
 
                     {/* Portfolio Link */}
@@ -126,6 +145,7 @@ const StockTradePanel = ({ symbol, balance, currentShares }: StockTradePanelProp
                     balance={balance}
                     currentShares={currentShares}
                     defaultType={tradeType}
+                    marketOpen={marketStatus.isOpen}
                 />
             )}
         </>

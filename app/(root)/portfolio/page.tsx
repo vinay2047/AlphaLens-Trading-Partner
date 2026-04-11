@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { getOrCreatePortfolio, getTransactions } from '@/lib/actions/portfolio.actions';
 import PortfolioSummary from '@/components/portfolio/PortfolioSummary';
 import PortfolioCharts from '@/components/portfolio/PortfolioCharts';
@@ -12,7 +13,6 @@ import DCAManager from '@/components/portfolio/DCAManager';
 import { Button } from '@/components/ui/button';
 import { Plus, RefreshCw, Search, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useSearchParams } from 'next/navigation';
 
 const PortfolioPage = () => {
     const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
@@ -22,6 +22,8 @@ const PortfolioPage = () => {
     const [addFundsOpen, setAddFundsOpen] = useState(false);
     const [tradeOpen, setTradeOpen] = useState(false);
     const [selectedHolding, setSelectedHolding] = useState<HoldingData | null>(null);
+    const [verifyingDeposit, setVerifyingDeposit] = useState(false);
+    const router = useRouter();
     const searchParams = useSearchParams();
 
     const loadData = async (showRefresh = false) => {
@@ -53,16 +55,56 @@ const PortfolioPage = () => {
     useEffect(() => {
         const payment = searchParams.get('payment');
         const amount = searchParams.get('amount');
-        if (payment === 'success' && amount) {
-            toast.success(`Successfully added $${amount} to your portfolio!`, {
-                description: 'Your AlphaFunds balance has been updated.',
-            });
-            // Reload data to reflect the deposit
-            setTimeout(() => loadData(true), 1000);
-        } else if (payment === 'cancelled') {
-            toast.info('Payment was cancelled');
-        }
-    }, [searchParams]);
+        const sessionId = searchParams.get('session_id');
+
+        const clearPaymentParams = () => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.delete('payment');
+            params.delete('amount');
+            params.delete('session_id');
+            const nextQuery = params.toString();
+            router.replace(nextQuery ? `/portfolio?${nextQuery}` : '/portfolio');
+        };
+
+        const verifyDeposit = async () => {
+            if (payment === 'cancelled') {
+                toast.info('Payment was cancelled');
+                clearPaymentParams();
+                return;
+            }
+
+            if (payment !== 'success' || !amount || !sessionId) {
+                return;
+            }
+
+            setVerifyingDeposit(true);
+            try {
+                const response = await fetch(`/api/stripe/session?session_id=${encodeURIComponent(sessionId)}`);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Unable to verify payment');
+                }
+
+                if (data.paymentStatus === 'paid') {
+                    toast.success(`Successfully added $${amount} to your portfolio!`, {
+                        description: 'Your AlphaFunds balance has been updated.',
+                    });
+                    setTimeout(() => loadData(true), 1000);
+                } else {
+                    toast.info('Your payment is still processing.');
+                }
+            } catch (error) {
+                console.error('Failed to verify Stripe checkout session', error);
+                toast.error('Unable to verify your deposit yet. Please refresh in a moment.');
+            } finally {
+                setVerifyingDeposit(false);
+                clearPaymentParams();
+            }
+        };
+
+        verifyDeposit();
+    }, [router, searchParams]);
 
     const handleSellFromTable = (holding: HoldingData) => {
         setSelectedHolding(holding);
@@ -108,11 +150,16 @@ const PortfolioPage = () => {
                     </Button>
                     <Button
                         onClick={() => setAddFundsOpen(true)}
+                        disabled={verifyingDeposit}
                         className="bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-gray-900 font-semibold rounded-xl px-5 shadow-lg hover:shadow-teal-500/20 transition-all"
                         size="sm"
                     >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add Funds
+                        {verifyingDeposit ? (
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        ) : (
+                            <Plus className="h-4 w-4 mr-2" />
+                        )}
+                        {verifyingDeposit ? 'Verifying Deposit...' : 'Add Funds'}
                     </Button>
                 </div>
             </div>

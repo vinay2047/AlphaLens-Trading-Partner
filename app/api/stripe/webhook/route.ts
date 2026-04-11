@@ -29,12 +29,22 @@ export async function POST(request: NextRequest) {
         const session = event.data.object;
         const userId = session.metadata?.userId;
         const amount = parseFloat(session.metadata?.amount || '0');
+        const stripePaymentId = typeof session.payment_intent === 'string' ? session.payment_intent : '';
 
-        if (userId && amount > 0) {
+        if (userId && amount > 0 && stripePaymentId) {
             try {
                 await connectToDatabase();
 
-                // Credit the user's portfolio
+                const existingDeposit = await Transaction.findOne({
+                    stripePaymentId,
+                    type: 'DEPOSIT',
+                    status: 'COMPLETED',
+                });
+
+                if (existingDeposit) {
+                    return NextResponse.json({ received: true, duplicate: true });
+                }
+
                 let portfolio = await Portfolio.findOne({ userId });
                 if (!portfolio) {
                     portfolio = await Portfolio.create({ userId, balance: 10000 + amount, totalInvested: 0 });
@@ -43,16 +53,15 @@ export async function POST(request: NextRequest) {
                     await portfolio.save();
                 }
 
-                // Record the deposit transaction
                 await Transaction.create({
                     userId,
                     type: 'DEPOSIT',
                     totalAmount: amount,
-                    stripePaymentId: session.payment_intent as string,
+                    stripePaymentId,
                     status: 'COMPLETED',
                 });
 
-                console.log(`✅ Deposited $${amount} to user ${userId}`);
+                console.log(`Stripe deposit completed: $${amount} credited to user ${userId}`);
             } catch (error) {
                 console.error('Webhook processing error:', error);
                 return NextResponse.json({ error: 'Processing failed' }, { status: 500 });

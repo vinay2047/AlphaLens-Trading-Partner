@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getUserDCAPlans, createDCAPlan, toggleDCAPlan, deleteDCAPlan, type DCAPlanData, type DCAFormData } from '@/lib/actions/dca.actions';
 import { Button } from '@/components/ui/button';
-import { Plus, Repeat, Pause, Play, Trash2, Loader2, X, Calendar } from 'lucide-react';
+import { Plus, Repeat, Pause, Play, Trash2, Loader2, X, Calendar, Activity } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
@@ -83,65 +83,69 @@ const DCAManager = () => {
     };
 
     return (
-        <div className="rounded-xl border border-gray-600 bg-gray-800 overflow-hidden">
+        <div className="rounded-[2rem] border border-gray-900 bg-[#0a0a0a] overflow-hidden shadow-2xl">
             {/* Header */}
-            <div className="px-5 py-4 border-b border-gray-600/50 flex items-center justify-between bg-gradient-to-r from-cyan-500/5 to-teal-500/5">
-                <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-lg bg-cyan-500/20 border border-cyan-500/30">
-                        <Repeat className="h-4 w-4 text-cyan-400" />
+            <div className="px-6 py-5 border-b border-gray-900 flex items-center justify-between bg-gradient-to-b from-white/[0.02] to-transparent">
+                <div className="flex items-center gap-3">
+                    <div className="p-2.5 rounded-xl bg-[#22c55e]/10 border border-[#22c55e]/20">
+                        <Repeat className="h-5 w-5 text-[#22c55e]" />
                     </div>
                     <div>
-                        <h3 className="text-base font-bold text-gray-100">Auto-Invest (DCA)</h3>
-                        <p className="text-xs text-gray-500">Automated dollar-cost averaging</p>
+                        <h3 className="text-lg font-bold text-white tracking-tight">Auto-Invest (DCA)</h3>
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-widest">Smart Wealth Building</p>
                     </div>
                 </div>
                 <Button
                     onClick={() => setShowForm(!showForm)}
                     size="sm"
-                    className="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/30 rounded-lg text-xs"
+                    className={`rounded-full transition-all px-4 ${
+                        showForm 
+                        ? 'bg-white/10 text-white hover:bg-white/20' 
+                        : 'bg-[#22c55e] text-black font-bold hover:bg-[#1da850]'
+                    }`}
                 >
-                    {showForm ? <X className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5 mr-1" />}
-                    {showForm ? '' : 'New Plan'}
+                    {showForm ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4 mr-1.5" />}
+                    {showForm ? 'Cancel' : 'New Plan'}
                 </Button>
             </div>
 
             {/* Create form */}
             {showForm && (
-                <div className="px-5 py-4 border-b border-gray-600/50 bg-gray-700/20 space-y-3">
-                    <div className="grid grid-cols-2 gap-3">
-                        <div>
-                            <label className="text-xs font-medium text-gray-400 mb-1 block">Symbol</label>
+                <div className="px-6 py-6 border-b border-gray-900 bg-white/[0.01] space-y-5 animate-in slide-in-from-top-4 duration-300">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider ml-1">Asset Symbol</label>
                             <input
                                 type="text"
-                                placeholder="AAPL"
+                                placeholder="BTC, AAPL..."
                                 value={formData.symbol}
                                 onChange={(e) => setFormData(prev => ({ ...prev, symbol: e.target.value.toUpperCase() }))}
-                                className="w-full px-3 py-2 rounded-lg bg-gray-700/50 border border-gray-600 text-gray-200 text-sm placeholder:text-gray-600 focus:border-cyan-500 focus:outline-none"
+                                className="w-full px-4 py-3 rounded-xl bg-[#141414] border border-gray-800 text-white font-bold placeholder:text-gray-700 focus:border-[#22c55e] focus:outline-none transition-all"
                             />
                         </div>
-                        <div>
-                            <label className="text-xs font-medium text-gray-400 mb-1 block">Amount ($)</label>
+                        <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider ml-1">Buy Amount ($)</label>
                             <input
                                 type="number"
                                 placeholder="100"
                                 value={formData.amount}
                                 onChange={(e) => setFormData(prev => ({ ...prev, amount: parseFloat(e.target.value) || 0 }))}
-                                className="w-full px-3 py-2 rounded-lg bg-gray-700/50 border border-gray-600 text-gray-200 text-sm placeholder:text-gray-600 focus:border-cyan-500 focus:outline-none"
+                                className="w-full px-4 py-3 rounded-xl bg-[#141414] border border-gray-800 text-white font-bold focus:border-[#22c55e] focus:outline-none transition-all"
                                 min="1"
                             />
                         </div>
                     </div>
-                    <div>
-                        <label className="text-xs font-medium text-gray-400 mb-1 block">Frequency</label>
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider ml-1">Frequency</label>
                         <div className="grid grid-cols-4 gap-2">
                             {FREQUENCY_OPTIONS.map((opt) => (
                                 <button
                                     key={opt.value}
                                     onClick={() => setFormData(prev => ({ ...prev, frequency: opt.value as DCAFormData['frequency'] }))}
-                                    className={`py-2 px-2 rounded-lg text-xs font-medium border transition-all ${
+                                    className={`py-2.5 rounded-xl text-[11px] font-bold border transition-all ${
                                         formData.frequency === opt.value
-                                            ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400'
-                                            : 'bg-gray-700/50 border-gray-600 text-gray-400 hover:border-gray-500'
+                                            ? 'bg-[#22c55e] border-[#22c55e] text-black shadow-lg shadow-[#22c55e]/10'
+                                            : 'bg-[#141414] border-gray-800 text-gray-500 hover:border-gray-600'
                                     }`}
                                 >
                                     {opt.label}
@@ -152,60 +156,66 @@ const DCAManager = () => {
                     <Button
                         onClick={handleCreate}
                         disabled={submitting}
-                        className="w-full h-9 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-gray-900 font-semibold rounded-lg text-sm"
+                        className="w-full h-12 bg-[#22c55e] hover:bg-[#1da850] text-black font-bold rounded-xl text-sm transition-all active:scale-[0.98]"
                     >
-                        {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create Auto-Invest Plan'}
+                        {submitting ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Confirm Strategy'}
                     </Button>
                 </div>
             )}
 
             {/* Plans list */}
-            <div className="divide-y divide-gray-600/30">
+            <div className="divide-y divide-gray-900">
                 {loading ? (
-                    <div className="py-8 text-center">
-                        <Loader2 className="h-6 w-6 text-cyan-400 animate-spin mx-auto" />
+                    <div className="py-12 text-center">
+                        <Loader2 className="h-8 w-8 text-[#22c55e] animate-spin mx-auto" />
                     </div>
                 ) : plans.length === 0 ? (
-                    <div className="py-8 text-center">
-                        <Repeat className="h-8 w-8 text-gray-600 mx-auto mb-2" />
-                        <p className="text-sm text-gray-500">No auto-invest plans</p>
-                        <p className="text-xs text-gray-600 mt-1">Create a plan to automatically buy stocks on a schedule</p>
+                    <div className="py-16 text-center">
+                        <Activity className="h-10 w-10 text-gray-800 mx-auto mb-3" />
+                        <p className="text-sm font-bold text-gray-400">No active strategies found</p>
+                        <p className="text-xs text-gray-600 mt-2 max-w-[200px] mx-auto leading-relaxed">
+                            Create a plan to automate your wealth building journey.
+                        </p>
                     </div>
                 ) : (
                     plans.map((plan) => (
-                        <div key={plan.id} className="px-5 py-3.5 hover:bg-gray-700/20 transition-colors">
+                        <div key={plan.id} className="px-6 py-5 hover:bg-white/[0.02] transition-colors group">
                             <div className="flex items-center justify-between">
-                                <div>
+                                <div className="space-y-1">
                                     <div className="flex items-center gap-2">
-                                        <span className="text-sm font-bold text-gray-100">{plan.symbol}</span>
-                                        <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${plan.active ? 'bg-emerald-500/20 text-emerald-400' : 'bg-gray-600/50 text-gray-500'}`}>
-                                            {plan.active ? 'Active' : 'Paused'}
+                                        <span className="text-lg font-black text-white">{plan.symbol}</span>
+                                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${plan.active ? 'bg-[#22c55e]/10 text-[#22c55e]' : 'bg-gray-800 text-gray-500'}`}>
+                                            {plan.active ? 'Running' : 'Paused'}
                                         </span>
                                     </div>
-                                    <p className="text-xs text-gray-500 mt-0.5">
-                                        ${plan.amount}/{plan.frequency.toLowerCase()} · {plan.totalExecuted} buys · ${plan.totalInvested.toFixed(0)} invested
+                                    <p className="text-xs font-semibold text-gray-500 flex items-center gap-1.5">
+                                        <span className="text-white">${plan.amount}</span> / {plan.frequency.toLowerCase()}
+                                        <span className="mx-1 text-gray-800">•</span>
+                                        {plan.totalExecuted} executed
+                                        <span className="mx-1 text-gray-800">•</span>
+                                        <span className="text-[#22c55e] font-bold">${plan.totalInvested.toLocaleString()} Total</span>
                                     </p>
                                     {plan.active && (
-                                        <p className="text-[10px] text-gray-600 mt-0.5 flex items-center gap-1">
-                                            <Calendar className="h-2.5 w-2.5" />
-                                            Next: {new Date(plan.nextExecutionAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                        <p className="text-[10px] font-bold text-gray-600 flex items-center gap-1.5 pt-1 uppercase tracking-tighter">
+                                            <Calendar className="h-3 w-3" />
+                                            Next Cycle: {new Date(plan.nextExecutionAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                         </p>
                                     )}
                                 </div>
-                                <div className="flex items-center gap-1">
+                                <div className="flex items-center gap-2">
                                     <button
                                         onClick={() => handleToggle(plan.id)}
-                                        className="p-1.5 rounded-lg hover:bg-gray-600/50 text-gray-400 hover:text-gray-200 transition-colors"
-                                        title={plan.active ? 'Pause' : 'Resume'}
+                                        className="p-2.5 rounded-xl bg-[#141414] border border-gray-800 text-gray-400 hover:text-white hover:border-gray-600 transition-all"
+                                        title={plan.active ? 'Pause Strategy' : 'Resume Strategy'}
                                     >
-                                        {plan.active ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                                        {plan.active ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 fill-current" />}
                                     </button>
                                     <button
                                         onClick={() => handleDelete(plan.id, plan.symbol)}
-                                        className="p-1.5 rounded-lg hover:bg-red-500/10 text-gray-400 hover:text-red-400 transition-colors"
-                                        title="Delete"
+                                        className="p-2.5 rounded-xl bg-[#141414] border border-gray-800 text-gray-400 hover:text-red-500 hover:border-red-900/50 transition-all"
+                                        title="Delete Strategy"
                                     >
-                                        <Trash2 className="h-3.5 w-3.5" />
+                                        <Trash2 className="h-4 w-4" />
                                     </button>
                                 </div>
                             </div>

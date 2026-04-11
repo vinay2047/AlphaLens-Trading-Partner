@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { CreditCard, Loader2, X, Sparkles } from 'lucide-react';
+import { CreditCard, Loader2, X, Sparkles, ShieldCheck } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
 import { toast } from 'sonner';
 
@@ -23,6 +23,13 @@ const AddFundsModal = ({ open, onClose }: { open: boolean; onClose: () => void }
             return;
         }
 
+        if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+            toast.error('Stripe is not configured', {
+                description: 'Add your Stripe publishable key to enable deposits.',
+            });
+            return;
+        }
+
         setLoading(true);
         try {
             const res = await fetch('/api/stripe/checkout', {
@@ -34,12 +41,10 @@ const AddFundsModal = ({ open, onClose }: { open: boolean; onClose: () => void }
             const data = await res.json();
 
             if (data.url) {
-                const stripe = await stripePromise;
-                if (stripe) {
-                    window.location.href = data.url;
-                }
+                await stripePromise;
+                window.location.href = data.url;
             } else {
-                toast.error('Failed to initiate payment');
+                toast.error(data.error || 'Failed to initiate payment');
             }
         } catch {
             toast.error('Payment failed. Please try again.');
@@ -51,36 +56,40 @@ const AddFundsModal = ({ open, onClose }: { open: boolean; onClose: () => void }
     if (!open) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-            {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            {/* Darker Backdrop with more blur */}
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
 
-            {/* Modal */}
-            <div className="relative z-10 w-full max-w-md mx-4 rounded-2xl border border-gray-600 bg-gray-800 shadow-2xl overflow-hidden">
-                {/* Header gradient */}
-                <div className="relative bg-gradient-to-r from-teal-500/20 via-cyan-500/20 to-blue-500/20 px-6 pt-6 pb-8">
+            {/* Modal - Darker theme with emerald accents */}
+            <div className="relative z-10 w-full max-w-md rounded-[2rem] border border-gray-800 bg-[#0a0a0a] shadow-[0_0_50px_-12px_rgba(34,197,94,0.2)] overflow-hidden">
+                
+                {/* Header: Clean Dark Background with subtle green glow */}
+                <div className="relative px-8 pt-8 pb-4">
                     <button
                         onClick={onClose}
-                        className="absolute top-4 right-4 p-1 rounded-lg hover:bg-gray-700/50 text-gray-400 hover:text-gray-200 transition-colors"
+                        className="absolute top-6 right-6 p-2 rounded-full hover:bg-white/5 text-gray-500 hover:text-white transition-all"
                     >
                         <X className="h-5 w-5" />
                     </button>
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="p-2.5 rounded-xl bg-teal-500/20 border border-teal-500/30">
-                            <Sparkles className="h-5 w-5 text-teal-400" />
+                    
+                    <div className="flex flex-col items-center text-center gap-3">
+                        <div className="p-3 rounded-2xl bg-[#22c55e]/10 border border-[#22c55e]/20">
+                            <Sparkles className="h-6 w-6 text-[#22c55e]" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-bold text-gray-100">Add AlphaFunds</h2>
-                            <p className="text-sm text-gray-400">Fund your trading portfolio</p>
+                            <h2 className="text-2xl font-bold text-white tracking-tight">Add AlphaFunds</h2>
+                            <p className="text-sm text-gray-500 mt-1">Instant deposit to your trading balance</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="px-6 pb-6 pt-4 space-y-5">
+                <div className="px-8 pb-8 pt-4 space-y-6">
                     {/* Preset amounts */}
                     <div>
-                        <p className="text-sm font-medium text-gray-400 mb-3">Select amount</p>
-                        <div className="grid grid-cols-2 gap-2.5">
+                        <div className="flex justify-between items-center mb-4">
+                            <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Quick Select</p>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
                             {PRESET_AMOUNTS.map((preset) => (
                                 <button
                                     key={preset}
@@ -88,10 +97,10 @@ const AddFundsModal = ({ open, onClose }: { open: boolean; onClose: () => void }
                                         setAmount(preset);
                                         setIsCustom(false);
                                     }}
-                                    className={`py-3 px-4 rounded-xl text-base font-semibold transition-all duration-200 border ${
+                                    className={`py-4 px-4 rounded-2xl text-base font-bold transition-all duration-200 border-2 ${
                                         !isCustom && amount === preset
-                                            ? 'bg-teal-500/20 border-teal-500/50 text-teal-400 shadow-lg shadow-teal-500/10'
-                                            : 'bg-gray-700/50 border-gray-600 text-gray-300 hover:bg-gray-700 hover:border-gray-500'
+                                            ? 'bg-[#22c55e] border-[#22c55e] text-black shadow-[0_0_20px_-5px_rgba(34,197,94,0.4)]'
+                                            : 'bg-[#141414] border-gray-900 text-gray-400 hover:border-gray-700 hover:text-gray-200'
                                     }`}
                                 >
                                     ${preset.toLocaleString()}
@@ -100,25 +109,27 @@ const AddFundsModal = ({ open, onClose }: { open: boolean; onClose: () => void }
                         </div>
                     </div>
 
-                    {/* Custom amount */}
-                    <div>
+                    {/* Custom amount toggle */}
+                    <div className="space-y-3">
                         <button
-                            onClick={() => setIsCustom(true)}
-                            className={`text-sm font-medium transition-colors ${isCustom ? 'text-teal-400' : 'text-gray-500 hover:text-gray-400'}`}
+                            onClick={() => setIsCustom(!isCustom)}
+                            className={`text-xs font-bold uppercase tracking-widest transition-colors ${isCustom ? 'text-[#22c55e]' : 'text-gray-500 hover:text-gray-400'}`}
                         >
-                            Custom amount
+                            {isCustom ? '← Use Preset' : '+ Custom amount'}
                         </button>
+                        
                         {isCustom && (
-                            <div className="mt-2 relative">
-                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-medium">$</span>
+                            <div className="relative animate-in slide-in-from-top-2 duration-200">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#22c55e] font-bold text-lg">$</span>
                                 <input
                                     type="number"
-                                    placeholder="Enter amount"
+                                    placeholder="0.00"
                                     value={customAmount}
                                     onChange={(e) => setCustomAmount(e.target.value)}
-                                    className="w-full pl-7 pr-4 py-3 rounded-xl bg-gray-700/50 border border-gray-600 text-gray-200 placeholder:text-gray-500 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500/50 text-base"
+                                    className="w-full pl-10 pr-4 py-4 rounded-2xl bg-[#141414] border-2 border-gray-900 text-white placeholder:text-gray-700 focus:border-[#22c55e] focus:outline-none transition-all text-lg font-bold"
                                     min="1"
                                     step="0.01"
+                                    autoFocus
                                 />
                             </div>
                         )}
@@ -128,21 +139,22 @@ const AddFundsModal = ({ open, onClose }: { open: boolean; onClose: () => void }
                     <Button
                         onClick={handleAddFunds}
                         disabled={loading}
-                        className="w-full h-12 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-gray-900 font-semibold text-base rounded-xl shadow-lg hover:shadow-teal-500/20 transition-all duration-200"
+                        className="w-full h-14 bg-[#22c55e] hover:bg-[#1da850] text-black font-bold text-lg rounded-2xl shadow-lg transition-all active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
                     >
                         {loading ? (
-                            <Loader2 className="h-5 w-5 animate-spin" />
+                            <Loader2 className="h-6 w-6 animate-spin" />
                         ) : (
-                            <>
-                                <CreditCard className="h-5 w-5 mr-2" />
-                                Pay ${(isCustom ? parseFloat(customAmount) || 0 : amount).toLocaleString()}
-                            </>
+                            <div className="flex items-center justify-center gap-2">
+                                <CreditCard className="h-5 w-5" />
+                                <span>Deposit ${(isCustom ? parseFloat(customAmount) || 0 : amount).toLocaleString()}</span>
+                            </div>
                         )}
                     </Button>
 
-                    <p className="text-xs text-center text-gray-500">
-                        Secured by Stripe • 256-bit SSL encryption
-                    </p>
+                    <div className="flex items-center justify-center gap-2 text-[10px] text-gray-600 uppercase font-bold tracking-widest">
+                        <ShieldCheck className="h-3 w-3" />
+                        <span>Secured by Stripe • AES-256 Encryption</span>
+                    </div>
                 </div>
             </div>
         </div>

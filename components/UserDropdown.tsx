@@ -76,7 +76,7 @@ const UserDropdown = ({ user }: {user: User}) => {
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="text-gray-100 text-md font-medium focus:bg-transparent focus:text-teal-500 transition-colors cursor-pointer">
-                    <Link href="/" className="flex items-center">
+                    <Link href="/dashboard" className="flex items-center">
                         Dashboard
                     </Link>
                 </DropdownMenuItem>

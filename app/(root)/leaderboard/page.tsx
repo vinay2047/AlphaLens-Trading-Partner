@@ -112,8 +112,7 @@ const LeaderboardPage = () => {
                     })}
                 </div>
             )}
-
-            {/* Table */}
+            
             <div className="rounded-xl border border-gray-600 bg-gray-800 overflow-hidden">
                 <table className="w-full">
                     <thead>

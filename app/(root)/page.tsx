@@ -6,7 +6,7 @@ import {
     TOP_STORIES_WIDGET_CONFIG
 } from "@/lib/constants";
 import Link from "next/link";
-import { TrendingUp, BarChart3, Newspaper } from "lucide-react";
+import { TrendingUp, BarChart3} from "lucide-react";
 
 const Home = () => {
     const scriptUrl = `https://s3.tradingview.com/external-embedding/embed-widget-`;
@@ -37,7 +37,6 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* Market Widgets */}
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
                 <div className="xl:col-span-1">
                     <TradingViewWidget

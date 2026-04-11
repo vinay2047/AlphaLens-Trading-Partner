@@ -16,6 +16,7 @@ type TradeModalProps = {
     balance: number;
     currentShares?: number;
     defaultType?: 'BUY' | 'SELL';
+    marketOpen?: boolean;
 };
 
 const TradeModal = ({
@@ -27,6 +28,7 @@ const TradeModal = ({
     balance,
     currentShares = 0,
     defaultType = 'BUY',
+    marketOpen = true,
 }: TradeModalProps) => {
     const [type, setType] = useState<'BUY' | 'SELL'>(defaultType);
     const [shares, setShares] = useState('');
@@ -38,6 +40,13 @@ const TradeModal = ({
     const maxBuyShares = currentPrice > 0 ? Math.floor(balance / currentPrice) : 0;
 
     const handleTrade = async () => {
+        if (!marketOpen) {
+            toast.error('Market is closed', {
+                description: 'Trading is available Monday to Friday, 9:30 AM to 4:00 PM ET.',
+            });
+            return;
+        }
+
         if (shareCount <= 0) {
             toast.error('Enter a valid number of shares');
             return;
@@ -99,22 +108,24 @@ const TradeModal = ({
                     <div className="flex bg-gray-700/50 rounded-xl p-1">
                         <button
                             onClick={() => setType('BUY')}
+                            disabled={!marketOpen}
                             className={`flex-1 py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-all duration-200 ${
                                 type === 'BUY'
                                     ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                                     : 'text-gray-400 hover:text-gray-300'
-                            }`}
+                            } ${!marketOpen ? 'cursor-not-allowed opacity-50' : ''}`}
                         >
                             <TrendingUp className="h-4 w-4" />
                             Buy
                         </button>
                         <button
                             onClick={() => setType('SELL')}
+                            disabled={!marketOpen}
                             className={`flex-1 py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 text-sm font-semibold transition-all duration-200 ${
                                 type === 'SELL'
                                     ? 'bg-red-500/20 text-red-400 border border-red-500/30'
                                     : 'text-gray-400 hover:text-gray-300'
-                            }`}
+                            } ${!marketOpen ? 'cursor-not-allowed opacity-50' : ''}`}
                         >
                             <TrendingDown className="h-4 w-4" />
                             Sell
@@ -142,6 +153,12 @@ const TradeModal = ({
                         </span>
                     </div>
 
+                    {!marketOpen && (
+                        <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-300">
+                            Market is closed. Trading is available Monday to Friday, 9:30 AM to 4:00 PM ET.
+                        </div>
+                    )}
+
                     {/* Shares input */}
                     <div>
                         <label className="text-sm font-medium text-gray-400 mb-2 block">Number of Shares</label>
@@ -153,6 +170,7 @@ const TradeModal = ({
                             className="w-full px-4 py-3 rounded-xl bg-gray-700/50 border border-gray-600 text-gray-200 placeholder:text-gray-600 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500/50 text-lg font-semibold"
                             min="1"
                             max={type === 'SELL' ? currentShares : maxBuyShares}
+                            disabled={!marketOpen}
                         />
                         {/* Quick fill buttons */}
                         <div className="flex gap-2 mt-2">
@@ -164,6 +182,7 @@ const TradeModal = ({
                                             <button
                                                 key={pct}
                                                 onClick={() => setShares(s.toString())}
+                                                disabled={!marketOpen}
                                                 className="flex-1 py-1.5 text-xs font-medium rounded-lg bg-gray-700/50 border border-gray-600 text-gray-400 hover:text-teal-400 hover:border-teal-500/30 transition-colors"
                                             >
                                                 {pct}%
@@ -179,6 +198,7 @@ const TradeModal = ({
                                             <button
                                                 key={pct}
                                                 onClick={() => setShares(s.toString())}
+                                                disabled={!marketOpen}
                                                 className="flex-1 py-1.5 text-xs font-medium rounded-lg bg-gray-700/50 border border-gray-600 text-gray-400 hover:text-red-400 hover:border-red-500/30 transition-colors"
                                             >
                                                 {pct}%
@@ -201,7 +221,7 @@ const TradeModal = ({
                     {/* Trade button */}
                     <Button
                         onClick={handleTrade}
-                        disabled={loading || shareCount <= 0}
+                        disabled={loading || shareCount <= 0 || !marketOpen}
                         className={`w-full h-12 font-semibold text-base rounded-xl shadow-lg transition-all duration-200 ${
                             type === 'BUY'
                                 ? 'bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-gray-900'
