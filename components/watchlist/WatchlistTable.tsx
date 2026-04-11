@@ -105,14 +105,16 @@ export default function WatchlistTable({ data, userId, onRefresh }: WatchlistTab
                                             </div>
                                         )}
                                         <div className="flex flex-col">
-                                            <span className="font-semibold text-white text-base">{stock.name}</span>
+                                            <Link href={`/stocks/${stock.symbol}`} className="font-semibold text-white text-base hover:text-teal-300 transition-colors">
+                                                {stock.name}
+                                            </Link>
                                         </div>
                                     </div>
                                 </td>
                                 <td className="px-6 py-4 font-medium text-gray-300">
-                                    <span className="bg-white/5 px-2.5 py-1 rounded-md text-xs font-mono border border-white/10">
+                                    <Link href={`/stocks/${stock.symbol}`} className="inline-flex items-center rounded-md bg-white/5 px-2.5 py-1 text-xs font-mono border border-white/10 text-gray-300 hover:border-teal-500 hover:text-teal-300 transition-colors">
                                         {stock.symbol}
-                                    </span>
+                                    </Link>
                                 </td>
                                 <td className="px-6 py-4 text-white font-medium text-base tracking-tight">
                                     {formatCurrency(stock.price)}

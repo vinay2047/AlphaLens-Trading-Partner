@@ -2,8 +2,6 @@ import Header from "@/components/Header";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
-import DonatePopup from "@/components/DonatePopup";
-import SirayBanner from "@/components/SirayBanner";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
     const clerkUser = await currentUser();
@@ -20,16 +18,14 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
     }
 
     return (
-        <main className="min-h-screen text-gray-400">
-            <SirayBanner />
+        <main className="min-h-screen bg-[#09090d] text-slate-200">
             <Header user={user} />
 
-            <div className="container py-10">
+            <div className="container mx-auto py-8 px-4">
                 {children}
             </div>
 
             <Footer />
-            <DonatePopup />
         </main>
     )
 }
