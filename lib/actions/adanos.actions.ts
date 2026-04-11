@@ -50,8 +50,14 @@ async function fetchCompareSource(
             return null;
         }
 
+        // 401/403 = API key missing or invalid – fail silently, no point
+        // logging on every source for every page load.
+        if (response.status === 401 || response.status === 403) {
+            return null;
+        }
+
         if (!response.ok) {
-            console.error(`Adanos ${source} compare failed for ${symbol}: ${response.status}`);
+            console.warn(`Adanos ${source} compare failed for ${symbol}: ${response.status}`);
             return null;
         }
 
