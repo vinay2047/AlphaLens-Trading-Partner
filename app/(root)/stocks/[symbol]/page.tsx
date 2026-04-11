@@ -1,6 +1,7 @@
 import TradingViewWidget from "@/components/TradingViewWidget";
 import WatchlistButton from "@/components/WatchlistButton";
 import StockSentimentCard from "@/components/stocks/StockSentimentCard";
+import StockTradePanel from "@/components/stocks/StockTradePanel";
 import {
     SYMBOL_INFO_WIDGET_CONFIG,
     CANDLE_CHART_WIDGET_CONFIG,
@@ -10,10 +11,10 @@ import {
     COMPANY_FINANCIALS_WIDGET_CONFIG,
 } from "@/lib/constants";
 
-import { auth } from '@/lib/better-auth/auth';
-import { headers } from 'next/headers';
+import { auth } from '@clerk/nextjs/server';
 import { isStockInWatchlist } from '@/lib/actions/watchlist.actions';
 import { getStockSentimentInsights } from '@/lib/actions/adanos.actions';
+import { getUserHoldingForSymbol, getPortfolioBalance } from '@/lib/actions/portfolio.actions';
 import { formatSymbolForTradingView } from '@/lib/utils';
 
 export default async function StockDetails({ params }: StockDetailsPageProps) {
@@ -21,13 +22,13 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
     const tvSymbol = formatSymbolForTradingView(symbol);
     const scriptUrl = `https://s3.tradingview.com/external-embedding/embed-widget-`;
 
-    const session = await auth.api.getSession({
-        headers: await headers()
-    });
-    const userId = session?.user?.id;
-    const [isInWatchlist, sentimentInsights] = await Promise.all([
+    const { userId } = await auth();
+
+    const [isInWatchlist, sentimentInsights, holding, balance] = await Promise.all([
         userId ? isStockInWatchlist(userId, symbol) : Promise.resolve(false),
         getStockSentimentInsights(symbol),
+        getUserHoldingForSymbol(symbol),
+        getPortfolioBalance(),
     ]);
 
     return (
@@ -65,9 +66,16 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
                             symbol={symbol.toUpperCase()}
                             company={symbol.toUpperCase()}
                             isInWatchlist={isInWatchlist}
-                            userId={userId}
+                            userId={userId || undefined}
                         />
                     </div>
+
+                    {/* Trade Panel - Buy/Sell */}
+                    <StockTradePanel
+                        symbol={symbol.toUpperCase()}
+                        balance={balance}
+                        currentShares={holding?.shares || 0}
+                    />
 
                     <StockSentimentCard insight={sentimentInsights} />
 

@@ -9,14 +9,16 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {useRouter} from "next/navigation";
-import {Button} from "@/components/ui/button";
-import {LogOut} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { LogOut, Briefcase } from "lucide-react";
 import NavItems from "@/components/NavItems";
-import {signOut} from "@/lib/actions/auth.actions";
+import { useClerk } from "@clerk/nextjs";
+import Link from "next/link";
 
 const UserDropdown = ({ user, initialStocks }: {user: User, initialStocks: StockWithWatchlistStatus[]}) => {
     const router = useRouter();
+    const { signOut } = useClerk();
 
     const handleSignOut = async () => {
         await signOut();
@@ -28,7 +30,7 @@ const UserDropdown = ({ user, initialStocks }: {user: User, initialStocks: Stock
             <DropdownMenuTrigger asChild>
                 <Button className="flex items-center gap-3 text-gray-4 hover:bg-gray-800 bg-gray-800">
                     <Avatar className="h-8 w-8">
-                        <AvatarImage src="https://media.licdn.com/dms/image/v2/D560BAQGHApE1Vtq6DA/company-logo_200_200/B56ZY1OFJOGcAI-/0/1744649609317/philosopai_in_logo?e=1761782400&v=beta&t=uLNK6v7h96sXybdT42cVK0cJSZaA8KVLw8JYO5fY4oQ" />
+                        <AvatarImage src={user.imageUrl || ''} />
                         <AvatarFallback className="bg-teal-500 text-teal-900 text-sm font-bold">
                             {user.name[0]}
                         </AvatarFallback>
@@ -44,7 +46,7 @@ const UserDropdown = ({ user, initialStocks }: {user: User, initialStocks: Stock
                 <DropdownMenuLabel>
                     <div className="flex relative items-center gap-3 py-2">
                         <Avatar className="h-10 w-10">
-                            <AvatarImage src="https://media.licdn.com/dms/image/v2/D560BAQGHApE1Vtq6DA/company-logo_200_200/B56ZY1OFJOGcAI-/0/1744649609317/philosopai_in_logo?e=1761782400&v=beta&t=uLNK6v7h96sXybdT42cVK0cJSZaA8KVLw8JYO5fY4oQ" />
+                            <AvatarImage src={user.imageUrl || ''} />
                             <AvatarFallback className="bg-teal-500 text-yellow-900 text-sm font-bold">
                                 {user.name[0]}
                             </AvatarFallback>
@@ -58,6 +60,12 @@ const UserDropdown = ({ user, initialStocks }: {user: User, initialStocks: Stock
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-gray-600"/>
+                <DropdownMenuItem asChild className="text-gray-100 text-md font-medium focus:bg-transparent focus:text-teal-500 transition-colors cursor-pointer">
+                    <Link href="/portfolio" className="flex items-center">
+                        <Briefcase className="h-4 w-4 mr-2 hidden sm:block" />
+                        Portfolio
+                    </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut} className="text-gray-100 text-md font-medium focus:bg-transparent focus:text-teal-500 transition-colors cursor-pointer">
                     <LogOut className="h-4 w-4 mr-2 hidden sm:block" />
                     Logout

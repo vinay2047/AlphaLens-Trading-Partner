@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { ClerkProvider } from "@clerk/nextjs";
 import {Toaster} from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -15,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OpenStock",
-  description: "OpenStock is an open-source alternative to expensive market platforms. Track real-time prices, set personalized alerts, and explore detailed company insights — built openly, for everyone, forever free.",
+  title: "AlphaLens Trading Partner",
+  description: "AlphaLens is your intelligent trading partner. Track real-time prices, manage your portfolio, trade stocks with AlphaFunds, and explore detailed company insights.",
 };
 
 export default function RootLayout({
@@ -25,14 +26,31 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className="dark">
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
-                {children}
-                <Toaster/>
-                <Analytics />
-            </body>
-        </html>
+        <ClerkProvider
+            appearance={{
+                variables: {
+                    colorPrimary: '#0FEDBE',
+                    colorBackground: '#141414',
+                    colorInputBackground: '#212328',
+                    colorInputText: '#CCDADC',
+                    colorText: '#CCDADC',
+                    colorTextSecondary: '#9095A1',
+                },
+                elements: {
+                    card: 'bg-gray-900 border-gray-600',
+                    socialButtonsBlockButton: 'bg-gray-800 border-gray-600 text-gray-400',
+                },
+            }}
+        >
+            <html lang="en" className="dark">
+                <body
+                    className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                >
+                    {children}
+                    <Toaster/>
+                    <Analytics />
+                </body>
+            </html>
+        </ClerkProvider>
     );
 }

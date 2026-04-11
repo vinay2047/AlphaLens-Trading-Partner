@@ -71,6 +71,7 @@ declare global {
         id: string;
         name: string;
         email: string;
+        imageUrl?: string;
     };
 
     type Stock = {
@@ -214,6 +215,48 @@ declare global {
         alertType: 'upper' | 'lower';
         threshold: number;
         changePercent?: number;
+    };
+
+    // ─── Portfolio types ───────────────────────────────────────
+    type PortfolioData = {
+        balance: number;
+        totalInvested: number;
+        holdings: HoldingData[];
+        totalPortfolioValue: number;
+        totalPnL: number;
+        totalPnLPercent: number;
+    };
+
+    type HoldingData = {
+        symbol: string;
+        company: string;
+        shares: number;
+        avgBuyPrice: number;
+        totalInvested: number;
+        currentPrice: number;
+        currentValue: number;
+        pnl: number;
+        pnlPercent: number;
+    };
+
+    type TransactionData = {
+        id: string;
+        type: 'DEPOSIT' | 'BUY' | 'SELL';
+        symbol?: string;
+        company?: string;
+        shares?: number;
+        pricePerShare?: number;
+        totalAmount: number;
+        status: string;
+        createdAt: string;
+    };
+
+    type TradeFormData = {
+        symbol: string;
+        company: string;
+        shares: number;
+        currentPrice: number;
+        type: 'BUY' | 'SELL';
     };
 }
 

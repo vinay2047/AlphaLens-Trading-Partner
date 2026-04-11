@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react';
-import { auth } from '@/lib/better-auth/auth';
-import { headers } from 'next/headers';
+import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { getUserWatchlist } from '@/lib/actions/watchlist.actions';
 import { getUserAlerts } from '@/lib/actions/alert.actions';
@@ -12,15 +11,11 @@ import SearchCommand from '@/components/SearchCommand';
 import { Loader2 } from 'lucide-react';
 
 export default async function WatchlistPage() {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    });
+    const { userId } = await auth();
 
-    if (!session) {
+    if (!userId) {
         redirect('/sign-in');
     }
-
-    const userId = session.user.id;
 
     // Parallel data fetching
     const [watchlistItems, alerts, news] = await Promise.all([
