@@ -19,7 +19,7 @@ export default function AlertsPanel({ alerts, onRefresh }: AlertsPanelProps) {
     };
 
     return (
-        <div className="bg-gray-950/40 rounded-2xl border border-white/5 p-6 h-full backdrop-blur-xl shadow-xl transition-all duration-300 hover:border-[#10E55A]/10 flex flex-col">
+        <div className="bg-[#000000] rounded-2xl border border-white/5 p-6 h-full shadow-xl transition-all duration-300 hover:border-[#10E55A]/10 flex flex-col">
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
                 <h2 className="text-xl font-bold text-gray-200 flex items-center tracking-wide">
                     <Bell className="w-5 h-5 mr-3 text-[#10E55A]" />
@@ -29,7 +29,7 @@ export default function AlertsPanel({ alerts, onRefresh }: AlertsPanelProps) {
 
             <div className="space-y-4 flex-1">
                 {alerts.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-48 text-center bg-black/20 rounded-xl border border-dashed border-white/10 p-6">
+                    <div className="flex flex-col items-center justify-center h-48 text-center bg-[#000000] rounded-xl border border-dashed border-white/10 p-6">
                         <Bell className="w-8 h-8 text-gray-700 mb-3" />
                         <span className="text-sm font-medium text-gray-500">No active alerts.</span>
                         <span className="text-xs text-gray-600 mt-1">Add one from the watchlist to get pinged on price targets.</span>

@@ -39,7 +39,7 @@ export default function TradingViewWatchlist({ symbols }: TradingViewWatchlistPr
 
     if (loading) {
         return (
-            <div className="w-full flex items-center justify-center p-12 bg-gray-950/40 backdrop-blur-xl border border-white/5 rounded-2xl shadow-xl min-h-[300px]">
+            <div className="w-full flex items-center justify-center p-12 bg-[#000000] border border-white/5 rounded-2xl shadow-xl min-h-[300px]">
                 <Loader2 className="animate-spin text-[#10E55A] w-10 h-10" />
             </div>
         );
@@ -50,7 +50,7 @@ export default function TradingViewWatchlist({ symbols }: TradingViewWatchlistPr
     }
 
     return (
-        <div className="w-full bg-gray-950/40 backdrop-blur-2xl border border-white/5 rounded-2xl shadow-2xl overflow-hidden transition-all hover:border-[#10E55A]/20">
+        <div className="w-full bg-[#000000] border border-white/5 rounded-2xl shadow-2xl overflow-hidden transition-all hover:border-[#10E55A]/20">
             <div className="overflow-x-auto relative">
                 {/* Subtle screen glare effect */}
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none"></div>
