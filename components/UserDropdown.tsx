@@ -27,58 +27,60 @@ const UserDropdown = ({ user }: {user: User}) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button className="flex items-center gap-3 text-gray-4 hover:bg-gray-800 bg-gray-800">
-                    <Avatar className="h-8 w-8">
+                <Button variant="ghost" className="flex items-center gap-2.5 h-auto pr-4 pl-2 py-1.5 rounded-full bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all">
+                    <Avatar className="h-8 w-8 ring-1 ring-white/10 shadow-sm">
                         <AvatarImage src={user.imageUrl || ''} />
-                        <AvatarFallback className="bg-teal-500 text-teal-900 text-sm font-bold">
+                        <AvatarFallback className="bg-[#10E55A] text-black text-sm font-bold">
                             {user.name[0]}
                         </AvatarFallback>
                     </Avatar>
-                    <div className="hidden md:flex flex-col items-start ">
-                        <span className='text-base font-medium text-gray-400 hover:text-teal-500 '>
+                    <div className="hidden md:flex flex-col items-start">
+                        <span className="text-sm font-semibold text-gray-200 hover:text-white transition-colors">
                             {user.name}
                         </span>
                     </div>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="text-gray-400 bg-gray-800 relative right-5">
-                <DropdownMenuLabel>
-                    <div className="flex relative items-center gap-3 py-2">
-                        <Avatar className="h-10 w-10">
+            <DropdownMenuContent align="end" className="w-[240px] mt-2 p-2 rounded-2xl border-white/5 bg-gray-950/80 backdrop-blur-xl shadow-2xl">
+                <DropdownMenuLabel className="mb-2">
+                    <div className="flex items-center gap-3 py-1">
+                        <Avatar className="h-10 w-10 ring-1 ring-white/10">
                             <AvatarImage src={user.imageUrl || ''} />
-                            <AvatarFallback className="bg-teal-500 text-yellow-900 text-sm font-bold">
+                            <AvatarFallback className="bg-[#10E55A] text-black text-sm font-bold">
                                 {user.name[0]}
                             </AvatarFallback>
                         </Avatar>
-                        <div className="flex flex-col">
-                            <span className='text-base font-medium text-gray-400'>
+                        <div className="flex flex-col overflow-hidden">
+                            <span className="text-sm font-bold text-gray-100 truncate">
                                 {user.name}
                             </span>
-                            <span className="text-sm text-gray-500">{user.email}</span>
+                            <span className="text-xs text-gray-500 font-medium truncate">{user.email}</span>
                         </div>
                     </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-gray-600"/>
-                <DropdownMenuItem asChild className="text-gray-100 text-md font-medium focus:bg-transparent focus:text-teal-500 transition-colors cursor-pointer">
+                <DropdownMenuSeparator className="bg-white/5" />
+                <DropdownMenuItem asChild className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-300 focus:bg-[#10E55A]/10 focus:text-[#10E55A] cursor-pointer transition-colors mt-1">
+                    <Link href="/dashboard" className="flex items-center">
+                        <Briefcase className="h-4 w-4 mr-2" />
+                        Dashboard
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-300 focus:bg-[#10E55A]/10 focus:text-[#10E55A] cursor-pointer transition-colors">
                     <Link href="/portfolio" className="flex items-center">
-                        <Briefcase className="h-4 w-4 mr-2 hidden sm:block" />
+                        <Briefcase className="h-4 w-4 mr-2" />
                         Portfolio
                     </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleSignOut} className="text-gray-100 text-md font-medium focus:bg-transparent focus:text-teal-500 transition-colors cursor-pointer">
-                    <LogOut className="h-4 w-4 mr-2 hidden sm:block" />
-                    Logout
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-gray-600"/>
-                <DropdownMenuItem asChild className="text-gray-100 text-md font-medium focus:bg-transparent focus:text-teal-500 transition-colors cursor-pointer">
+                <DropdownMenuItem asChild className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-300 focus:bg-[#10E55A]/10 focus:text-[#10E55A] cursor-pointer transition-colors">
                     <Link href="/watchlist" className="flex items-center">
+                        <Briefcase className="h-4 w-4 mr-2" />
                         Watchlist
                     </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild className="text-gray-100 text-md font-medium focus:bg-transparent focus:text-teal-500 transition-colors cursor-pointer">
-                    <Link href="/dashboard" className="flex items-center">
-                        Dashboard
-                    </Link>
+                <DropdownMenuSeparator className="bg-white/5 my-1" />
+                <DropdownMenuItem onClick={handleSignOut} className="rounded-xl px-3 py-2.5 text-sm font-medium text-gray-300 focus:bg-red-500/10 focus:text-red-500 cursor-pointer transition-colors">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

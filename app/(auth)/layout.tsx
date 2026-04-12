@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import React from "react";
 import { Star } from "lucide-react";
 import { auth } from "@clerk/nextjs/server";
@@ -15,8 +16,14 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
                 {/* Subtle background glow left */}
                 <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-teal-500/5 blur-[100px] rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2 mix-blend-screen"></div>
 
-                <Link href="/" className="auth-logo flex items-center gap-3 text-white text-3xl font-bold tracking-tight relative z-10">
-                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-400 text-black font-extrabold shadow-[0_0_20px_rgba(16,229,90,0.4)]">α</span>
+                <Link href="/" className="auth-logo flex items-center gap-3 text-white text-3xl font-bold tracking-tight relative z-10 w-fit">
+                    <Image 
+                        src="/images/alphalens-flat.png" 
+                        alt="AlphaLens Logo" 
+                        width={48} 
+                        height={48} 
+                        className="rounded-xl ring-1 ring-white/10"
+                    />
                     AlphaLens
                 </Link>
 
@@ -35,10 +42,10 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
                     </blockquote>
                     <div className="flex items-center justify-between border-t border-gray-800 pt-6">
                         <div>
-                            <cite className="text-sm md:text-base font-bold text-teal-400 not-italic block mb-1">AlphaLens Team</cite>
+                            <cite className="text-sm md:text-base font-bold text-[#10E55A] not-italic block mb-1">AlphaLens Team</cite>
                             <p className="max-md:text-xs text-gray-500 font-medium">Your Trading Partner</p>
                         </div>
-                        <div className="flex items-center gap-1 text-teal-400 bg-teal-500/10 px-3 py-1.5 rounded-full border border-teal-500/20">
+                        <div className="flex items-center gap-1 text-[#10E55A] bg-[#10E55A]/10 px-3 py-1.5 rounded-full border border-[#10E55A]/20">
                             {[1,2,3,4,5].map((star) => (
                                 <Star key={star} className="w-4 h-4 fill-current" />
                             ))}

@@ -13,33 +13,36 @@ export default function NewsGrid({ news }: NewsGridProps) {
     if (!news || news.length === 0) return null;
 
     return (
-        <div className="mt-8">
-            <h2 className="text-xl font-bold text-white mb-4">Market News</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="mt-12">
+            <h2 className="text-2xl font-bold text-gray-200 mb-6 flex items-center">
+                <span className="w-2 h-6 bg-[#10E55A] rounded-full mr-3"></span>
+                Market Intelligence
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {news.map((item, idx) => (
                     <a
                         key={idx}
                         href={item.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block bg-gray-900/30 border border-gray-800 rounded-lg overflow-hidden hover:border-gray-700 transition-colors group"
+                        className="block bg-gray-950/40 border border-white/5 rounded-2xl overflow-hidden backdrop-blur-xl hover:border-[#10E55A]/30 transition-all duration-300 group hover:-translate-y-1"
                     >
-                        <div className="p-4 flex flex-col h-full">
-                            <div className="flex items-start justify-between mb-2">
-                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${item.related ? "bg-blue-900/50 text-blue-300" : "bg-gray-800 text-gray-400"
+                        <div className="p-6 flex flex-col h-full bg-gradient-to-br from-white/[0.02] to-transparent">
+                            <div className="flex items-center justify-between mb-4">
+                                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-md tracking-wider border ${item.related ? "bg-[#10E55A]/10 text-[#10E55A] border-[#10E55A]/20" : "bg-white/5 text-gray-400 border-white/10"
                                     }`}>
                                     {item.related || "MARKET"}
                                 </span>
-                                <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-gray-400" />
+                                <ExternalLink className="w-4 h-4 text-gray-600 group-hover:text-[#10E55A] transition-colors" />
                             </div>
-                            <h3 className="text-sm font-semibold text-gray-200 mb-2 line-clamp-2 group-hover:text-blue-400 transition-colors">
+                            <h3 className="text-base font-bold text-gray-200 mb-3 line-clamp-2 leading-snug group-hover:text-white transition-colors">
                                 {item.headline}
                             </h3>
-                            <p className="text-xs text-gray-500 line-clamp-3 mb-4 flex-1">
+                            <p className="text-sm text-gray-500 line-clamp-3 mb-5 flex-1 leading-relaxed">
                                 {item.summary}
                             </p>
-                            <div className="flex items-center justify-between text-[10px] text-gray-600 mt-auto">
-                                <span>{item.source}</span>
+                            <div className="flex items-center justify-between text-xs text-gray-600 mt-auto font-medium">
+                                <span className="text-gray-400">{item.source}</span>
                                 <span>
                                     {item.datetime ? formatDistanceToNow(item.datetime * 1000, { addSuffix: true }) : ''}
                                 </span>

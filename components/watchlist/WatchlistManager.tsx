@@ -87,7 +87,7 @@ export default function WatchlistManager({ initialItems, userId }: WatchlistMana
                 )}
             </div>
 
-            <div className="min-h-[550px]">
+            <div className="w-full">
                 <TradingViewWatchlist symbols={watchlistSymbols} />
             </div>
         </div>

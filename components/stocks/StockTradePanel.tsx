@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { TrendingUp, TrendingDown, Wallet, BarChart3 } from 'lucide-react';
+import { TrendingUp, TrendingDown } from 'lucide-react';
 import TradeModal from '@/components/portfolio/TradeModal';
 import Link from 'next/link';
 import { getUsMarketStatus } from '@/lib/utils';
@@ -39,10 +39,8 @@ const StockTradePanel = ({ symbol, balance, currentShares }: StockTradePanelProp
 
     useEffect(() => {
         const syncMarketStatus = () => setMarketStatus(getUsMarketStatus());
-
         syncMarketStatus();
         const intervalId = window.setInterval(syncMarketStatus, 60_000);
-
         return () => window.clearInterval(intervalId);
     }, []);
 
@@ -58,39 +56,28 @@ const StockTradePanel = ({ symbol, balance, currentShares }: StockTradePanelProp
 
     return (
         <>
-            <div className="rounded-xl border border-gray-600 bg-gradient-to-br from-gray-800 to-gray-800/80 overflow-hidden">
+            <div className="rounded-2xl border border-gray-800 bg-gray-950/40 backdrop-blur-sm overflow-hidden">
                 {/* Header */}
-                <div className="px-5 py-4 border-b border-gray-600/50 bg-gradient-to-r from-teal-500/5 to-cyan-500/5">
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-gray-100 flex items-center gap-2">
-                            <BarChart3 className="h-5 w-5 text-teal-400" />
-                            Trade {symbol}
-                        </h3>
-                        {currentPrice > 0 && (
-                            <span className="text-lg font-bold text-gray-100">
-                                ${currentPrice.toFixed(2)}
-                            </span>
-                        )}
-                    </div>
+                <div className="px-5 py-4 border-b border-gray-800 flex items-center justify-between">
+                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-[0.2em]">Trade {symbol}</span>
+                    {currentPrice > 0 && (
+                        <span className="text-base font-bold text-gray-100">
+                            ${currentPrice.toFixed(2)}
+                        </span>
+                    )}
                 </div>
 
                 <div className="p-5 space-y-4">
-                    {/* Balance & Holdings info */}
+                    {/* Balance & Holdings */}
                     <div className="grid grid-cols-2 gap-3">
-                        <div className="p-3 rounded-lg bg-gray-700/30 border border-gray-600/30">
-                            <div className="flex items-center gap-2 mb-1">
-                                <Wallet className="h-3.5 w-3.5 text-teal-400" />
-                                <span className="text-xs text-gray-500">Balance</span>
-                            </div>
+                        <div className="p-3 rounded-xl border border-gray-800 bg-black/20">
+                            <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-600 mb-1.5">Balance</p>
                             <p className="text-sm font-bold text-gray-200">
                                 ${balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                             </p>
                         </div>
-                        <div className="p-3 rounded-lg bg-gray-700/30 border border-gray-600/30">
-                            <div className="flex items-center gap-2 mb-1">
-                                <BarChart3 className="h-3.5 w-3.5 text-blue-400" />
-                                <span className="text-xs text-gray-500">Your Shares</span>
-                            </div>
+                        <div className="p-3 rounded-xl border border-gray-800 bg-black/20">
+                            <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-600 mb-1.5">Shares</p>
                             <p className="text-sm font-bold text-gray-200">
                                 {currentShares > 0 ? currentShares.toLocaleString() : '0'}
                             </p>
@@ -102,33 +89,32 @@ const StockTradePanel = ({ symbol, balance, currentShares }: StockTradePanelProp
                         <Button
                             onClick={openBuy}
                             disabled={loading || !marketStatus.isOpen}
-                            className="h-11 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-gray-900 font-semibold rounded-xl shadow-lg hover:shadow-emerald-500/20 transition-all"
+                            className="h-9 bg-[#10E55A] hover:bg-[#00CC47] text-black text-xs font-bold rounded-xl transition-all shadow-none disabled:opacity-40"
                         >
-                            <TrendingUp className="h-4 w-4 mr-2" />
+                            <TrendingUp className="h-3.5 w-3.5 mr-1.5" />
                             Buy
                         </Button>
                         <Button
                             onClick={openSell}
                             disabled={loading || currentShares <= 0 || !marketStatus.isOpen}
-                            className="h-11 bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-red-500/20 transition-all disabled:opacity-40"
+                            className="h-9 bg-transparent hover:bg-[#FF3B30]/10 text-[#FF3B30] border border-[#FF3B30]/30 hover:border-[#FF3B30]/70 text-xs font-bold rounded-xl transition-all disabled:opacity-30"
                         >
-                            <TrendingDown className="h-4 w-4 mr-2" />
+                            <TrendingDown className="h-3.5 w-3.5 mr-1.5" />
                             Sell
                         </Button>
                     </div>
 
-                    <div className={`rounded-lg border px-3 py-2 text-xs ${
-                        marketStatus.isOpen
-                            ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300'
-                            : 'border-amber-500/20 bg-amber-500/10 text-amber-300'
+                    {/* Market status */}
+                    <p className={`text-[10px] text-center font-medium ${
+                        marketStatus.isOpen ? 'text-[#10E55A]/70' : 'text-amber-400/60'
                     }`}>
                         {marketStatus.label}
-                    </div>
+                    </p>
 
                     {/* Portfolio Link */}
                     <Link
                         href="/portfolio"
-                        className="block text-center text-sm text-teal-400 hover:text-teal-300 transition-colors py-1"
+                        className="block text-center text-xs text-gray-600 hover:text-gray-400 transition-colors"
                     >
                         View Full Portfolio →
                     </Link>
