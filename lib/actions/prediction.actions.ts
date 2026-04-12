@@ -31,15 +31,13 @@ export type PredictionResponse = {
 export async function getMLPricePrediction(symbol: string, days: number = 7): Promise<PredictionResponse> {
     try {
         // Fetch historical data for the payload
-        const fromSec = Math.floor(Date.now() / 1000) - (86400 * 160); // roughly 160 days to get 110 trading days
-        const toSec = Math.floor(Date.now() / 1000);
-        const candles = await getStockCandles(symbol, 'D', fromSec, toSec);
+        const candles = await getStockCandles(symbol, 160);
         
-        const open = candles.o ? candles.o.slice(-110) : [];
-        const high = candles.h ? candles.h.slice(-110) : [];
-        const low = candles.l ? candles.l.slice(-110) : [];
-        const close = candles.c ? candles.c.slice(-110) : [];
-        const volume = candles.v ? candles.v.slice(-110) : [];
+        const open = candles.length > 0 ? candles.map(c => c.o).slice(-110) : [];
+        const high = candles.length > 0 ? candles.map(c => c.h).slice(-110) : [];
+        const low = candles.length > 0 ? candles.map(c => c.l).slice(-110) : [];
+        const close = candles.length > 0 ? candles.map(c => c.c).slice(-110) : [];
+        const volume = candles.length > 0 ? candles.map(c => c.v).slice(-110) : [];
 
         // The unified backend exposes /api/predict 
         const response = await fetch(`${PREDICTION_SERVICE_URL}/api/predict`, {
