@@ -15,9 +15,16 @@ try {
     dns.setServers(['8.8.8.8']);
 } catch {}
 
+import 'dotenv/config';
+
 // ─── Config ───────────────────────────────────────────────────────────────────
-const MONGODB_URI = 'mongodb+srv://gargmishti:alphalens@cluster0.mqad0fe.mongodb.net/?appName=Cluster0';
-const CLERK_SECRET_KEY = 'sk_test_ohetAxntGBWEcjnEUUteok9ECyfCsjf1WLZGDK9tkY';
+const MONGODB_URI = process.env.MONGODB_URI;
+const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY;
+
+if (!MONGODB_URI || !CLERK_SECRET_KEY) {
+    console.error('❌ MONGODB_URI and CLERK_SECRET_KEY must be set in .env');
+    process.exit(1);
+}
 
 const TARGET_EMAILS = ['gargmishti9@gmail.com', 'timepassinphone@gmail.com'];
 
