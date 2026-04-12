@@ -61,6 +61,8 @@ export async function getShadowPortfolioInference(
             throw new Error(`Shadow Portfolio API returned ${res.status}`);
         }
 
+        const data: ShadowPortfolioResponse = await res.json();
+        return data;
     } catch (error) {
         console.error(`[Shadow Portfolio Service Error] Inference failed for ${ticker}:`, error);
         return null;
