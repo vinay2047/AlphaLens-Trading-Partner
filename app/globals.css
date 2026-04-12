@@ -130,6 +130,9 @@
     --color-red-500: #FF3B30;
     --color-orange-500: #FF8243;
     --color-purple-500: #D13BFF;
+
+    --color-text-secondary: #A3A3A3;
+    --color-text-tertiary: #525252;
 }
 
 @layer base {
@@ -375,6 +378,9 @@
     }
     .alert-delete-btn {
         @apply text-gray-500 rounded-full hover:bg-red-500/10 bg-transparent cursor-pointer transition-colors;
+    }
+    .glass-card {
+        @apply bg-gray-950/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)];
     }
 }
 

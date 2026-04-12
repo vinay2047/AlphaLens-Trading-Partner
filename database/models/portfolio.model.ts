@@ -11,7 +11,7 @@ export interface IPortfolio extends Document {
 const PortfolioSchema = new Schema<IPortfolio>(
     {
         userId: { type: String, required: true, unique: true, index: true },
-        balance: { type: Number, default: 10000, min: 0 },
+        balance: { type: Number, default: 0, min: 0 },
         totalInvested: { type: Number, default: 0, min: 0 },
     },
     { timestamps: true }

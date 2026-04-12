@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, Activity, TrendingUp, ShieldCheck, Repeat, ArrowUpRight, ArrowDownRight, Zap, Layers, Globe } from 'lucide-react';
 import Image from 'next/image';
+import { auth, currentUser } from "@clerk/nextjs/server";
+import UserDropdown from "@/components/UserDropdown";
 
 const FeatureCard = ({ icon: Icon, title, description, highlighted = false }: { 
   icon: React.ElementType, 
@@ -144,7 +146,35 @@ const AnalyticsPromo = () => (
     </section>
 );
 
-export default function AlphaLensHero() {
+export default async function AlphaLensHero() {
+  const { userId, sessionClaims } = await auth();
+  
+  let user: User | null = null;
+  if (userId) {
+    const clerkUser = await currentUser();
+    const fallbackName =
+        typeof sessionClaims?.fullName === 'string'
+            ? sessionClaims.fullName
+            : typeof sessionClaims?.firstName === 'string'
+                ? `${sessionClaims.firstName}${typeof sessionClaims?.lastName === 'string' ? ` ${sessionClaims.lastName}` : ''}`
+                : typeof sessionClaims?.email === 'string'
+                    ? sessionClaims.email
+                    : 'User';
+    const fallbackEmail =
+        typeof sessionClaims?.email === 'string'
+            ? sessionClaims.email
+            : '';
+
+    user = {
+        id: userId,
+        name: clerkUser?.firstName
+            ? `${clerkUser.firstName}${clerkUser.lastName ? ' ' + clerkUser.lastName : ''}`
+            : clerkUser?.emailAddresses[0]?.emailAddress || fallbackName,
+        email: clerkUser?.emailAddresses[0]?.emailAddress || fallbackEmail,
+        imageUrl: clerkUser?.imageUrl,
+    };
+  }
+
   return (
     <main className="min-h-screen bg-[#000000] text-white overflow-hidden relative selection:bg-[#10E55A]/20">
       {/* Background Ambience gradients */}
@@ -159,13 +189,19 @@ export default function AlphaLensHero() {
             <span className="font-extrabold text-xl tracking-tight hidden md:block">AlphaLens</span>
         </nav>
 
-        <nav className="absolute top-6 right-6 lg:right-10 flex gap-4 z-50">
-             <Link href="/sign-in" className="flex items-center justify-center text-gray-400 hover:text-white px-5 py-2 rounded-xl font-bold transition-colors">
-              Log In
-            </Link>
-             <Link href="/sign-up" className="flex items-center justify-center bg-[#10E55A] hover:bg-[#00CC47] text-black px-6 py-2 rounded-xl font-extrabold transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(16,229,90,0.1)]">
-              Trade Now
-            </Link>
+        <nav className="absolute top-6 right-6 lg:right-10 flex gap-4 z-50 items-center">
+             {userId && user ? (
+               <UserDropdown user={user} />
+             ) : (
+               <>
+                 <Link href="/sign-in" className="flex items-center justify-center text-gray-400 hover:text-white px-5 py-2 rounded-xl font-bold transition-colors">
+                  Log In
+                </Link>
+                 <Link href="/sign-up" className="flex items-center justify-center bg-[#10E55A] hover:bg-[#00CC47] text-black px-6 py-2 rounded-xl font-extrabold transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(16,229,90,0.1)]">
+                  Trade Now
+                </Link>
+               </>
+             )}
         </nav>
 
         {/* Hero Section Split Layout */}

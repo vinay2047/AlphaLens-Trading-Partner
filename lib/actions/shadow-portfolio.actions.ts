@@ -4,9 +4,7 @@
 const SHADOW_PORTFOLIO_SERVICE_URL =
     process.env.NEXT_PUBLIC_API_URL || 'https://alpha-lens-3464.onrender.com';
 
-// ---------------------------------------------------------------------------
-// Type Definitions (Mapped from Python Pydantic Models)
-// ---------------------------------------------------------------------------
+
 export interface DayResult {
     date: string;
     allocation: number;

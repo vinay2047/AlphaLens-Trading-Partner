@@ -56,7 +56,7 @@ export default function ShadowPortfolioCard({ symbol }: Props) {
         return (
             <div className="glass-card p-6 flex flex-col items-center justify-center min-h-[400px]">
                 <div className="flex items-center gap-3 text-cyan-400 animate-pulse">
-                    <Bot className="w-6 h-6 animate-spin-slow" />
+                    {/* <Bot className="w-6 h-6 animate-spin-slow" /> */}
                     <span>RL Agent Compiling Strategy...</span>
                 </div>
             </div>
@@ -85,65 +85,74 @@ export default function ShadowPortfolioCard({ symbol }: Props) {
     return (
         <div className="glass-card p-6 flex flex-col gap-6 relative overflow-hidden group">
             {/* Ambient Background Glow */}
-            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-green-500/5 rounded-full blur-[100px] pointer-events-none group-hover:bg-green-500/10 transition-colors duration-700" />
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#10E55A]/10 rounded-full blur-[80px] pointer-events-none group-hover:bg-[#10E55A]/20 transition-all duration-700" />
 
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-10">
+            <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 z-10">
                 <div>
-                    <h2 className="text-xl font-bold flex items-center gap-2">
-                        <Bot className="w-5 h-5 text-green-400" />
+                    <h2 className="text-lg font-bold flex items-center gap-2 text-white">
+                        <Bot className="w-5 h-5 text-[#10E55A]" />
                         Shadow Portfolio Agent
-
                     </h2>
-                    <p className="text-sm text-text-secondary mt-1">
+                    <p className="text-[10px] text-text-secondary mt-1 max-w-[240px] leading-relaxed">
                         Deep Reinforcement Learning (PPO) Dynamic Allocation
                     </p>
                 </div>
                 
-                <div className="flex items-center gap-4 text-sm bg-background-dark/50 p-2 rounded-lg border border-white/5">
-                    <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-[#10E55A]" />
-                        <span className="text-text-secondary">Agent PPO</span>
+                <div className="flex items-center gap-3 text-[10px] bg-black/40 px-3 py-1.5 rounded-full border border-white/5 w-fit">
+                    <div className="flex items-center gap-1.5">
+                        <div className="w-2 h-2 rounded-full bg-[#10E55A]" />
+                        <span className="text-text-secondary uppercase tracking-wider font-medium">Agent PPO</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-slate-600" />
-                        <span className="text-text-secondary">Buy & Hold</span>
+                    <div className="w-px h-3 bg-white/10 mx-1" />
+                    <div className="flex items-center gap-1.5">
+                        <div className="w-2 h-2 rounded-full bg-slate-600" />
+                        <span className="text-text-secondary uppercase tracking-wider font-medium">Hold</span>
                     </div>
                 </div>
             </div>
 
             {/* Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 z-10">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 z-10">
                 {/* Total Return */}
-                <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 shadow-inner">
-                    <p className="text-xs text-text-secondary uppercase tracking-wider mb-2">Total Return (90D)</p>
-                    <div className="flex items-baseline gap-2">
-                        <span className={`text-2xl font-bold ${data.agent_metrics.total_return >= data.baseline_metrics.total_return ? 'text-green-400' : 'text-red-400'}`}>
+                <div className="p-3.5 rounded-xl bg-white/2 border border-white/5 shadow-inner backdrop-blur-sm flex flex-col justify-between h-full">
+                    <p className="text-[9px] text-text-secondary uppercase tracking-[0.2em] mb-2 font-bold opacity-80">Total Return</p>
+                    <div className="flex flex-col gap-0.5">
+                        <span className={`text-xl font-black tracking-tighter ${data.agent_metrics.total_return >= data.baseline_metrics.total_return ? 'text-[#10E55A]' : 'text-red-400'}`}>
                             {formatPct(data.agent_metrics.total_return)}
                         </span>
-                        <span className="text-sm text-text-secondary">vs {formatPct(data.baseline_metrics.total_return)}</span>
+                        <div className="flex items-center gap-1 text-[10px]">
+                            <span className="text-text-tertiary">vs</span>
+                            <span className="text-text-secondary">{formatPct(data.baseline_metrics.total_return)}</span>
+                        </div>
                     </div>
                 </div>
 
                 {/* Sharpe Ratio */}
-                <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 shadow-inner">
-                    <p className="text-xs text-text-secondary uppercase tracking-wider mb-2">Sharpe Ratio</p>
-                    <div className="flex items-baseline gap-2">
-                        <span className={`text-2xl font-bold ${data.agent_metrics.sharpe_ratio >= data.baseline_metrics.sharpe_ratio ? 'text-green-400' : 'text-red-400'}`}>
+                <div className="p-3.5 rounded-xl bg-white/2 border border-white/5 shadow-inner backdrop-blur-sm flex flex-col justify-between h-full">
+                    <p className="text-[9px] text-text-secondary uppercase tracking-[0.2em] mb-2 font-bold opacity-80">Sharpe Ratio</p>
+                    <div className="flex flex-col gap-0.5">
+                        <span className={`text-xl font-black tracking-tighter ${data.agent_metrics.sharpe_ratio >= data.baseline_metrics.sharpe_ratio ? 'text-[#10E55A]' : 'text-red-400'}`}>
                             {data.agent_metrics.sharpe_ratio.toFixed(2)}
                         </span>
-                        <span className="text-sm text-text-secondary">vs {data.baseline_metrics.sharpe_ratio.toFixed(2)}</span>
+                        <div className="flex items-center gap-1 text-[10px]">
+                            <span className="text-text-tertiary">vs</span>
+                            <span className="text-text-secondary">{data.baseline_metrics.sharpe_ratio.toFixed(2)}</span>
+                        </div>
                     </div>
                 </div>
 
                 {/* Max Drawdown */}
-                <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 shadow-inner">
-                    <p className="text-xs text-text-secondary uppercase tracking-wider mb-2">Max Drawdown</p>
-                    <div className="flex items-baseline gap-2">
-                        <span className={`text-2xl font-bold ${data.agent_metrics.max_drawdown <= data.baseline_metrics.max_drawdown ? 'text-green-400' : 'text-red-400'}`}>
+                <div className="p-3.5 rounded-xl bg-white/2 border border-white/5 shadow-inner backdrop-blur-sm flex flex-col justify-between h-full">
+                    <p className="text-[9px] text-text-secondary uppercase tracking-[0.2em] mb-2 font-bold opacity-80">Max Drawdown</p>
+                    <div className="flex flex-col gap-0.5">
+                        <span className={`text-xl font-black tracking-tighter ${data.agent_metrics.max_drawdown <= data.baseline_metrics.max_drawdown ? 'text-[#10E55A]' : 'text-red-400'}`}>
                             {formatPct(data.agent_metrics.max_drawdown)}
                         </span>
-                        <span className="text-sm text-text-secondary">vs {formatPct(data.baseline_metrics.max_drawdown)}</span>
+                        <div className="flex items-center gap-1 text-[10px]">
+                            <span className="text-text-tertiary">vs</span>
+                            <span className="text-text-secondary">{formatPct(data.baseline_metrics.max_drawdown)}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -151,7 +160,7 @@ export default function ShadowPortfolioCard({ symbol }: Props) {
             {/* Chart */}
             <div className="h-[350px] w-full mt-4 z-10 relative">
                 <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <LineChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
                         <defs>
                             <linearGradient id="colorAgent" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="5%" stopColor="#10E55A" stopOpacity={0.3}/>
@@ -168,10 +177,12 @@ export default function ShadowPortfolioCard({ symbol }: Props) {
                             minTickGap={30}
                         />
                         <YAxis 
-                            stroke="#ffffff40" 
-                            fontSize={12}
+                            stroke="#ffffff20" 
+                            fontSize={10}
                             tickFormatter={(val) => val.toFixed(2)}
                             domain={['auto', 'auto']}
+                            axisLine={false}
+                            tickLine={false}
                         />
                         <Tooltip 
                             contentStyle={{ 
@@ -207,9 +218,9 @@ export default function ShadowPortfolioCard({ symbol }: Props) {
                 </ResponsiveContainer>
             </div>
             
-            <div className="flex items-center gap-2 text-xs text-text-tertiary z-10 border-t border-white/5 pt-4">
-                <TrendingUp className="w-4 h-4" />
-                <p>The agent observes 17 technical indicators daily to dynamically allocate capital between {symbol} and cash to maximize the Differential Sharpe Ratio.</p>
+            <div className="flex items-start gap-2 text-[10px] text-text-tertiary z-10 border-t border-white/5 pt-4">
+                <TrendingUp className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+                <p className="leading-normal">The agent observes 17 technical indicators daily to dynamically allocate capital between {symbol} and cash, optimizing the Differential Sharpe Ratio.</p>
             </div>
         </div>
     );

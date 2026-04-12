@@ -34,8 +34,8 @@ const UserDropdown = ({ user }: {user: User}) => {
                             {user.name[0]}
                         </AvatarFallback>
                     </Avatar>
-                    <div className="hidden md:flex flex-col items-start">
-                        <span className="text-sm font-semibold text-gray-200 hover:text-white transition-colors">
+                    <div className="hidden md:flex flex-col items-start min-w-0 max-w-[120px]">
+                        <span className="text-sm font-semibold text-gray-200 hover:text-white transition-colors truncate w-full">
                             {user.name}
                         </span>
                     </div>
