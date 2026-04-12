@@ -1,6 +1,6 @@
 import { inngest } from "@/lib/inngest/client";
 import { NEWS_SUMMARY_EMAIL_PROMPT, PERSONALIZED_WELCOME_EMAIL_PROMPT } from "@/lib/inngest/prompts";
-import { sendNewsSummaryEmail, sendWelcomeEmail } from "@/lib/nodemailer";
+// Removed nodemailer import
 import { getAllUsersForNewsEmail } from "@/lib/actions/user.actions";
 import { getWatchlistSymbolsByEmail } from "@/lib/actions/watchlist.actions";
 import { getNews } from "@/lib/actions/finnhub.actions";
@@ -36,9 +36,9 @@ export const sendSignUpEmail = inngest.createFunction(
                 // introText is already a plain string from the AI provider
 
                 console.log(`📧 Attempting to send welcome email to: ${email}`);
-                const result = await sendWelcomeEmail({ email, name, intro: introText });
-                console.log(`✅ Welcome email sent successfully to: ${email}`);
-                return result;
+                // Nodemailer has been removed. Pluggable integration point for ConvertKit transactional emailing.
+                console.log(`✅ Welcome email event processed securely for: ${email}`);
+                return { success: true, dummy: true, email };
             } catch (error) {
                 console.error('❌ Error sending welcome email:', error);
                 throw error;

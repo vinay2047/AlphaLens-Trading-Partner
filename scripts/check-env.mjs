@@ -24,9 +24,6 @@ const requiredVars = {
     'GEMINI_API_KEY': 'Google Gemini API key',
     'INNGEST_SIGNING_KEY': 'Inngest signing key (for Vercel)',
     
-    // Email
-    'NODEMAILER_EMAIL': 'Gmail address for sending emails',
-    'NODEMAILER_PASSWORD': 'Gmail app password (not regular password)',
 };
 
 const deprecatedVars = {
