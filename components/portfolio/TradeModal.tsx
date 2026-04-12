@@ -7,6 +7,15 @@ import { buyStock, sellStock } from '@/lib/actions/portfolio.actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
+export type TradeSuccessPayload = {
+    type: 'BUY' | 'SELL';
+    symbol: string;
+    company: string;
+    shares: number;
+    pricePerShare: number;
+    totalAmount: number;
+};
+
 type TradeModalProps = {
     open: boolean;
     onClose: () => void;
@@ -17,6 +26,7 @@ type TradeModalProps = {
     currentShares?: number;
     defaultType?: 'BUY' | 'SELL';
     marketOpen?: boolean;
+    onTradeSuccess?: (payload: TradeSuccessPayload) => void | Promise<void>;
 };
 
 const TradeModal = ({
@@ -29,6 +39,7 @@ const TradeModal = ({
     currentShares = 0,
     defaultType = 'BUY',
     marketOpen = true,
+    onTradeSuccess,
 }: TradeModalProps) => {
     const [type, setType] = useState<'BUY' | 'SELL'>(defaultType);
     const [shares, setShares] = useState('');
@@ -60,8 +71,18 @@ const TradeModal = ({
                     toast.success(`Bought ${shareCount} shares of ${symbol}`, {
                         description: `Total cost: $${estimatedTotal.toFixed(2)}`,
                     });
+                    await onTradeSuccess?.({
+                        type: 'BUY',
+                        symbol,
+                        company,
+                        shares: shareCount,
+                        pricePerShare: currentPrice,
+                        totalAmount: estimatedTotal,
+                    });
                     onClose();
-                    router.refresh();
+                    if (!onTradeSuccess) {
+                        router.refresh();
+                    }
                 } else {
                     toast.error('Buy failed', { description: result.error });
                 }
@@ -71,8 +92,18 @@ const TradeModal = ({
                     toast.success(`Sold ${shareCount} shares of ${symbol}`, {
                         description: `Total revenue: $${estimatedTotal.toFixed(2)}`,
                     });
+                    await onTradeSuccess?.({
+                        type: 'SELL',
+                        symbol,
+                        company,
+                        shares: shareCount,
+                        pricePerShare: currentPrice,
+                        totalAmount: estimatedTotal,
+                    });
                     onClose();
-                    router.refresh();
+                    if (!onTradeSuccess) {
+                        router.refresh();
+                    }
                 } else {
                     toast.error('Sell failed', { description: result.error });
                 }

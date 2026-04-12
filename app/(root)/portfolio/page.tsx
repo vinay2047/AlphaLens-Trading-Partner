@@ -8,7 +8,7 @@ import PortfolioCharts from '@/components/portfolio/PortfolioCharts';
 import HoldingsTable from '@/components/portfolio/HoldingsTable';
 import TransactionHistory from '@/components/portfolio/TransactionHistory';
 import AddFundsModal from '@/components/portfolio/AddFundsModal';
-import TradeModal from '@/components/portfolio/TradeModal';
+import TradeModal, { type TradeSuccessPayload } from '@/components/portfolio/TradeModal';
 import DCAManager from '@/components/portfolio/DCAManager';
 import { Button } from '@/components/ui/button';
 import { Plus, RefreshCw, Search, Loader2 } from 'lucide-react';
@@ -109,6 +109,120 @@ const PortfolioPage = () => {
     const handleSellFromTable = (holding: HoldingData) => {
         setSelectedHolding(holding);
         setTradeOpen(true);
+    };
+
+    const buildPortfolioSummary = (base: PortfolioData, holdings: HoldingData[], balance: number, totalInvested: number): PortfolioData => {
+        const totalPortfolioValue = holdings.reduce((sum, holding) => sum + holding.currentValue, 0);
+        const totalPnL = holdings.reduce((sum, holding) => sum + holding.pnl, 0);
+
+        return {
+            ...base,
+            balance,
+            totalInvested,
+            holdings,
+            totalPortfolioValue,
+            totalPnL,
+            totalPnLPercent: totalInvested > 0 ? (totalPnL / totalInvested) * 100 : 0,
+        };
+    };
+
+    const handleTradeSuccess = ({ type, symbol, company, shares, pricePerShare, totalAmount }: TradeSuccessPayload) => {
+        setPortfolio((prev) => {
+            if (!prev) return prev;
+
+            if (type === 'BUY') {
+                const existingHolding = prev.holdings.find((holding) => holding.symbol === symbol);
+                const nextHoldings = existingHolding
+                    ? prev.holdings.map((holding) => {
+                        if (holding.symbol !== symbol) return holding;
+
+                        const nextShares = holding.shares + shares;
+                        const nextTotalInvested = holding.totalInvested + totalAmount;
+                        const nextCurrentValue = nextShares * pricePerShare;
+                        const nextPnl = nextCurrentValue - nextTotalInvested;
+
+                        return {
+                            ...holding,
+                            company,
+                            shares: nextShares,
+                            avgBuyPrice: nextTotalInvested / nextShares,
+                            totalInvested: nextTotalInvested,
+                            currentPrice: pricePerShare,
+                            currentValue: nextCurrentValue,
+                            pnl: nextPnl,
+                            pnlPercent: nextTotalInvested > 0 ? (nextPnl / nextTotalInvested) * 100 : 0,
+                        };
+                    })
+                    : [
+                        {
+                            symbol,
+                            company,
+                            shares,
+                            avgBuyPrice: pricePerShare,
+                            totalInvested: totalAmount,
+                            currentPrice: pricePerShare,
+                            currentValue: totalAmount,
+                            pnl: 0,
+                            pnlPercent: 0,
+                        },
+                        ...prev.holdings,
+                    ];
+                const nextTotalInvested = prev.totalInvested + totalAmount;
+
+                return buildPortfolioSummary(
+                    prev,
+                    nextHoldings,
+                    Math.max(0, prev.balance - totalAmount),
+                    nextTotalInvested,
+                );
+            }
+
+            const nextHoldings = prev.holdings.flatMap((holding) => {
+                if (holding.symbol !== symbol) return [holding];
+
+                const nextShares = holding.shares - shares;
+                if (nextShares <= 0) {
+                    return [];
+                }
+
+                const investedReduction = holding.totalInvested * (shares / holding.shares);
+                const nextTotalInvested = holding.totalInvested - investedReduction;
+                const nextCurrentValue = nextShares * holding.currentPrice;
+                const nextPnl = nextCurrentValue - nextTotalInvested;
+
+                return [{
+                    ...holding,
+                    shares: nextShares,
+                    totalInvested: nextTotalInvested,
+                    currentValue: nextCurrentValue,
+                    pnl: nextPnl,
+                    pnlPercent: nextTotalInvested > 0 ? (nextPnl / nextTotalInvested) * 100 : 0,
+                }];
+            });
+            const nextTotalInvested = nextHoldings.reduce((sum, holding) => sum + holding.totalInvested, 0);
+
+            return buildPortfolioSummary(
+                prev,
+                nextHoldings,
+                prev.balance + totalAmount,
+                nextTotalInvested,
+            );
+        });
+
+        setTransactions((prev) => [
+            {
+                id: `temp-${Date.now()}`,
+                type,
+                symbol,
+                company,
+                shares,
+                pricePerShare,
+                totalAmount,
+                status: 'COMPLETED',
+                createdAt: new Date().toISOString(),
+            },
+            ...prev,
+        ].slice(0, 50));
     };
 
     if (loading) {
@@ -247,6 +361,7 @@ const PortfolioPage = () => {
                     balance={portfolio.balance}
                     currentShares={selectedHolding.shares}
                     defaultType="SELL"
+                    onTradeSuccess={handleTradeSuccess}
                 />
             )}
         </div>

@@ -9,35 +9,11 @@ import {
     leaderboardCacheKey,
     portfolioCacheKey,
     PORTFOLIO_CACHE_TTL_SECONDS,
-    QUOTE_CACHE_TTL_SECONDS,
-    quoteCacheKey,
     transactionsCacheKey,
     TRANSACTIONS_CACHE_TTL_SECONDS,
 } from "@/lib/cache-keys";
 import { deleteCacheKeys, getCacheJson, setCacheJson } from "@/lib/redis-cache";
-
-const FINNHUB_API_KEY = process.env.NEXT_PUBLIC_FINNHUB_API_KEY;
-const FINNHUB_BASE = process.env.FINNHUB_BASE_URL || 'https://finnhub.io/api/v1';
-
-async function getStockPrice(symbol: string): Promise<number> {
-    const normalizedSymbol = symbol.toUpperCase();
-    const cachedPrice = await getCacheJson<number>(quoteCacheKey(normalizedSymbol));
-    if (cachedPrice !== null) {
-        return cachedPrice;
-    }
-
-    try {
-        const res = await fetch(`${FINNHUB_BASE}/quote?symbol=${normalizedSymbol}&token=${FINNHUB_API_KEY}`, {
-            next: { revalidate: 30 },
-        });
-        const data = await res.json();
-        const price = data?.c || 0;
-        await setCacheJson(quoteCacheKey(normalizedSymbol), price, QUOTE_CACHE_TTL_SECONDS);
-        return price;
-    } catch {
-        return 0;
-    }
-}
+import { getStockPrice, getStockPrices } from "@/lib/market-data";
 
 async function invalidatePortfolioCaches(userId: string) {
     await deleteCacheKeys([
@@ -65,11 +41,11 @@ export async function getOrCreatePortfolio(): Promise<{ success: boolean; data?:
         }
 
         const holdings = await Holding.find({ userId, shares: { $gt: 0 } }).lean();
+        const priceMap = await getStockPrices(holdings.map((holding) => holding.symbol));
 
-        // Fetch current prices for all holdings
         const holdingsWithPrices: HoldingData[] = await Promise.all(
             holdings.map(async (h) => {
-                const currentPrice = await getStockPrice(h.symbol);
+                const currentPrice = priceMap.get(h.symbol.toUpperCase()) ?? 0;
                 const currentValue = currentPrice * h.shares;
                 const pnl = currentValue - h.totalInvested;
                 const pnlPercent = h.totalInvested > 0 ? (pnl / h.totalInvested) * 100 : 0;

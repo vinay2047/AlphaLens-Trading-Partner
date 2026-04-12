@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { TrendingUp, TrendingDown } from 'lucide-react';
-import TradeModal from '@/components/portfolio/TradeModal';
+import TradeModal, { type TradeSuccessPayload } from '@/components/portfolio/TradeModal';
 import Link from 'next/link';
 import { getUsMarketStatus } from '@/lib/utils';
 
@@ -19,6 +19,16 @@ const StockTradePanel = ({ symbol, balance, currentShares }: StockTradePanelProp
     const [currentPrice, setCurrentPrice] = useState(0);
     const [loading, setLoading] = useState(true);
     const [marketStatus, setMarketStatus] = useState(() => getUsMarketStatus());
+    const [localBalance, setLocalBalance] = useState(balance);
+    const [localShares, setLocalShares] = useState(currentShares);
+
+    useEffect(() => {
+        setLocalBalance(balance);
+    }, [balance]);
+
+    useEffect(() => {
+        setLocalShares(currentShares);
+    }, [currentShares]);
 
     useEffect(() => {
         const fetchPrice = async () => {
@@ -54,6 +64,17 @@ const StockTradePanel = ({ symbol, balance, currentShares }: StockTradePanelProp
         setTradeOpen(true);
     };
 
+    const handleTradeSuccess = ({ type, shares, totalAmount }: TradeSuccessPayload) => {
+        if (type === 'BUY') {
+            setLocalBalance((prev) => Math.max(0, prev - totalAmount));
+            setLocalShares((prev) => prev + shares);
+            return;
+        }
+
+        setLocalBalance((prev) => prev + totalAmount);
+        setLocalShares((prev) => Math.max(0, prev - shares));
+    };
+
     return (
         <>
             <div className="rounded-2xl border border-gray-800 bg-gray-950/40 backdrop-blur-sm overflow-hidden">
@@ -73,13 +94,13 @@ const StockTradePanel = ({ symbol, balance, currentShares }: StockTradePanelProp
                         <div className="p-3 rounded-xl border border-gray-800 bg-black/20">
                             <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-600 mb-1.5">Balance</p>
                             <p className="text-sm font-bold text-gray-200">
-                                ${balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                                ${localBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                             </p>
                         </div>
                         <div className="p-3 rounded-xl border border-gray-800 bg-black/20">
                             <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-600 mb-1.5">Shares</p>
                             <p className="text-sm font-bold text-gray-200">
-                                {currentShares > 0 ? currentShares.toLocaleString() : '0'}
+                                {localShares > 0 ? localShares.toLocaleString() : '0'}
                             </p>
                         </div>
                     </div>
@@ -96,7 +117,7 @@ const StockTradePanel = ({ symbol, balance, currentShares }: StockTradePanelProp
                         </Button>
                         <Button
                             onClick={openSell}
-                            disabled={loading || currentShares <= 0 || !marketStatus.isOpen}
+                            disabled={loading || localShares <= 0 || !marketStatus.isOpen}
                             className="h-9 bg-transparent hover:bg-[#FF3B30]/10 text-[#FF3B30] border border-[#FF3B30]/30 hover:border-[#FF3B30]/70 text-xs font-bold rounded-xl transition-all disabled:opacity-30"
                         >
                             <TrendingDown className="h-3.5 w-3.5 mr-1.5" />
@@ -128,10 +149,11 @@ const StockTradePanel = ({ symbol, balance, currentShares }: StockTradePanelProp
                     symbol={symbol}
                     company={symbol}
                     currentPrice={currentPrice}
-                    balance={balance}
-                    currentShares={currentShares}
+                    balance={localBalance}
+                    currentShares={localShares}
                     defaultType={tradeType}
                     marketOpen={marketStatus.isOpen}
+                    onTradeSuccess={handleTradeSuccess}
                 />
             )}
         </>

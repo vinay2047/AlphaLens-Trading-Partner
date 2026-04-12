@@ -60,10 +60,10 @@ const AddFundsModal = ({ open, onClose }: { open: boolean; onClose: () => void }
             {/* Darker Backdrop with more blur */}
             <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
 
-            {/* Modal - Darker theme with emerald accents */}
-            <div className="relative z-10 w-full max-w-md rounded-[2rem] border border-gray-800 bg-[#0a0a0a] shadow-[0_0_50px_-12px_rgba(34,197,94,0.2)] overflow-hidden">
+            {/* Modal - Minimal flat theme */}
+            <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/5 bg-[#000000]/90 backdrop-blur-2xl shadow-2xl overflow-hidden">
                 
-                {/* Header: Clean Dark Background with subtle green glow */}
+                {/* Header: Clean transparent background */}
                 <div className="relative px-8 pt-8 pb-4">
                     <button
                         onClick={onClose}
@@ -73,8 +73,8 @@ const AddFundsModal = ({ open, onClose }: { open: boolean; onClose: () => void }
                     </button>
                     
                     <div className="flex flex-col items-center text-center gap-3">
-                        <div className="p-3 rounded-2xl bg-[#22c55e]/10 border border-[#22c55e]/20">
-                            <Sparkles className="h-6 w-6 text-[#22c55e]" />
+                        <div className="p-3 rounded-2xl bg-white/5 border border-white/5">
+                            <Sparkles className="h-6 w-6 text-[#10E55A]" />
                         </div>
                         <div>
                             <h2 className="text-2xl font-bold text-white tracking-tight">Add AlphaFunds</h2>
@@ -97,10 +97,10 @@ const AddFundsModal = ({ open, onClose }: { open: boolean; onClose: () => void }
                                         setAmount(preset);
                                         setIsCustom(false);
                                     }}
-                                    className={`py-4 px-4 rounded-2xl text-base font-bold transition-all duration-200 border-2 ${
+                                    className={`py-4 px-4 rounded-xl text-base font-bold transition-all duration-200 border ${
                                         !isCustom && amount === preset
-                                            ? 'bg-[#22c55e] border-[#22c55e] text-black shadow-[0_0_20px_-5px_rgba(34,197,94,0.4)]'
-                                            : 'bg-[#141414] border-gray-900 text-gray-400 hover:border-gray-700 hover:text-gray-200'
+                                            ? 'bg-[#000000] border-[#10E55A] text-[#10E55A] shadow-none'
+                                            : 'bg-transparent border-white/5 text-gray-500 hover:border-white/10 hover:text-gray-300'
                                     }`}
                                 >
                                     ${preset.toLocaleString()}
@@ -113,20 +113,20 @@ const AddFundsModal = ({ open, onClose }: { open: boolean; onClose: () => void }
                     <div className="space-y-3">
                         <button
                             onClick={() => setIsCustom(!isCustom)}
-                            className={`text-xs font-bold uppercase tracking-widest transition-colors ${isCustom ? 'text-[#22c55e]' : 'text-gray-500 hover:text-gray-400'}`}
+                            className={`text-xs font-bold uppercase tracking-widest transition-colors ${isCustom ? 'text-[#10E55A]' : 'text-gray-500 hover:text-gray-400'}`}
                         >
                             {isCustom ? '← Use Preset' : '+ Custom amount'}
                         </button>
                         
                         {isCustom && (
                             <div className="relative animate-in slide-in-from-top-2 duration-200">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#22c55e] font-bold text-lg">$</span>
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-lg">$</span>
                                 <input
                                     type="number"
                                     placeholder="0.00"
                                     value={customAmount}
                                     onChange={(e) => setCustomAmount(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-4 rounded-2xl bg-[#141414] border-2 border-gray-900 text-white placeholder:text-gray-700 focus:border-[#22c55e] focus:outline-none transition-all text-lg font-bold"
+                                    className="w-full pl-10 pr-4 py-4 rounded-xl bg-black/40 border border-white/10 text-white placeholder:text-gray-700 focus:border-[#10E55A]/50 focus:outline-none transition-all text-lg font-bold"
                                     min="1"
                                     step="0.01"
                                     autoFocus
@@ -139,7 +139,7 @@ const AddFundsModal = ({ open, onClose }: { open: boolean; onClose: () => void }
                     <Button
                         onClick={handleAddFunds}
                         disabled={loading}
-                        className="w-full h-14 bg-[#22c55e] hover:bg-[#1da850] text-black font-bold text-lg rounded-2xl shadow-lg transition-all active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
+                        className="w-full h-14 bg-[#000000] border border-[#10E55A] hover:bg-[#10E55A]/10 text-[#10E55A] hover:text-[#10E55A] font-bold text-lg rounded-xl shadow-none transition-all disabled:opacity-50"
                     >
                         {loading ? (
                             <Loader2 className="h-6 w-6 animate-spin" />
