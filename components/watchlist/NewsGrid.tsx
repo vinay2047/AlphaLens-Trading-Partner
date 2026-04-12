@@ -25,7 +25,7 @@ export default function NewsGrid({ news }: NewsGridProps) {
                         href={item.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block bg-gray-950/40 border border-white/5 rounded-2xl overflow-hidden backdrop-blur-xl hover:border-[#10E55A]/30 transition-all duration-300 group hover:-translate-y-1"
+                        className="block bg-[#000000] border border-white/5 rounded-2xl overflow-hidden shadow-sm hover:border-[#10E55A]/50 transition-all duration-300 group hover:-translate-y-1"
                     >
                         <div className="p-6 flex flex-col h-full bg-gradient-to-br from-white/[0.02] to-transparent">
                             <div className="flex items-center justify-between mb-4">

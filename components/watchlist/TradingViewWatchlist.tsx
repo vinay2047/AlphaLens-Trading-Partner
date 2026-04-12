@@ -72,9 +72,9 @@ export default function TradingViewWatchlist({ symbols }: TradingViewWatchlistPr
                                     <td className="p-5">
                                         <div className="flex items-center gap-4">
                                             {item.logo ? (
-                                                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden flex-shrink-0 shadow-lg ring-1 ring-white/10 group-hover:ring-[#10E55A]/30 transition-all">
+                                                <div className="w-12 h-12 rounded-full bg-gray-900 flex items-center justify-center overflow-hidden flex-shrink-0 ring-1 ring-white/10 group-hover:ring-[#10E55A]/30 transition-all">
                                                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                    <img src={item.logo} alt={item.symbol} className="w-8 h-8 object-contain" />
+                                                    <img src={item.logo} alt={item.symbol} className="w-8 h-8 object-contain grayscale group-hover:grayscale-0 transition-all duration-300" />
                                                 </div>
                                             ) : (
                                                 <div className="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center text-gray-300 font-bold flex-shrink-0 shadow-lg ring-1 ring-white/10 group-hover:ring-[#10E55A]/30 transition-all">

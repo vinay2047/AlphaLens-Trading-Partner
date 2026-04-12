@@ -234,16 +234,51 @@ export default function AlphaLensHero() {
         {/* New Analytics Promo Section appended to length the page */}
         <AnalyticsPromo />
         
-        {/* Simple Footer for Landing Page */}
-        <footer className="mt-20 pt-10 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-gray-500 text-sm font-medium">
-            <div className="flex items-center gap-2">
-                 <Image src="/images/alphalens-flat.png" alt="Logo" width={24} height={24} className="opacity-50 grayscale hover:grayscale-0 transition-all" />
-                 <span>© 2026 Synaptic Surge / AlphaLens. All rights reserved.</span>
+        {/* Expanded Footer for Landing Page */}
+        <footer className="mt-32 pt-16 pb-8 border-t border-white/5">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div className="md:col-span-2">
+                    <div className="flex items-center gap-3 mb-6">
+                        <Image src="/images/alphalens-flat.png" alt="Logo" width={40} height={40} className="rounded-xl border border-white/10" />
+                        <span className="font-extrabold text-xl tracking-tight text-white">AlphaLens</span>
+                    </div>
+                    <p className="text-gray-500 font-medium max-w-sm leading-relaxed mb-6">
+                        Advanced portfolio analytics, precise market tracking, and lightning-fast execution tools engineered for the modern terminal user.
+                    </p>
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#10E55A] hover:border-[#10E55A]/50 transition-colors cursor-pointer">𝕏</div>
+                        <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#10E55A] hover:border-[#10E55A]/50 transition-colors cursor-pointer">in</div>
+                        <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#10E55A] hover:border-[#10E55A]/50 transition-colors cursor-pointer">GH</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 className="text-white font-bold mb-4 tracking-tight">Platform</h4>
+                    <ul className="space-y-3 text-sm text-gray-500 font-medium">
+                        <li><Link href="/dashboard" className="hover:text-[#10E55A] transition-colors">Dashboard</Link></li>
+                        <li><Link href="/portfolio" className="hover:text-[#10E55A] transition-colors">Portfolio Analytics</Link></li>
+                        <li><Link href="/watchlist" className="hover:text-[#10E55A] transition-colors">Live Watchlist</Link></li>
+                        <li><Link href="/sign-up" className="hover:text-[#10E55A] transition-colors">Create Account</Link></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 className="text-white font-bold mb-4 tracking-tight">Resources</h4>
+                    <ul className="space-y-3 text-sm text-gray-500 font-medium">
+                        <li><Link href="/about" className="hover:text-[#10E55A] transition-colors">Technical Specs</Link></li>
+                        <li><Link href="/contact" className="hover:text-[#10E55A] transition-colors">API Documentation</Link></li>
+                        <li><Link href="/privacy" className="hover:text-[#10E55A] transition-colors">Privacy Policy</Link></li>
+                        <li><Link href="/terms" className="hover:text-[#10E55A] transition-colors">Terms of Service</Link></li>
+                    </ul>
+                </div>
             </div>
-            <div className="flex gap-6">
-                <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-                <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-                <Link href="/contact" className="hover:text-white transition-colors">API Docs</Link>
+
+            <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-gray-600 text-xs font-semibold">
+                <p>© {new Date().getFullYear()} Synaptic Surge / AlphaLens. All rights reserved.</p>
+                <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-[#10E55A] animate-pulse"></div>
+                    <span>All Systems Operational</span>
+                </div>
             </div>
         </footer>
 
