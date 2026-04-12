@@ -245,8 +245,8 @@ export async function getStockCandles(
         const token = NEXT_PUBLIC_FINNHUB_API_KEY;
         if (!token) return [];
 
-        const to   = Math.floor(Date.now() / 1000);                  // unix now
-        const from = to - daysBack * 24 * 60 * 60;                   // daysBack ago
+        const to   = Math.floor(Date.now() / 1000);
+        const from = to - daysBack * 24 * 60 * 60;
 
         const url =
             `${FINNHUB_BASE_URL}/stock/candle` +
@@ -256,16 +256,23 @@ export async function getStockCandles(
             `&to=${to}` +
             `&token=${token}`;
 
-        // Cache for 5 minutes – near real-time but avoids hammering the API
-        const data = await fetchJSON<{
-            s: string;       // status: 'ok' | 'no_data'
-            t?: number[];    // timestamps
-            o?: number[];    // open
-            h?: number[];    // high
-            l?: number[];    // low
-            c?: number[];    // close
-            v?: number[];    // volume
-        }>(url, 300);
+        // Pre-check for 403 (premium endpoint) so we don't throw noisy errors
+        const probe = await fetch(url, { cache: 'force-cache', next: { revalidate: 300 } });
+        if (probe.status === 403 || probe.status === 401) {
+            // Free plan – silently skip, anomaly detection will use /quote fallback
+            return [];
+        }
+        if (!probe.ok) return [];
+
+        const data = await probe.json() as {
+            s: string;
+            t?: number[];
+            o?: number[];
+            h?: number[];
+            l?: number[];
+            c?: number[];
+            v?: number[];
+        };
 
         if (data?.s !== 'ok' || !data.t) return [];
 
@@ -301,11 +308,18 @@ export async function getSentimentScore(
             `?symbol=${encodeURIComponent(symbol)}` +
             `&token=${token}`;
 
-        // Cache for 10 minutes
-        const data = await fetchJSON<{
+        // Pre-check for 403 (premium endpoint) before attempting to parse
+        const probe = await fetch(url, { cache: 'force-cache', next: { revalidate: 600 } });
+        if (probe.status === 403 || probe.status === 401) {
+            // Free plan doesn't include /news-sentiment – silently skip
+            return null;
+        }
+        if (!probe.ok) return null;
+
+        const data = await probe.json() as {
             buzz?: { weeklyAverage?: number };
             sentiment?: { bullishPercent?: number };
-        }>(url, 600);
+        };
 
         if (!data?.buzz && !data?.sentiment) return null;
 
@@ -314,7 +328,8 @@ export async function getSentimentScore(
             bullishPercent: data.sentiment?.bullishPercent ?? 0.5,
         };
     } catch (e) {
-        console.error('Error fetching sentiment for', symbol, e);
+        // Truly unexpected error only
+        console.error('Error fetching Finnhub sentiment for', symbol, e);
         return null;
     }
 }

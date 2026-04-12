@@ -25,10 +25,10 @@ const Header = ({ user }: { user: User }) => {
                     <Link href="/watchlist" className="rounded-lg px-4 py-2 hover:bg-gray-800 hover:text-white transition-colors duration-200">
                         Watchlist
                     </Link>
-                    
+
                     <div className="h-5 w-px bg-gray-800 mx-2 hidden lg:block"></div>
-                    
-                    <SearchCommand renderAs="button" label="Search symbols..." initialStocks={[]} />
+
+                    <SearchCommand renderAs="button" label="Search Symbol" initialStocks={[]} />
                 </nav>
 
                 <div className="flex items-center gap-4">

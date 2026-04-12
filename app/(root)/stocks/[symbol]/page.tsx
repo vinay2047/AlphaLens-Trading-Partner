@@ -4,6 +4,7 @@ import StockSentimentCard from "@/components/stocks/StockSentimentCard";
 import StockTradePanel from "@/components/stocks/StockTradePanel";
 import AIStockAnalysis from "@/components/stocks/AIStockAnalysis";
 import AnomalyBanner from "@/components/stocks/AnomalyBanner";
+import NewsSentimentMeter from "@/components/stocks/NewsSentimentMeter";
 import {
     SYMBOL_INFO_WIDGET_CONFIG,
     CANDLE_CHART_WIDGET_CONFIG,
@@ -16,6 +17,7 @@ import {
 import { auth } from '@clerk/nextjs/server';
 import { isStockInWatchlist } from '@/lib/actions/watchlist.actions';
 import { getStockSentimentInsights } from '@/lib/actions/adanos.actions';
+import { getNewsSentiment } from '@/lib/actions/sentiment.actions';
 import { getUserHoldingForSymbol, getPortfolioBalance } from '@/lib/actions/portfolio.actions';
 import { formatSymbolForTradingView } from '@/lib/utils';
 
@@ -26,11 +28,12 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
 
     const { userId } = await auth();
 
-    const [isInWatchlist, sentimentInsights, holding, balance] = await Promise.all([
+    const [isInWatchlist, sentimentInsights, holding, balance, newsSentiment] = await Promise.all([
         userId ? isStockInWatchlist(userId, symbol) : Promise.resolve(false),
         getStockSentimentInsights(symbol),
         getUserHoldingForSymbol(symbol),
         getPortfolioBalance(),
+        getNewsSentiment(symbol),
     ]);
 
     return (
@@ -84,6 +87,9 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
 
                     {/* AI Analysis */}
                     <AIStockAnalysis symbol={symbol.toUpperCase()} />
+
+                    {/* News Sentiment Meter – powered by DistilRoBERTa */}
+                    <NewsSentimentMeter data={newsSentiment} />
 
                     <StockSentimentCard insight={sentimentInsights} />
 
