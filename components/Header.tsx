@@ -28,7 +28,7 @@ const Header = ({ user }: { user: User }) => {
 
                     <div className="h-5 w-px bg-gray-800 mx-2 hidden lg:block"></div>
 
-                    <SearchCommand renderAs="button" label="Search Symbol" initialStocks={[]} />
+                    <SearchCommand renderAs="button" label="Search Symbols" initialStocks={[]} />
                 </nav>
 
                 <div className="flex items-center gap-4">

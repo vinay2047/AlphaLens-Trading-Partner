@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { CommandDialog, CommandEmpty, CommandInput, CommandList } from "@/components/ui/command"
-import {Button} from "@/components/ui/button";
-import {Loader2, Search, TrendingUp} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Loader2, Search, TrendingUp } from "lucide-react";
 import Link from "next/link";
-import {searchStocks} from "@/lib/actions/finnhub.actions";
-import {useDebounce} from "@/hooks/useDebounce";
+import { searchStocks } from "@/lib/actions/finnhub.actions";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function SearchCommand({ renderAs = 'button', label = 'Add stock', initialStocks }: SearchCommandProps) {
     const [open, setOpen] = useState(false)
@@ -29,7 +29,7 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
     }, [])
 
     const handleSearch = async () => {
-        if(!isSearchMode) return setStocks(initialStocks);
+        if (!isSearchMode) return setStocks(initialStocks);
 
         setLoading(true)
         try {
@@ -64,14 +64,13 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
                 >
                     {label}
                 </button>
-            ): (
+            ) : (
                 <Button onClick={() => setOpen(true)} className="search-btn">
                     {label}
                 </Button>
             )}
             <CommandDialog open={open} onOpenChange={setOpen} className="search-dialog">
                 <div className="search-field flex items-center gap-3">
-                    <Search className="h-4 w-4 text-slate-400" />
                     <CommandInput value={searchTerm} onValueChange={setSearchTerm} placeholder="Search symbols..." className="search-input" />
                     {loading && <Loader2 className="search-loader" />}
                 </div>
@@ -96,12 +95,12 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
                                         className="search-item-link"
                                     >
                                         <TrendingUp className="h-4 w-4 text-gray-500" />
-                                        <div  className="flex-1">
+                                        <div className="flex-1">
                                             <div className="search-item-name">
                                                 {stock.name}
                                             </div>
                                             <div className="text-sm text-gray-500">
-                                                {stock.symbol} | {stock.exchange } | {stock.type}
+                                                {stock.symbol} | {stock.exchange} | {stock.type}
                                             </div>
                                         </div>
 
