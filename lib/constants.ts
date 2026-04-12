@@ -243,6 +243,10 @@ export const TECHNICAL_ANALYSIS_WIDGET_CONFIG = (symbol: string) => ({
     height: 400,
     interval: '1h',
     largeChartUrl: '',
+    colorThemeBuy: '#10E55A',
+    colorThemeSell: '#FF3B30',
+    upColor: '#10E55A',
+    downColor: '#FF3B30',
 });
 
 export const COMPANY_PROFILE_WIDGET_CONFIG = (symbol: string) => ({
