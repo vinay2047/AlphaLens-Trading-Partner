@@ -29,7 +29,7 @@ export interface NewsSentimentData {
  * Direct server→service call avoids the self-HTTP anti-pattern and is much faster.
  */
 const SENTIMENT_SERVICE_URL =
-    process.env.SENTIMENT_SERVICE_URL || 'http://localhost:8000';
+    process.env.SENTIMENT_SERVICE_URL || 'http://localhost:8003';
 
 export async function getNewsSentiment(ticker: string): Promise<NewsSentimentData | null> {
     if (!ticker?.trim()) return null;
@@ -76,7 +76,7 @@ export async function getNewsSentiment(ticker: string): Promise<NewsSentimentDat
             percentages: {
                 positive: pct(data.score_summary?.positive ?? 0),
                 negative: pct(data.score_summary?.negative ?? 0),
-                neutral:  pct(data.score_summary?.neutral  ?? 0),
+                neutral: pct(data.score_summary?.neutral ?? 0),
             },
         };
     } catch (err) {

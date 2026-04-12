@@ -2,6 +2,7 @@
 import React, { useMemo, useState } from "react";
 import { addToWatchlist, removeFromWatchlist } from "@/lib/actions/watchlist.actions";
 import { toast } from "sonner";
+import { Star, Check, Trash2 } from "lucide-react";
 
 interface WatchlistButtonProps {
     symbol: string;
@@ -96,23 +97,26 @@ const WatchlistButton = ({
     return (
         <button
             type="button"
-            className={`watchlist-btn ${added ? "watchlist-remove" : ""} ${loading ? "opacity-70 cursor-wait" : ""}`}
+            className={`
+                relative group flex items-center justify-center gap-2.5 px-6 py-2.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 overflow-hidden
+                ${added 
+                    ? "bg-green-500/10 text-green-400 border border-green-500/30 hover:bg-green-500/20 hover:border-green-500/50 shadow-[0_0_15px_rgba(34,197,94,0.15)]" 
+                    : "bg-black/40 text-gray-300 border border-gray-800 hover:text-[#10E55A] hover:bg-[#10E55A]/10 hover:border-[#10E55A]/40  shadow-[0_0_20px_rgba(0,0,0,0.5)]"}
+                ${loading ? "opacity-50 cursor-wait" : "cursor-pointer"}
+            `}
             onClick={handleClick}
             disabled={loading}
         >
-            {showTrashIcon && added ? (
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5 mr-2"
-                >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 7h12M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m-7 4v6m4-6v6m4-6v6" />
-                </svg>
-            ) : null}
-            <span>{loading ? "Updating..." : label}</span>
+            {/* Hover Glow Sweep */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#10E55A]/5 to-transparent -translate-x-[150%] skew-x-[-30deg] group-hover:animate-[sweep_1.5s_ease-in-out_infinite]" />
+
+            {added ? (
+                showTrashIcon ? <Trash2 className="w-4 h-4 text-green-400" /> : <Check className="w-4 h-4 text-green-400" />
+            ) : (
+                <Star className={`w-4 h-4 transition-colors ${loading ? "text-gray-500" : "group-hover:text-[#10E55A]"}`} />
+            )}
+            
+            <span className="relative z-10">{loading ? "Updating..." : label}</span>
         </button>
     );
 };

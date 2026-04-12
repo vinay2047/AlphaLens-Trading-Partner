@@ -184,7 +184,7 @@ export default function NewsSentimentMeter({ data }: Props) {
                     <div className="h-10 w-10 rounded-full bg-gray-800 flex items-center justify-center text-xl">📡</div>
                     <p className="text-sm text-gray-500">Sentiment service offline</p>
                     <p className="text-xs text-gray-600">
-                        Start the Python service at <code className="text-teal-400/70">localhost:8000</code>
+                        Start the Python service at <code className="text-green-400/70">localhost:8003</code>
                     </p>
                 </div>
             </section>
