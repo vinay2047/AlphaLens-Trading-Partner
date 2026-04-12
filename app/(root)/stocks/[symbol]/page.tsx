@@ -5,6 +5,7 @@ import StockTradePanel from "@/components/stocks/StockTradePanel";
 import AIStockAnalysis from "@/components/stocks/AIStockAnalysis";
 import AnomalyBanner from "@/components/stocks/AnomalyBanner";
 import NewsSentimentMeter from "@/components/stocks/NewsSentimentMeter";
+import PricePredictionCard from "@/components/stocks/PricePredictionCard";
 import {
     SYMBOL_INFO_WIDGET_CONFIG,
     CANDLE_CHART_WIDGET_CONFIG,
@@ -84,6 +85,9 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
                         balance={balance}
                         currentShares={holding?.shares || 0}
                     />
+
+                    {/* AI Price Prediction Forecast */}
+                    <PricePredictionCard symbol={symbol.toUpperCase()} />
 
                     {/* AI Analysis */}
                     <AIStockAnalysis symbol={symbol.toUpperCase()} />
