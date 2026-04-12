@@ -8,7 +8,7 @@ import {
     TOP_STORIES_WIDGET_CONFIG
 } from "@/lib/constants";
 import Link from "next/link";
-import { TrendingUp, BarChart3, ArrowUpRight } from "lucide-react";
+import { TrendingUp, ArrowUpRight } from "lucide-react";
 
 const DashboardPage = () => {
     const scriptUrl = `https://s3.tradingview.com/external-embedding/embed-widget-`;
@@ -36,13 +36,6 @@ const DashboardPage = () => {
                     >
                         <TrendingUp className="h-4 w-4 text-teal-400" />
                         Portfolio
-                    </Link>
-                    <Link
-                        href="/leaderboard"
-                        className="flex items-center gap-2 rounded-xl bg-teal-400 px-6 py-3 text-sm font-bold text-black border border-teal-300 hover:bg-teal-300 transition-all shadow-[0_0_20px_rgba(16,229,90,0.2)]"
-                    >
-                        <BarChart3 className="h-4 w-4" />
-                        Leaderboard
                     </Link>
                 </div>
             </div>
