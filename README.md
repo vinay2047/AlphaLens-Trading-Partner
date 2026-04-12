@@ -1,4 +1,4 @@
-# AlphaLens 🚀
+# AlphaLens 
 
 AlphaLens is a premium, AI-powered trading companion designed to provide retail traders with institutional-grade insights. Built with a focus on high-fidelity UI/UX and advanced data analysis, AlphaLens bridges the gap between raw market data and actionable intelligence.
 
