@@ -28,7 +28,9 @@ const TradingViewWidget = ({ title, scriptUrl, config, height = 600, className, 
         }
     }, []);
 
-    const currentHeight = isExpanded ? windowHeight : height;
+    const HEADER_HEIGHT = 56; // 3.5rem = 56px
+    const expandedHeight = windowHeight > 0 ? windowHeight - HEADER_HEIGHT : height;
+    const currentHeight = isExpanded ? expandedHeight : height;
 
     const widgetConfig = {
         ...config,
@@ -44,8 +46,11 @@ const TradingViewWidget = ({ title, scriptUrl, config, height = 600, className, 
     };
 
     return (
-        <div className={cn("w-full transition-all duration-300", isExpanded && "fixed inset-0 z-[9999] bg-background")}>
-            <div className={cn("w-full relative group", isExpanded && "h-full w-full")}>
+        <div
+            className={cn("w-full transition-all duration-300", isExpanded && "fixed left-0 right-0 z-[9999] bg-background")}
+            style={isExpanded ? { top: `${HEADER_HEIGHT}px`, height: `${expandedHeight}px` } : {}}
+        >
+            <div className={cn("w-full relative group", isExpanded && "h-full")}>
                 {title && !isExpanded && <h3 className="font-semibold text-2xl text-gray-100 mb-5">{title}</h3>}
 
                 {allowExpand && (

@@ -37,7 +37,7 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
     ]);
 
     return (
-        <div className="flex min-h-screen p-4 md:p-6 lg:p-8">
+        <div className="flex min-h-[calc(100vh-3.5rem)] p-4 md:p-6 lg:p-8">
             <section className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
                 {/* Left column */}
                 <div className="flex flex-col gap-6">
@@ -93,11 +93,25 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
 
                     <StockSentimentCard insight={sentimentInsights} />
 
-                    <TradingViewWidget
-                        scriptUrl={`${scriptUrl}technical-analysis.js`}
-                        config={TECHNICAL_ANALYSIS_WIDGET_CONFIG(tvSymbol)}
-                        height={400}
-                    />
+                    {/* Technical Analysis - color-filtered to match #10E55A theme */}
+                    <div style={{ filter: 'url(#tv-green-filter)' }}>
+                        {/* SVG hue-rotate filter: shifts blue(~220°) → neon green(~145°) */}
+                        <svg width="0" height="0" style={{ position: 'absolute', overflow: 'hidden' }}>
+                            <defs>
+                                <filter id="tv-green-filter" colorInterpolationFilters="sRGB">
+                                    {/* Step 1: hue-rotate -75deg shifts blue→green */}
+                                    <feColorMatrix type="hueRotate" values="-75" result="hued" />
+                                    {/* Step 2: boost saturation so neon green pops like #10E55A */}
+                                    <feColorMatrix in="hued" type="saturate" values="1.4" />
+                                </filter>
+                            </defs>
+                        </svg>
+                        <TradingViewWidget
+                            scriptUrl={`${scriptUrl}technical-analysis.js`}
+                            config={TECHNICAL_ANALYSIS_WIDGET_CONFIG(tvSymbol)}
+                            height={400}
+                        />
+                    </div>
 
                     <TradingViewWidget
                         scriptUrl={`${scriptUrl}company-profile.js`}

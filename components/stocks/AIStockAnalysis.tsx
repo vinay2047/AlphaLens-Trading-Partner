@@ -6,19 +6,19 @@ import { Button } from '@/components/ui/button';
 import { Sparkles, Loader2, TrendingUp, TrendingDown, AlertTriangle, Target, BarChart3 } from 'lucide-react';
 
 const sectionIcons: Record<string, React.ReactNode> = {
-    'Summary': <BarChart3 className="h-4 w-4 text-blue-400" />,
-    'Bull Case': <TrendingUp className="h-4 w-4 text-emerald-400" />,
-    'Bear Case': <TrendingDown className="h-4 w-4 text-red-400" />,
-    'Technical Outlook': <Target className="h-4 w-4 text-amber-400" />,
-    'Verdict': <AlertTriangle className="h-4 w-4 text-purple-400" />,
+    'Summary': <BarChart3 className="h-4 w-4 text-teal-400" />,
+    'Bull Case': <TrendingUp className="h-4 w-4 text-teal-400" />,
+    'Bear Case': <TrendingDown className="h-4 w-4 text-teal-400" />,
+    'Technical Outlook': <Target className="h-4 w-4 text-teal-400" />,
+    'Verdict': <AlertTriangle className="h-4 w-4 text-teal-400" />,
 };
 
 const sectionColors: Record<string, string> = {
-    'Summary': 'border-blue-500/20 bg-blue-500/5',
-    'Bull Case': 'border-emerald-500/20 bg-emerald-500/5',
-    'Bear Case': 'border-red-500/20 bg-red-500/5',
-    'Technical Outlook': 'border-amber-500/20 bg-amber-500/5',
-    'Verdict': 'border-purple-500/20 bg-purple-500/5',
+    'Summary': 'border-gray-800 bg-black/20',
+    'Bull Case': 'border-gray-800 bg-black/20',
+    'Bear Case': 'border-gray-800 bg-black/20',
+    'Technical Outlook': 'border-gray-800 bg-black/20',
+    'Verdict': 'border-gray-800 bg-black/20',
 };
 
 function parseAnalysis(text: string) {
@@ -74,24 +74,23 @@ const AIStockAnalysis = ({ symbol }: { symbol: string }) => {
     const sections = analysis ? parseAnalysis(analysis) : [];
 
     return (
-        <div className="rounded-xl border border-gray-600 bg-gray-800 overflow-hidden">
+        <div className="group rounded-2xl border border-gray-800 bg-gray-950/40 backdrop-blur-sm transition-all duration-300 relative shadow-sm">
             {/* Header */}
-            <div className="px-5 py-4 border-b border-gray-600/50 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-teal-500/10">
+            <div className="px-5 py-4 bg-[#0a0a0a]/50 rounded-2xl group-hover:rounded-b-none group-hover:border-b border-gray-800 transition-all duration-300 relative z-10">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                        <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500/20 to-blue-500/20 border border-purple-500/30">
-                            <Sparkles className="h-4 w-4 text-purple-400" />
+                        <div className="p-2 rounded-lg border border-gray-800 bg-black/20">
+                            <Sparkles className="h-4 w-4 text-teal-400" />
                         </div>
                         <div>
                             <h3 className="text-base font-bold text-gray-100">AI Analysis</h3>
-                            <p className="text-xs text-gray-500">Powered by Gemini</p>
                         </div>
                     </div>
                     <Button
                         onClick={handleAnalyze}
                         disabled={loading}
                         size="sm"
-                        className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-medium rounded-lg text-xs px-4"
+                        className="bg-teal-500 hover:bg-teal-600 text-black font-semibold rounded-lg text-xs px-4 border border-transparent shadow-sm"
                     >
                         {loading ? (
                             <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -106,47 +105,50 @@ const AIStockAnalysis = ({ symbol }: { symbol: string }) => {
             </div>
 
             {/* Content */}
-            <div className="p-5">
-                {!analysis && !loading && !error && (
-                    <p className="text-center text-gray-500 text-sm py-4">
-                        Click &quot;Analyze&quot; to get AI-powered insights for {symbol}
-                    </p>
-                )}
+            <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-300 ease-in-out">
+                <div className="overflow-hidden">
+                    <div className="p-5">
+                        {!analysis && !loading && !error && (
+                            <p className="text-center text-gray-500 text-sm py-4">
+                                Click &quot;Analyze&quot; to get AI-powered insights for {symbol}
+                            </p>
+                        )}
 
-                {loading && (
-                    <div className="flex flex-col items-center gap-3 py-8">
-                        <div className="relative">
-                            <Loader2 className="h-8 w-8 text-purple-400 animate-spin" />
-                            <Sparkles className="h-3 w-3 text-blue-400 absolute -top-1 -right-1 animate-pulse" />
-                        </div>
-                        <p className="text-sm text-gray-400">Analyzing {symbol}...</p>
-                    </div>
-                )}
-
-                {error && (
-                    <div className="text-center py-4">
-                        <p className="text-red-400 text-sm">{error}</p>
-                    </div>
-                )}
-
-                {sections.length > 0 && !loading && (
-                    <div className="space-y-3">
-                        {sections.map((section) => (
-                            <div
-                                key={section.title}
-                                className={`rounded-lg border p-3.5 ${sectionColors[section.title] || 'border-gray-600 bg-gray-700/30'}`}
-                            >
-                                <div className="flex items-center gap-2 mb-2">
-                                    {sectionIcons[section.title] || <BarChart3 className="h-4 w-4 text-gray-400" />}
-                                    <h4 className="text-sm font-semibold text-gray-200">{section.title}</h4>
+                        {loading && (
+                            <div className="flex flex-col items-center gap-3 py-8">
+                                <div className="relative">
+                                    <Loader2 className="h-8 w-8 text-teal-400 animate-spin" />
                                 </div>
-                                <div className="text-sm text-gray-300 leading-relaxed whitespace-pre-line">
-                                    {section.content}
-                                </div>
+                                <p className="text-sm text-gray-400">Analyzing {symbol}...</p>
                             </div>
-                        ))}
+                        )}
+
+                        {error && (
+                            <div className="text-center py-4">
+                                <p className="text-red-400 text-sm">{error}</p>
+                            </div>
+                        )}
+
+                        {sections.length > 0 && !loading && (
+                            <div className="space-y-3">
+                                {sections.map((section) => (
+                                    <div
+                                        key={section.title}
+                                        className={`rounded-lg border p-3.5 ${sectionColors[section.title] || 'border-gray-600 bg-gray-700/30'}`}
+                                    >
+                                        <div className="flex items-center gap-2 mb-2">
+                                            {sectionIcons[section.title] || <BarChart3 className="h-4 w-4 text-gray-400" />}
+                                            <h4 className="text-sm font-semibold text-gray-200">{section.title}</h4>
+                                        </div>
+                                        <div className="text-sm text-gray-300 leading-relaxed whitespace-pre-line">
+                                            {section.content}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                )}
+                </div>
             </div>
         </div>
     );
