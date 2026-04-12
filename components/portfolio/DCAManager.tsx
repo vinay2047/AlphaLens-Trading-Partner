@@ -83,11 +83,11 @@ const DCAManager = () => {
     };
 
     return (
-        <div className="rounded-2xl border border-gray-800 bg-[#000000] overflow-hidden shadow-sm z-10 relative">
+        <div className="rounded-2xl border border-white/5 bg-[#000000] overflow-hidden relative">
             {/* Header */}
-            <div className="px-6 py-5 border-b border-gray-800 flex items-center justify-between">
+            <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-lg bg-[#0a0a0a] border border-gray-800">
+                    <div className="p-2 rounded-lg bg-white/5 border border-white/5">
                         <Repeat className="h-4 w-4 text-gray-400" />
                     </div>
                     <div>
@@ -100,8 +100,8 @@ const DCAManager = () => {
                     size="sm"
                     className={`rounded-lg transition-all px-4 h-9 ${
                         showForm 
-                        ? 'bg-gray-800 text-white hover:bg-gray-700' 
-                        : 'bg-teal-500 text-black font-semibold hover:bg-teal-600'
+                        ? 'bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10' 
+                        : 'bg-[#10E55A] text-black font-bold hover:bg-[#00CC47]'
                     }`}
                 >
                     {showForm ? <X className="h-4 w-4 mr-1.5" /> : <Plus className="h-4 w-4 mr-1.5" />}
@@ -111,7 +111,7 @@ const DCAManager = () => {
 
             {/* Create form */}
             {showForm && (
-                <div className="px-6 py-6 border-b border-gray-800 bg-[#050505] space-y-5 animate-in slide-in-from-top-4 duration-300">
+                <div className="px-6 py-6 border-t border-white/5 bg-white/[0.02] space-y-5 animate-in slide-in-from-top-4 duration-300">
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1.5">
                             <label className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider ml-1">Asset Symbol</label>
@@ -120,7 +120,7 @@ const DCAManager = () => {
                                 placeholder="BTC, AAPL..."
                                 value={formData.symbol}
                                 onChange={(e) => setFormData(prev => ({ ...prev, symbol: e.target.value.toUpperCase() }))}
-                                className="w-full px-4 py-2.5 text-sm rounded-lg bg-[#0a0a0a] border border-gray-800 text-gray-200 font-semibold placeholder:text-gray-600 focus:border-teal-500 focus:outline-none transition-all"
+                                className="w-full px-4 py-2.5 text-sm rounded-lg bg-black/60 border border-white/10 text-gray-200 font-semibold placeholder:text-gray-600 focus:border-[#10E55A]/50 focus:outline-none transition-all"
                             />
                         </div>
                         <div className="space-y-1.5">
@@ -130,7 +130,7 @@ const DCAManager = () => {
                                 placeholder="100"
                                 value={formData.amount}
                                 onChange={(e) => setFormData(prev => ({ ...prev, amount: parseFloat(e.target.value) || 0 }))}
-                                className="w-full px-4 py-2.5 text-sm rounded-lg bg-[#0a0a0a] border border-gray-800 text-gray-200 font-semibold focus:border-teal-500 focus:outline-none transition-all"
+                                className="w-full px-4 py-2.5 text-sm rounded-lg bg-black/60 border border-white/10 text-gray-200 font-semibold focus:border-[#10E55A]/50 focus:outline-none transition-all"
                                 min="1"
                             />
                         </div>
@@ -144,8 +144,8 @@ const DCAManager = () => {
                                     onClick={() => setFormData(prev => ({ ...prev, frequency: opt.value as DCAFormData['frequency'] }))}
                                     className={`py-2 rounded-lg text-[11px] font-semibold border transition-all ${
                                         formData.frequency === opt.value
-                                            ? 'bg-teal-500/10 border-teal-500 text-teal-400'
-                                            : 'bg-[#0a0a0a] border-gray-800 text-gray-500 hover:border-gray-700'
+                                            ? 'bg-[#10E55A]/10 border-[#10E55A] text-[#10E55A]'
+                                            : 'bg-transparent border-white/5 text-gray-500 hover:border-white/10'
                                     }`}
                                 >
                                     {opt.label}
@@ -156,7 +156,7 @@ const DCAManager = () => {
                     <Button
                         onClick={handleCreate}
                         disabled={submitting}
-                        className="w-full h-10 bg-teal-500 hover:bg-teal-600 text-black font-semibold rounded-lg text-sm transition-all"
+                        className="w-full h-10 bg-[#10E55A] hover:bg-[#00CC47] text-black font-bold rounded-lg text-sm transition-all"
                     >
                         {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Confirm Strategy'}
                     </Button>
@@ -164,10 +164,10 @@ const DCAManager = () => {
             )}
 
             {/* Plans list */}
-            <div className="divide-y divide-gray-800/50">
+            <div className="divide-y divide-white/[0.04]">
                 {loading ? (
                     <div className="py-12 text-center">
-                        <Loader2 className="h-6 w-6 text-teal-500 animate-spin mx-auto" />
+                        <Loader2 className="h-5 w-5 text-[#10E55A] animate-spin mx-auto" />
                     </div>
                 ) : plans.length === 0 ? (
                     <div className="py-16 text-center">
@@ -184,7 +184,7 @@ const DCAManager = () => {
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2">
                                         <span className="text-base font-bold text-gray-200">{plan.symbol}</span>
-                                        <span className={`text-[9px] px-2 py-0.5 rounded-md font-semibold uppercase tracking-wider ${plan.active ? 'bg-teal-500/10 text-teal-400 border border-teal-500/20' : 'bg-gray-800 text-gray-500'}`}>
+                                        <span className={`text-[9px] px-2 py-0.5 rounded-md font-bold uppercase tracking-wider ${plan.active ? 'bg-[#10E55A]/10 text-[#10E55A] border border-[#10E55A]/20' : 'bg-white/5 text-gray-500 border border-white/5'}`}>
                                             {plan.active ? 'Running' : 'Paused'}
                                         </span>
                                     </div>
@@ -193,7 +193,7 @@ const DCAManager = () => {
                                         <span className="mx-1 text-gray-800">•</span>
                                         {plan.totalExecuted} executed
                                         <span className="mx-1 text-gray-800">•</span>
-                                        <span className="text-teal-400 font-semibold">${plan.totalInvested.toLocaleString()} Total</span>
+                                        <span className="text-[#10E55A] font-semibold">${plan.totalInvested.toLocaleString()} Total</span>
                                     </p>
                                     {plan.active && (
                                         <p className="text-[10px] font-medium text-gray-600 flex items-center gap-1 pt-1 uppercase tracking-wider">

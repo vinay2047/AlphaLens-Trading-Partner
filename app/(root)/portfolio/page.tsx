@@ -247,7 +247,7 @@ const PortfolioPage = () => {
     return (
         <div className="space-y-10 relative">
              {/* Subtle ambient lighting inner page */}
-             <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-teal-900/10 blur-[100px] rounded-full pointer-events-none opacity-40 mix-blend-screen overflow-hidden"></div>
+             <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-[#10E55A]/5 blur-[100px] rounded-full pointer-events-none opacity-40 mix-blend-screen overflow-hidden"></div>
 
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
@@ -262,13 +262,13 @@ const PortfolioPage = () => {
                         className="bg-black border border-gray-800 hover:bg-gray-900 text-gray-300 rounded-lg px-4 h-10 transition-colors shadow-sm text-sm"
                         size="sm"
                     >
-                        <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin text-teal-500' : 'text-gray-500'}`} />
+                        <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin text-[#10E55A]' : 'text-gray-500'}`} />
                         Refresh
                     </Button>
                     <Button
                         onClick={() => setAddFundsOpen(true)}
                         disabled={verifyingDeposit}
-                        className="bg-teal-500 hover:bg-teal-600 text-black font-semibold rounded-lg px-6 h-10 transition-all shadow-sm text-sm"
+                        className="bg-[#10E55A] hover:bg-[#00CC47] text-black font-bold rounded-lg px-6 h-10 transition-all shadow-none text-sm"
                         size="sm"
                     >
                         {verifyingDeposit ? (
@@ -333,7 +333,7 @@ const PortfolioPage = () => {
             {/* How to trade info */}
             <div className="rounded-2xl border border-gray-800 bg-black p-6 shadow-md relative z-10 group overflow-hidden">
                 <div className="flex items-start gap-4 relative z-10">
-                    <div className="p-3 rounded-xl bg-gray-900 border border-gray-800 text-teal-500 mt-1">
+                    <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-[#10E55A] mt-1">
                         <Search className="h-5 w-5" />
                     </div>
                     <div>
