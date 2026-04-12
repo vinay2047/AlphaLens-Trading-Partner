@@ -54,7 +54,7 @@ export function getProviderConfig(
         apiKey: process.env.GEMINI_API_KEY || "",
         baseUrl:
           "https://generativelanguage.googleapis.com/v1beta/models",
-        model: process.env.GEMINI_MODEL || "gemini-2.5-flash-lite",
+        model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
       };
   }
 }
@@ -82,8 +82,9 @@ async function callGemini(
   config: AIProviderConfig
 ): Promise<string> {
   if (!config.apiKey) throw new Error("GEMINI_API_KEY is not set");
+  const validKey = config.apiKey.trim();
 
-  const url = `${config.baseUrl}/${config.model}:generateContent?key=${config.apiKey}`;
+  const url = `${config.baseUrl}/${config.model}:generateContent?key=${validKey}`;
 
   const res = await fetch(url, {
     method: "POST",
@@ -94,7 +95,8 @@ async function callGemini(
   });
 
   if (!res.ok) {
-    throw new Error(`Gemini API error: ${res.status} ${res.statusText}`);
+    const errText = await res.text().catch(() => "");
+    throw new Error(`Gemini API error: ${res.status} ${res.statusText} - ${errText}`);
   }
 
   const data = await res.json();
@@ -119,7 +121,7 @@ async function callOpenAICompatible(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${config.apiKey}`,
+      Authorization: `Bearer ${config.apiKey.trim()}`,
     },
     body: JSON.stringify({
       model: config.model,

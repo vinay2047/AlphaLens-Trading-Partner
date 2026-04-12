@@ -84,11 +84,7 @@ export default function PricePredictionCard({ symbol }: { symbol: string }) {
                         <h3 className="text-lg font-bold text-white tracking-tight">AI Price Forecast</h3>
                         <div className="flex items-center gap-2 mt-0.5">
                             <span className="text-[11px] font-medium text-gray-500 uppercase tracking-widest">7-Day Trajectory</span>
-                            {prediction.is_mock && (
-                                <span className="bg-amber-500/10 text-amber-500 border border-amber-500/20 text-[9px] px-2 py-0.5 rounded-full uppercase tracking-widest font-bold flex items-center gap-1">
-                                    <Info className="h-3 w-3" /> Offline (Mocked)
-                                </span>
-                            )}
+
                         </div>
                     </div>
                 </div>

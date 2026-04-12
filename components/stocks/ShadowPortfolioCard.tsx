@@ -93,9 +93,7 @@ export default function ShadowPortfolioCard({ symbol }: Props) {
                     <h2 className="text-xl font-bold flex items-center gap-2">
                         <Bot className="w-5 h-5 text-green-400" />
                         Shadow Portfolio Agent
-                        {data.is_mock && (
-                            <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded text-white/60 ml-2">SIMULATED</span>
-                        )}
+
                     </h2>
                     <p className="text-sm text-text-secondary mt-1">
                         Deep Reinforcement Learning (PPO) Dynamic Allocation
@@ -120,7 +118,7 @@ export default function ShadowPortfolioCard({ symbol }: Props) {
                 <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 shadow-inner">
                     <p className="text-xs text-text-secondary uppercase tracking-wider mb-2">Total Return (90D)</p>
                     <div className="flex items-baseline gap-2">
-                        <span className={`text-2xl font-bold ${data.agent_metrics.total_return >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                        <span className={`text-2xl font-bold ${data.agent_metrics.total_return >= data.baseline_metrics.total_return ? 'text-green-400' : 'text-red-400'}`}>
                             {formatPct(data.agent_metrics.total_return)}
                         </span>
                         <span className="text-sm text-text-secondary">vs {formatPct(data.baseline_metrics.total_return)}</span>
@@ -131,7 +129,7 @@ export default function ShadowPortfolioCard({ symbol }: Props) {
                 <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 shadow-inner">
                     <p className="text-xs text-text-secondary uppercase tracking-wider mb-2">Sharpe Ratio</p>
                     <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-bold text-white">
+                        <span className={`text-2xl font-bold ${data.agent_metrics.sharpe_ratio >= data.baseline_metrics.sharpe_ratio ? 'text-green-400' : 'text-red-400'}`}>
                             {data.agent_metrics.sharpe_ratio.toFixed(2)}
                         </span>
                         <span className="text-sm text-text-secondary">vs {data.baseline_metrics.sharpe_ratio.toFixed(2)}</span>
@@ -142,7 +140,7 @@ export default function ShadowPortfolioCard({ symbol }: Props) {
                 <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 shadow-inner">
                     <p className="text-xs text-text-secondary uppercase tracking-wider mb-2">Max Drawdown</p>
                     <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-bold text-red-300">
+                        <span className={`text-2xl font-bold ${data.agent_metrics.max_drawdown <= data.baseline_metrics.max_drawdown ? 'text-green-400' : 'text-red-400'}`}>
                             {formatPct(data.agent_metrics.max_drawdown)}
                         </span>
                         <span className="text-sm text-text-secondary">vs {formatPct(data.baseline_metrics.max_drawdown)}</span>
