@@ -5,7 +5,14 @@ import WatchlistStockChip from './WatchlistStockChip';
 import TradingViewWatchlist from './TradingViewWatchlist';
 import { Button } from '@/components/ui/button';
 import { ArrowDownAZ, ArrowUpZA, ArrowUpDown } from 'lucide-react';
-import { WatchlistItem } from '@/database/models/watchlist.model';
+
+type WatchlistItem = {
+    _id?: string;
+    userId: string;
+    symbol: string;
+    company: string;
+    addedAt: string;
+};
 
 interface WatchlistManagerProps {
     initialItems: WatchlistItem[]; // Using the DB model type directly or a simplified version

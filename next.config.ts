@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+    output: "standalone",
     devIndicators: false,
     /* config options here */
     images: {
@@ -31,9 +32,9 @@ const nextConfig: NextConfig = {
     typescript: {
         ignoreBuildErrors: true,
     },
-    experimental: {
-        staticGenerationRetryCount: 0
-    }
+    // experimental: {
+    //     staticGenerationRetryCount: 0
+    // }
 };
 
 export default nextConfig;

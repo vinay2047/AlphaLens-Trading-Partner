@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, TrendingUp, TrendingDown, Loader2 } from 'lucide-react';
-import { buyStock, sellStock } from '@/lib/actions/portfolio.actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
@@ -65,9 +64,20 @@ const TradeModal = ({
 
         setLoading(true);
         try {
+            const response = await fetch('/api/portfolio/trade', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type,
+                    symbol,
+                    company,
+                    shares: shareCount,
+                }),
+            });
+            const result = await response.json();
+
             if (type === 'BUY') {
-                const result = await buyStock(symbol, company, shareCount);
-                if (result.success) {
+                if (response.ok) {
                     toast.success(`Bought ${shareCount} shares of ${symbol}`, {
                         description: `Total cost: $${estimatedTotal.toFixed(2)}`,
                     });
@@ -87,8 +97,7 @@ const TradeModal = ({
                     toast.error('Buy failed', { description: result.error });
                 }
             } else {
-                const result = await sellStock(symbol, shareCount);
-                if (result.success) {
+                if (response.ok) {
                     toast.success(`Sold ${shareCount} shares of ${symbol}`, {
                         description: `Total revenue: $${estimatedTotal.toFixed(2)}`,
                     });

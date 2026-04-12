@@ -3,14 +3,13 @@ export const dynamic = "force-dynamic";
 import React, { Suspense } from 'react';
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
-import { getUserWatchlist } from '@/lib/actions/watchlist.actions';
-import { getUserAlerts } from '@/lib/actions/alert.actions';
 import { getNews } from '@/lib/actions/finnhub.actions';
 import WatchlistManager from '@/components/watchlist/WatchlistManager';
 import AlertsPanel from '@/components/watchlist/AlertsPanel';
 import NewsGrid from '@/components/watchlist/NewsGrid';
 import SearchCommand from '@/components/SearchCommand';
 import { Loader2 } from 'lucide-react';
+import { getInternalApiHeaders, getInternalApiUrl } from '@/lib/server-url';
 
 export default async function WatchlistPage() {
     const { userId } = await auth();
@@ -20,10 +19,18 @@ export default async function WatchlistPage() {
     }
 
     // Parallel data fetching
-    const [watchlistItems, alerts, news] = await Promise.all([
-        getUserWatchlist(userId),
-        getUserAlerts(userId),
-        getNews() // Initial news fetch
+    const watchlistUrl = await getInternalApiUrl('/api/watchlist');
+    const alertsUrl = await getInternalApiUrl('/api/alerts');
+    const apiHeaders = await getInternalApiHeaders();
+
+    const [watchlistRes, alertsRes, news] = await Promise.all([
+        fetch(watchlistUrl, { cache: 'no-store', headers: apiHeaders }),
+        fetch(alertsUrl, { cache: 'no-store', headers: apiHeaders }),
+        getNews()
+    ]);
+    const [watchlistItems, alerts] = await Promise.all([
+        watchlistRes.json(),
+        alertsRes.json(),
     ]);
 
     const watchlistSymbols = watchlistItems.map((item: any) => item.symbol);

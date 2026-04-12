@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { createAlert } from "@/lib/actions/alert.actions";
 import { toast } from "sonner"; // Assuming sonner is available or use existing toast
 
 interface CreateAlertModalProps {
@@ -51,12 +50,18 @@ export default function CreateAlertModal({
         e.preventDefault();
         setLoading(true);
         try {
-            await createAlert({
-                userId,
-                symbol,
-                targetPrice: parseFloat(targetPrice),
-                condition,
+            const response = await fetch('/api/alerts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    symbol,
+                    targetPrice: parseFloat(targetPrice),
+                    condition,
+                }),
             });
+            if (!response.ok) {
+                throw new Error('Failed to create alert');
+            }
             toast.success("Alert created successfully");
             setOpen?.(false);
             if (onAlertCreated) onAlertCreated();

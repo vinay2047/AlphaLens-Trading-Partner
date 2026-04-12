@@ -1,11 +1,29 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getUserDCAPlans, createDCAPlan, toggleDCAPlan, deleteDCAPlan, type DCAPlanData, type DCAFormData } from '@/lib/actions/dca.actions';
 import { Button } from '@/components/ui/button';
 import { Plus, Repeat, Pause, Play, Trash2, Loader2, X, Calendar, Activity } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+
+type DCAFormData = {
+    symbol: string;
+    company: string;
+    amount: number;
+    frequency: 'DAILY' | 'WEEKLY' | 'BIWEEKLY' | 'MONTHLY';
+};
+
+type DCAPlanData = {
+    id: string;
+    symbol: string;
+    company: string;
+    amount: number;
+    frequency: string;
+    active: boolean;
+    nextExecutionAt: string;
+    totalExecuted: number;
+    totalInvested: number;
+};
 
 const FREQUENCY_OPTIONS = [
     { value: 'DAILY', label: 'Daily', desc: 'Every day' },
@@ -24,8 +42,9 @@ const DCAManager = () => {
 
     const loadPlans = async () => {
         try {
-            const result = await getUserDCAPlans();
-            if (result.success && result.data) setPlans(result.data);
+            const response = await fetch('/api/dca', { cache: 'no-store' });
+            const data = await response.json();
+            if (response.ok) setPlans(data);
         } catch {
             toast.error('Failed to load DCA plans');
         } finally {
@@ -41,12 +60,17 @@ const DCAManager = () => {
 
         setSubmitting(true);
         try {
-            const result = await createDCAPlan({
-                ...formData,
-                symbol: formData.symbol.toUpperCase(),
-                company: formData.company || formData.symbol.toUpperCase(),
+            const response = await fetch('/api/dca', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...formData,
+                    symbol: formData.symbol.toUpperCase(),
+                    company: formData.company || formData.symbol.toUpperCase(),
+                }),
             });
-            if (result.success) {
+            const result = await response.json();
+            if (response.ok) {
                 toast.success(`DCA plan created for ${formData.symbol.toUpperCase()}`);
                 setShowForm(false);
                 setFormData({ symbol: '', company: '', amount: 100, frequency: 'WEEKLY' });
@@ -63,8 +87,13 @@ const DCAManager = () => {
     };
 
     const handleToggle = async (planId: string) => {
-        const result = await toggleDCAPlan(planId);
-        if (result.success) {
+        const response = await fetch('/api/dca', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ planId }),
+        });
+        const result = await response.json();
+        if (response.ok) {
             loadPlans();
             toast.success('Plan updated');
         } else {
@@ -73,8 +102,11 @@ const DCAManager = () => {
     };
 
     const handleDelete = async (planId: string, symbol: string) => {
-        const result = await deleteDCAPlan(planId);
-        if (result.success) {
+        const response = await fetch(`/api/dca?id=${encodeURIComponent(planId)}`, {
+            method: 'DELETE',
+        });
+        const result = await response.json();
+        if (response.ok) {
             setPlans(prev => prev.filter(p => p.id !== planId));
             toast.success(`DCA plan for ${symbol} deleted`);
         } else {
@@ -155,6 +187,7 @@ const DCAManager = () => {
                     </div>
                     <Button
                         onClick={handleCreate}
+                        type="button"
                         disabled={submitting}
                         className="w-full h-10 bg-[#10E55A] hover:bg-[#00CC47] text-black font-bold rounded-lg text-sm transition-all"
                     >

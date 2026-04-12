@@ -3,7 +3,6 @@
 import React from "react";
 import { Trash2, TrendingUp, Bell } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
-import { deleteAlert } from "@/lib/actions/alert.actions";
 
 interface AlertsPanelProps {
     alerts: any[];
@@ -13,8 +12,13 @@ interface AlertsPanelProps {
 export default function AlertsPanel({ alerts, onRefresh }: AlertsPanelProps) {
     const handleDelete = async (id: string) => {
         if (confirm("Are you sure you want to delete this alert?")) {
-            await deleteAlert(id);
-            if (onRefresh) onRefresh();
+            const response = await fetch(`/api/alerts?id=${encodeURIComponent(id)}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                onRefresh?.();
+            }
         }
     };
 

@@ -7,7 +7,6 @@ import { ArrowUp, ArrowDown, Bell } from "lucide-react";
 import CreateAlertModal from "./CreateAlertModal";
 import WatchlistButton from "@/components/WatchlistButton";
 import { formatCurrency, formatNumber } from "@/lib/utils";
-import { removeFromWatchlist } from "@/lib/actions/watchlist.actions";
 
 interface WatchlistTableProps {
     data: any[];
@@ -150,7 +149,9 @@ export default function WatchlistTable({ data, userId, onRefresh }: WatchlistTab
                                                 showTrashIcon={false}
                                                 onWatchlistChange={async (sym, added) => {
                                                     if (!added) {
-                                                        await removeFromWatchlist(userId, sym);
+                                                        await fetch(`/api/watchlist?symbol=${encodeURIComponent(sym)}`, {
+                                                            method: 'DELETE',
+                                                        });
                                                         // Update local list faster than full page refresh if you want
                                                         setStocks((curr: any[]) => curr.filter((s: any) => s.symbol !== sym));
                                                         if (onRefresh) onRefresh();

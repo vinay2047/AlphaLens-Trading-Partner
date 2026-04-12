@@ -3,7 +3,6 @@ export const dynamic = "force-dynamic";
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getOrCreatePortfolio, getTransactions } from '@/lib/actions/portfolio.actions';
 import PortfolioSummary from '@/components/portfolio/PortfolioSummary';
 import PortfolioCharts from '@/components/portfolio/PortfolioCharts';
 import HoldingsTable from '@/components/portfolio/HoldingsTable';
@@ -31,15 +30,20 @@ const PortfolioPage = () => {
         if (showRefresh) setRefreshing(true);
         try {
             const [portfolioRes, txRes] = await Promise.all([
-                getOrCreatePortfolio(),
-                getTransactions(),
+                fetch('/api/portfolio', { cache: 'no-store' }),
+                fetch('/api/portfolio/transactions', { cache: 'no-store' }),
             ]);
 
-            if (portfolioRes.success && portfolioRes.data) {
-                setPortfolio(portfolioRes.data);
+            const [portfolioData, txData] = await Promise.all([
+                portfolioRes.json(),
+                txRes.json(),
+            ]);
+
+            if (portfolioRes.ok) {
+                setPortfolio(portfolioData);
             }
-            if (txRes.success && txRes.data) {
-                setTransactions(txRes.data);
+            if (txRes.ok) {
+                setTransactions(txData);
             }
         } catch {
             toast.error('Failed to load portfolio data');

@@ -1,10 +1,20 @@
-export const dynamic = "force-dynamic";
 'use client';
+export const dynamic = "force-dynamic";
 
 import { useState, useEffect } from 'react';
-import { getLeaderboard, type LeaderboardEntry } from '@/lib/actions/leaderboard.actions';
 import { Trophy, Medal, TrendingUp, TrendingDown, Crown, Loader2, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+
+type LeaderboardEntry = {
+    rank: number;
+    userId: string;
+    displayName: string;
+    portfolioValue: number;
+    totalPnL: number;
+    totalPnLPercent: number;
+    holdingsCount: number;
+    topHolding?: string;
+};
 
 const rankStyles: Record<number, { bg: string; border: string; icon: React.ReactNode }> = {
     1: { bg: 'bg-gradient-to-r from-amber-500/15 to-yellow-500/15', border: 'border-amber-500/40', icon: <Crown className="h-5 w-5 text-amber-400" /> },
@@ -20,9 +30,10 @@ const LeaderboardPage = () => {
     const loadData = async (isRefresh = false) => {
         if (isRefresh) setRefreshing(true);
         try {
-            const result = await getLeaderboard();
-            if (result.success && result.data) {
-                setEntries(result.data);
+            const response = await fetch('/api/leaderboard', { cache: 'no-store' });
+            const data = await response.json();
+            if (response.ok) {
+                setEntries(data);
             }
         } catch {
             console.error('Failed to load leaderboard');

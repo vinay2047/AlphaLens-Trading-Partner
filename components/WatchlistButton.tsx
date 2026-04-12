@@ -1,6 +1,5 @@
 "use client";
 import React, { useMemo, useState } from "react";
-import { addToWatchlist, removeFromWatchlist } from "@/lib/actions/watchlist.actions";
 import { toast } from "sonner";
 import { Star, Check, Trash2 } from "lucide-react";
 
@@ -47,10 +46,22 @@ const WatchlistButton = ({
         try {
             if (userId) {
                 if (next) {
-                    await addToWatchlist(userId, symbol, company);
+                    const response = await fetch('/api/watchlist', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ symbol, company }),
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to add to watchlist');
+                    }
                     toast.success(`${symbol} added to watchlist`);
                 } else {
-                    await removeFromWatchlist(userId, symbol);
+                    const response = await fetch(`/api/watchlist?symbol=${encodeURIComponent(symbol)}`, {
+                        method: 'DELETE',
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to remove from watchlist');
+                    }
                     toast.success(`${symbol} removed from watchlist`);
                 }
             }

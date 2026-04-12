@@ -20,11 +20,10 @@ import {
 } from "@/lib/constants";
 
 import { auth } from '@clerk/nextjs/server';
-import { isStockInWatchlist } from '@/lib/actions/watchlist.actions';
 import { getStockSentimentInsights } from '@/lib/actions/adanos.actions';
 import { getNewsSentiment } from '@/lib/actions/sentiment.actions';
-import { getUserHoldingForSymbol, getPortfolioBalance } from '@/lib/actions/portfolio.actions';
 import { formatSymbolForTradingView } from '@/lib/utils';
+import { getInternalApiHeaders, getInternalApiUrl } from '@/lib/server-url';
 
 export default async function StockDetails({ params }: StockDetailsPageProps) {
     const { symbol } = await params;
@@ -32,12 +31,17 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
     const scriptUrl = `https://s3.tradingview.com/external-embedding/embed-widget-`;
 
     const { userId } = await auth();
+    const stockUrl = await getInternalApiUrl(`/api/stocks?symbol=${encodeURIComponent(symbol)}`);
+    const apiHeaders = await getInternalApiHeaders();
+
+    const stockRes = await fetch(stockUrl, { cache: 'no-store', headers: apiHeaders });
+    const stockData = await stockRes.json();
 
     const [isInWatchlist, sentimentInsights, holding, balance, newsSentiment] = await Promise.all([
-        userId ? isStockInWatchlist(userId, symbol) : Promise.resolve(false),
+        Promise.resolve(userId ? stockData.isInWatchlist : false),
         getStockSentimentInsights(symbol),
-        getUserHoldingForSymbol(symbol),
-        getPortfolioBalance(),
+        Promise.resolve(stockData.holding),
+        Promise.resolve(stockData.balance ?? 0),
         getNewsSentiment(symbol),
     ]);
 
