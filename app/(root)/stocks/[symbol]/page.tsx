@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import TradingViewWidget from "@/components/TradingViewWidget";
 import WatchlistButton from "@/components/WatchlistButton";
 import StockSentimentCard from "@/components/stocks/StockSentimentCard";
