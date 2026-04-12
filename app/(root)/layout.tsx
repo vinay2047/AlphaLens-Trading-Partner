@@ -34,7 +34,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
         <main className="min-h-screen bg-gray-900 text-white selection:bg-teal-500/30">
             <Header user={user} />
 
-            <div className="container mx-auto py-8 px-4 relative z-10">
+            <div className="container mx-auto pt-8 pb-4 px-4 relative z-10">
                 {children}
             </div>
 

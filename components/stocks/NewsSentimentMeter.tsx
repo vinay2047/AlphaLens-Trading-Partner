@@ -68,7 +68,7 @@ function StackedBar({ positive, neutral, negative, posCount, neuCount, negCount 
     return (
         <div className="flex flex-col gap-3">
             {/* Horizontal bar */}
-            <div className="relative flex h-7 w-full rounded-full overflow-hidden bg-gray-800/60 border border-gray-700/50 shadow-inner">
+            <div className="relative flex h-2 w-full rounded-full overflow-hidden bg-white/5 border border-white/10">
                 {segments.map(({ key, pct, count }) => (
                     <div
                         key={key}
@@ -128,9 +128,8 @@ function StackedBar({ positive, neutral, negative, posCount, neuCount, negCount 
                         onMouseLeave={() => setHovered(null)}
                     >
                         <span className="h-2 w-2 rounded-full flex-shrink-0" style={{ backgroundColor: SEG[key].color }} />
-                        <span className="text-xs font-semibold" style={{ color: SEG[key].color }}>{pct}%</span>
-                        <span className="text-[11px] text-gray-500">{SEG[key].label}</span>
-                        <span className="text-[10px] text-gray-600 hidden sm:inline">· {count}</span>
+                        <span className="text-[10px] text-gray-400 font-medium">{SEG[key].label}</span>
+                        <span className="text-[10px] font-bold" style={{ color: SEG[key].color }}>{pct}%</span>
                     </div>
                 ))}
             </div>

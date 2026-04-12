@@ -44,7 +44,7 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
     ]);
 
     return (
-        <div className="flex min-h-[calc(100vh-3.5rem)] p-4 md:p-6 lg:p-8">
+        <div className="flex flex-col flex-1 p-4 md:p-6 lg:px-8 lg:pt-8 lg:pb-0 max-w-[1440px] mx-auto w-full">
             <StockDashboardTabs
                 symbolInfo={
                     <TradingViewWidget
@@ -75,7 +75,7 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
                         scriptUrl={`${scriptUrl}advanced-chart.js`}
                         config={BASELINE_WIDGET_CONFIG(tvSymbol)}
                         className="custom-chart"
-                        height={600}
+                        height={640}
                         allowExpand={true}
                     />
                 }

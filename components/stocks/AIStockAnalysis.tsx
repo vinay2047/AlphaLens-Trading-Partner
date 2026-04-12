@@ -76,7 +76,7 @@ const AIStockAnalysis = ({ symbol }: { symbol: string }) => {
     return (
         <div className="group rounded-2xl border border-gray-800 bg-gray-950/40 backdrop-blur-sm transition-all duration-300 relative shadow-sm">
             {/* Header */}
-            <div className="px-5 py-4 bg-[#0a0a0a]/50 rounded-2xl group-hover:rounded-b-none group-hover:border-b border-gray-800 transition-all duration-300 relative z-10">
+            <div className="px-5 py-4 bg-[#0a0a0a]/50 rounded-t-2xl border-b border-gray-800 transition-all duration-300 relative z-10">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
                         <div className="p-2 rounded-lg border border-gray-800 bg-black/20">
@@ -105,13 +105,30 @@ const AIStockAnalysis = ({ symbol }: { symbol: string }) => {
             </div>
 
             {/* Content */}
-            <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-300 ease-in-out">
-                <div className="overflow-hidden">
                     <div className="p-5">
                         {!analysis && !loading && !error && (
-                            <p className="text-center text-gray-500 text-sm py-4">
-                                Click &quot;Analyze&quot; to get AI-powered insights for {symbol}
-                            </p>
+                            <div className="space-y-6">
+                                <div className="text-center py-2">
+                                    <p className="text-gray-400 text-sm font-medium">Ready to analyze {symbol}</p>
+                                    <p className="text-gray-500 text-xs mt-1">Run AI assessment for specialized market insights</p>
+                                </div>
+                                <div className="grid grid-cols-2 gap-3">
+                                    {Object.entries(sectionIcons).map(([name, icon]) => (
+                                        <div key={name} className="flex items-center gap-3 p-3 rounded-xl border border-gray-800/50 bg-black/10 opacity-50">
+                                            <div className="p-1.5 rounded-lg bg-gray-900 border border-gray-800">
+                                                {icon}
+                                            </div>
+                                            <span className="text-[11px] font-semibold text-gray-400">{name}</span>
+                                        </div>
+                                    ))}
+                                    <div className="flex items-center gap-3 p-3 rounded-xl border border-gray-800/50 bg-black/10 opacity-50 italic">
+                                        <div className="p-1.5 rounded-lg bg-gray-900 border border-gray-800">
+                                            <Sparkles className="h-4 w-4 text-teal-500/50" />
+                                        </div>
+                                        <span className="text-[11px] font-semibold text-gray-500">More...</span>
+                                    </div>
+                                </div>
+                            </div>
                         )}
 
                         {loading && (
@@ -148,8 +165,6 @@ const AIStockAnalysis = ({ symbol }: { symbol: string }) => {
                             </div>
                         )}
                     </div>
-                </div>
-            </div>
         </div>
     );
 };

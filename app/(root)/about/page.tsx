@@ -15,7 +15,7 @@ import {
 
 export const metadata = {
     title: 'About | AlphaLens',
-    description: 'The story behind AlphaLens and the team at Synaptic Surge.',
+    description: 'Learn about AlphaLens and our vision for intelligent trading tools.',
 };
 
 export default function AboutPage() {
@@ -29,12 +29,12 @@ export default function AboutPage() {
                     </div>
                 </div>
 
-                <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500 tracking-tight">
-                    Tools for Everyone.
+                <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500 tracking-tight pb-2">
+                    Smart Trading, Simplified.
                 </h1>
                 <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-light">
-                    We believe financial intelligence shouldn't be locked behind paywalls.
-                    AlphaLens is built by the community, for the community.
+                    AlphaLens provides real-time insights and portfolio management tools 
+                    designed to give every trader an edge in the market.
                 </p>
             </section>
 
@@ -42,41 +42,41 @@ export default function AboutPage() {
             <section className="grid md:grid-cols-3 gap-6 mb-24">
                 <FeatureCard
                     icon={<Globe className="text-[#10E55A]" />}
-                    title="Open Access"
-                    desc="No premium tiers for core features. Real-time data and insights available to all, forever."
+                    title="Real-time Tracking"
+                    desc="Stay on top of market movements with live data and instant portfolio updates across global markets."
                 />
                 <FeatureCard
                     icon={<Code className="text-[#10E55A]" />}
-                    title="Open Source"
-                    desc="Fully transparent codebase. Audit our algorithms, contribute features, and build with us."
+                    title="Smart Analysis"
+                    desc="Leverage advanced indicators and simplified charts to make informed decisions without the noise."
                 />
                 <FeatureCard
                     icon={<Heart className="text-[#10E55A]" />}
-                    title="Community Driven"
-                    desc="Powered by donations and volunteers. We answer to our users, not shareholders."
+                    title="User Centric"
+                    desc="Built with a focus on speed, privacy, and clarity. No clutter, just the data you need to succeed."
                 />
             </section>
 
-            {/* Story Section */}
+            {/* Vision Section */}
             <section className="grid md:grid-cols-2 gap-12 items-center mb-24 bg-gray-950/40 backdrop-blur-xl p-8 md:p-12 rounded-3xl border border-white/5 shadow-2xl">
                 <div className="space-y-6">
-                    <h2 className="text-3xl font-bold text-white">Synaptic Surge</h2>
+                    <h2 className="text-3xl font-bold text-white">The AlphaLens Vision</h2>
                     <p className="text-gray-400 leading-relaxed text-lg">
-                        AlphaLens was born from a simple frustration: why are powerful financial tools so expensive?
+                        AlphaLens was created to bridge the gap between high-end professional terminals and retail trading tools. 
                     </p>
                     <p className="text-gray-400 leading-relaxed text-lg">
-                        We are a collective of developers, designers, and financial enthusiasts working under the <span className="text-[#10E55A] font-semibold">Synaptic Surge</span> banner. Our mission is to democratize software by building high-quality, open-source alternatives to proprietary platforms.
+                        We focus on providing a seamless experience for managing your holdings, tracking your favorite stocks, and identifying trade opportunities through a clean, high-performance interface.
                     </p>
                     <div className="pt-4">
-                        <Link href="https://github.com/Open-Dev-Society" target="_blank" className="inline-flex items-center gap-2 text-[#10E55A] hover:text-white font-medium transition-colors group">
-                            Visit our GitHub <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                        <Link href="/dashboard" className="inline-flex items-center gap-2 text-[#10E55A] hover:text-white font-medium transition-colors group">
+                            Explore Dashboard <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                         </Link>
                     </div>
                 </div>
                 <div className="relative h-[400px] w-full bg-gradient-to-br from-black to-gray-900 rounded-3xl overflow-hidden border border-white/5 shadow-2xl group flex items-center justify-center">
                     <Image
                         src="/images/alphalens-flat.png"
-                        alt="AlphaLens / Synaptic Surge"
+                        alt="AlphaLens Platform"
                         width={250}
                         height={250}
                         className="object-contain opacity-60 group-hover:scale-105 transition-transform duration-700"

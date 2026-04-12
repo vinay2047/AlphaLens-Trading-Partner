@@ -78,7 +78,7 @@ export default function TermsPage() {
         {/* Footer Note */}
         <div className="text-center pt-8 border-t border-gray-800">
           <p className="text-gray-500">
-            Questions about these terms? Email us at <a href="mailto:opendevsociety@gmail.com" className="text-teal-400 hover:underline">opendevsociety@gmail.com</a>
+            Questions about these terms? Please contact our support team.
           </p>
         </div>
       </div>
