@@ -20,7 +20,6 @@ import {
 } from "@/lib/constants";
 
 import { auth } from '@clerk/nextjs/server';
-import { getStockSentimentInsights } from '@/lib/actions/adanos.actions';
 import { getNewsSentiment } from '@/lib/actions/sentiment.actions';
 import { formatSymbolForTradingView } from '@/lib/utils';
 import { getInternalApiHeaders, getInternalApiUrl } from '@/lib/server-url';
@@ -37,9 +36,8 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
     const stockRes = await fetch(stockUrl, { cache: 'no-store', headers: apiHeaders });
     const stockData = await stockRes.json();
 
-    const [isInWatchlist, sentimentInsights, holding, balance, newsSentiment] = await Promise.all([
+    const [isInWatchlist, holding, balance, newsSentiment] = await Promise.all([
         Promise.resolve(userId ? stockData.isInWatchlist : false),
-        getStockSentimentInsights(symbol),
         Promise.resolve(stockData.holding),
         Promise.resolve(stockData.balance ?? 0),
         getNewsSentiment(symbol),
@@ -93,7 +91,7 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
                 shadowPortfolio={<ShadowPortfolioCard symbol={symbol.toUpperCase()} />}
                 aiAnalysis={<AIStockAnalysis symbol={symbol.toUpperCase()} />}
                 newsSentiment={<NewsSentimentMeter data={newsSentiment} />}
-                insightCard={<StockSentimentCard insight={sentimentInsights} />}
+                insightCard={<StockSentimentCard insight={null} />}
                 technicalAnalysis={
                     <div style={{ filter: 'url(#tv-green-filter)' }}>
                         <svg width="0" height="0" style={{ position: 'absolute', overflow: 'hidden' }}>

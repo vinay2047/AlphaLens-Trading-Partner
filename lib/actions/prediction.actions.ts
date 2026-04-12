@@ -2,8 +2,7 @@
 
 import { getStockCandles } from './finnhub.actions';
 
-const ML_API_BASE = process.env.ML_API_BASE_URL || "https://dead-or-alpha-future-company-price-predictor.hf.space";
-const PREDICTION_SERVICE_URL = process.env.PREDICTION_SERVICE_URL || 'http://localhost:8000';
+const PREDICTION_SERVICE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://alpha-lens-3464.onrender.com';
 
 export type PredictionForecastDay = {
     date: string;
@@ -67,54 +66,7 @@ export async function getMLPricePrediction(symbol: string, days: number = 7): Pr
         const data = await response.json();
         return data as PredictionResponse;
     } catch (error) {
-        console.warn(`[ML Service Offline] Falling back to Gemini mock prediction for ${symbol}:`, error);
-        return generateGeminiPrediction(symbol, days);
-    }
-}
-
-async function generateGeminiPrediction(symbol: string, days: number): Promise<PredictionResponse> {
-    const { callAIProviderWithFallback } = await import('../ai-provider');
-    
-    let currentPrice = 150.0; // Default dummy
-    try {
-         const fromSec = Math.floor(Date.now() / 1000) - (86400 * 5); // 5 days ago
-         const toSec = Math.floor(Date.now() / 1000);
-         const candles = await getStockCandles(symbol, 'D', fromSec, toSec);
-         if (candles.c && candles.c.length > 0) {
-             currentPrice = candles.c[candles.c.length - 1];
-         }
-    } catch {
-         // Silently fail to keep mock fast
-    }
-
-    const prompt = `You are a financial AI. Generate a dummy stock price prediction for the ticker ${symbol.toUpperCase()} over the next ${days} days.
-The current price is roughly $${currentPrice}. Generate a realistic trajectory.
-Please respond ONLY with valid JSON matching this schema:
-{
-  "symbol": "${symbol.toUpperCase()}",
-  "current_price": ${currentPrice},
-  "predicted_price": number,
-  "price_change": number,
-  "price_change_pct": number,
-  "direction": "BULLISH" or "BEARISH",
-  "confidence": number,
-  "forecast": [
-    { "date": "YYYY-MM-DD", "price": number, "day": number }
-  ],
-  "models_used": ["Gemini (Fallback)"]
-}
-Do NOT include markdown formatting or backticks around the JSON.`;
-
-    try {
-        const text = await callAIProviderWithFallback(prompt);
-        const cleanText = text.trim().replace(/^```(?:json)?/, '').replace(/```$/, '').trim();
-        const data = JSON.parse(cleanText);
-        return {
-            ...data,
-            is_mock: true,
-        } as PredictionResponse;
-    } catch (err) {
-        console.error("Failed to parse Gemini Prediction fallback", err);
-        throw new Error("Unable to parse Gemini output for prediction");
+        console.error(`[Prediction Service Error] Failed to fetch prediction for ${symbol}:`, error);
+        throw error;
     }
 }

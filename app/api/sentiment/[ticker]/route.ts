@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const SENTIMENT_SERVICE_URL =
-    process.env.SENTIMENT_SERVICE_URL || 'http://localhost:8000';
+    process.env.NEXT_PUBLIC_API_URL || 'https://alpha-lens-3464.onrender.com';
 
 const CACHE_SECONDS = 300; // 5-minute cache per ticker
 
