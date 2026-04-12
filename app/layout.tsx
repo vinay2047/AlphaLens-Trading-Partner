@@ -20,6 +20,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "AlphaLens Trading Partner",
   description: "AlphaLens is your intelligent trading partner. Track real-time prices, manage your portfolio, trade stocks with AlphaFunds, and explore detailed company insights.",
+  icons: {
+    icon: "/images/alphalens-flat.png",
+  },
 };
 
 export default function RootLayout({
