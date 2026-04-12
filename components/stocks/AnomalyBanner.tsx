@@ -34,16 +34,16 @@ interface AnomalyBannerProps {
 
 const SEVERITY_CONFIG = {
     high: {
-        gradient:    'from-green-950/90 via-green-900/80 to-green-950/90',
-        border:      'border-green-500/80',
-        badge:       'bg-green-500 text-black shadow-green-500/60',
-        glow:        'shadow-green-500/40',
+        gradient:    'from-red-950/90 via-red-900/80 to-red-950/90',
+        border:      'border-red-500/80',
+        badge:       'bg-red-500 text-white shadow-red-500/60',
+        glow:        'shadow-red-500/40',
         pulse:       'animate-pulse',
         icon:        ShieldAlert,
-        iconColor:   'text-green-400',
-        titleColor:  'text-green-300',
-        dot:         'bg-green-400',
-        dotPulse:    'bg-green-500/80',
+        iconColor:   'text-red-400',
+        titleColor:  'text-red-300',
+        dot:         'bg-red-400',
+        dotPulse:    'bg-red-500/80',
     },
     medium: {
         gradient:    'from-emerald-950/90 via-emerald-900/80 to-emerald-950/90',
@@ -85,7 +85,7 @@ const ANOMALY_TYPE_ICONS: Record<string, React.FC<{ className?: string }>> = {
 const ACTION_STYLES: Record<string, string> = {
     'hold':         'bg-gray-700/80 text-gray-300 border border-gray-600',
     'caution':      'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40',
-    'watch closely':'bg-green-500/20 text-green-300 border border-green-500/40',
+    'watch closely':'bg-red-500/20 text-red-300 border border-red-500/40',
 };
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -206,7 +206,7 @@ export default function AnomalyBanner({
             {/* Animated top accent bar */}
             <div
                 className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${
-                    sev === 'high'   ? 'from-green-500 via-green-400 to-green-500' :
+                    sev === 'high'   ? 'from-red-500 via-red-400 to-red-500' :
                     sev === 'medium' ? 'from-emerald-500 via-emerald-400 to-emerald-500' :
                                       'from-green-600 via-green-500 to-green-600'
                 } ${cfg.pulse}`}
@@ -215,7 +215,7 @@ export default function AnomalyBanner({
             {/* Subtle corner glow */}
             <div
                 className={`absolute -top-8 -right-8 w-24 h-24 rounded-full blur-2xl opacity-20 ${
-                    sev === 'high' ? 'bg-green-500' : sev === 'medium' ? 'bg-emerald-500' : 'bg-green-600'
+                    sev === 'high' ? 'bg-red-500' : sev === 'medium' ? 'bg-emerald-500' : 'bg-green-600'
                 }`}
             />
 
@@ -223,7 +223,7 @@ export default function AnomalyBanner({
             <div className="relative px-4 py-3.5 flex items-start gap-3">
                 {/* Icon */}
                 <div className={`flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-xl
-                    ${sev === 'high'   ? 'bg-green-500/20 border border-green-500/40' :
+                    ${sev === 'high'   ? 'bg-red-500/20 border border-red-500/40' :
                       sev === 'medium' ? 'bg-emerald-500/20 border border-emerald-500/40' :
                                         'bg-green-600/20 border border-green-600/40'}
                 `}>
@@ -287,7 +287,7 @@ export default function AnomalyBanner({
             {/* ── Expanded details ── */}
             {expanded && (
                 <div className={`relative px-4 pb-3.5 border-t ${
-                    sev === 'high'   ? 'border-green-500/20' :
+                    sev === 'high'   ? 'border-red-500/20' :
                     sev === 'medium' ? 'border-emerald-500/20' :
                                       'border-green-600/20'
                 }`}>
@@ -322,7 +322,7 @@ export default function AnomalyBanner({
                                     flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg
                                     text-[11px] font-medium transition-all disabled:opacity-50
                                     ${sev === 'high'
-                                        ? 'text-green-400 hover:bg-green-500/10 border border-green-500/30 hover:border-green-500/50'
+                                        ? 'text-red-400 hover:bg-red-500/10 border border-red-500/30 hover:border-red-500/50'
                                         : sev === 'medium'
                                             ? 'text-emerald-400 hover:bg-emerald-500/10 border border-emerald-500/30 hover:border-emerald-500/50'
                                             : 'text-green-400 hover:bg-green-500/10 border border-green-500/30 hover:border-green-500/50'
@@ -346,7 +346,7 @@ export default function AnomalyBanner({
                         <div className="h-1 rounded-full bg-gray-700/60 overflow-hidden">
                             <div
                                 className={`h-full rounded-full transition-all duration-700 ${
-                                    sev === 'high'   ? 'bg-gradient-to-r from-green-600 to-green-400' :
+                                    sev === 'high'   ? 'bg-gradient-to-r from-red-600 to-red-400' :
                                     sev === 'medium' ? 'bg-gradient-to-r from-emerald-600 to-emerald-400' :
                                                       'bg-gradient-to-r from-green-700 to-green-500'
                                 }`}
