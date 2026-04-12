@@ -6,6 +6,8 @@ import AIStockAnalysis from "@/components/stocks/AIStockAnalysis";
 import AnomalyBanner from "@/components/stocks/AnomalyBanner";
 import NewsSentimentMeter from "@/components/stocks/NewsSentimentMeter";
 import PricePredictionCard from "@/components/stocks/PricePredictionCard";
+import ShadowPortfolioCard from "@/components/stocks/ShadowPortfolioCard";
+import StockDashboardTabs from "@/components/stocks/StockDashboardTabs";
 import {
     SYMBOL_INFO_WIDGET_CONFIG,
     CANDLE_CHART_WIDGET_CONFIG,
@@ -39,18 +41,23 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
 
     return (
         <div className="flex min-h-[calc(100vh-3.5rem)] p-4 md:p-6 lg:p-8">
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-                {/* Left column */}
-                <div className="flex flex-col gap-6">
-                    {/* Anomaly Detection Banner – fires on mount, auto-refreshes every 5 min */}
-                    <AnomalyBanner symbol={symbol.toUpperCase()} />
-
+            <StockDashboardTabs
+                symbolInfo={
                     <TradingViewWidget
                         scriptUrl={`${scriptUrl}symbol-info.js`}
                         config={SYMBOL_INFO_WIDGET_CONFIG(tvSymbol)}
                         height={170}
                     />
-
+                }
+                watchlistButton={
+                    <WatchlistButton
+                        symbol={symbol.toUpperCase()}
+                        company={symbol.toUpperCase()}
+                        isInWatchlist={isInWatchlist}
+                        userId={userId || undefined}
+                    />
+                }
+                candleChart={
                     <TradingViewWidget
                         scriptUrl={`${scriptUrl}advanced-chart.js`}
                         config={CANDLE_CHART_WIDGET_CONFIG(tvSymbol)}
@@ -58,7 +65,8 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
                         height={600}
                         allowExpand={true}
                     />
-
+                }
+                baseline={
                     <TradingViewWidget
                         scriptUrl={`${scriptUrl}advanced-chart.js`}
                         config={BASELINE_WIDGET_CONFIG(tvSymbol)}
@@ -66,46 +74,26 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
                         height={600}
                         allowExpand={true}
                     />
-                </div>
-
-                {/* Right column */}
-                <div className="flex flex-col gap-6">
-                    <div className="flex items-center justify-between">
-                        <WatchlistButton
-                            symbol={symbol.toUpperCase()}
-                            company={symbol.toUpperCase()}
-                            isInWatchlist={isInWatchlist}
-                            userId={userId || undefined}
-                        />
-                    </div>
-
-                    {/* Trade Panel - Buy/Sell */}
+                }
+                tradePanel={
                     <StockTradePanel
                         symbol={symbol.toUpperCase()}
                         balance={balance}
                         currentShares={holding?.shares || 0}
                     />
-
-                    {/* AI Price Prediction Forecast */}
-                    <PricePredictionCard symbol={symbol.toUpperCase()} />
-
-                    {/* AI Analysis */}
-                    <AIStockAnalysis symbol={symbol.toUpperCase()} />
-
-                    {/* News Sentiment Meter – powered by DistilRoBERTa */}
-                    <NewsSentimentMeter data={newsSentiment} />
-
-                    <StockSentimentCard insight={sentimentInsights} />
-
-                    {/* Technical Analysis - color-filtered to match #10E55A theme */}
+                }
+                anomalyBanner={<AnomalyBanner symbol={symbol.toUpperCase()} />}
+                pricePrediction={<PricePredictionCard symbol={symbol.toUpperCase()} />}
+                shadowPortfolio={<ShadowPortfolioCard symbol={symbol.toUpperCase()} />}
+                aiAnalysis={<AIStockAnalysis symbol={symbol.toUpperCase()} />}
+                newsSentiment={<NewsSentimentMeter data={newsSentiment} />}
+                insightCard={<StockSentimentCard insight={sentimentInsights} />}
+                technicalAnalysis={
                     <div style={{ filter: 'url(#tv-green-filter)' }}>
-                        {/* SVG hue-rotate filter: shifts blue(~220°) → neon green(~145°) */}
                         <svg width="0" height="0" style={{ position: 'absolute', overflow: 'hidden' }}>
                             <defs>
                                 <filter id="tv-green-filter" colorInterpolationFilters="sRGB">
-                                    {/* Step 1: hue-rotate -75deg shifts blue→green */}
                                     <feColorMatrix type="hueRotate" values="-75" result="hued" />
-                                    {/* Step 2: boost saturation so neon green pops like #10E55A */}
                                     <feColorMatrix in="hued" type="saturate" values="1.4" />
                                 </filter>
                             </defs>
@@ -116,20 +104,22 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
                             height={400}
                         />
                     </div>
-
+                }
+                companyProfile={
                     <TradingViewWidget
                         scriptUrl={`${scriptUrl}company-profile.js`}
                         config={COMPANY_PROFILE_WIDGET_CONFIG(tvSymbol)}
                         height={440}
                     />
-
+                }
+                financials={
                     <TradingViewWidget
                         scriptUrl={`${scriptUrl}financials.js`}
                         config={COMPANY_FINANCIALS_WIDGET_CONFIG(tvSymbol)}
                         height={800}
                     />
-                </div>
-            </section>
+                }
+            />
         </div>
     );
 }

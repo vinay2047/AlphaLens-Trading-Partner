@@ -29,9 +29,9 @@ export default function PricePredictionCard({ symbol }: { symbol: string }) {
 
     if (loading) {
         return (
-            <div className="rounded-2xl border border-gray-800 bg-[#000000] p-6 shadow-sm flex flex-col items-center justify-center min-h-[350px]">
-                <Loader2 className="h-8 w-8 text-teal-500 animate-spin mb-4" />
-                <p className="text-gray-400 font-medium text-sm">Initializing ML Models...</p>
+            <div className="rounded-2xl border border-green-900/40 bg-[#000000] p-6 shadow-sm flex flex-col items-center justify-center min-h-[350px]">
+                <Loader2 className="h-8 w-8 text-green-500 animate-spin mb-4" />
+                <p className="text-green-400/70 font-medium text-sm">Initializing ML Models...</p>
                 <p className="text-gray-600 text-xs mt-1">Generating 7-day forecast for {symbol}</p>
             </div>
         );
@@ -56,7 +56,7 @@ export default function PricePredictionCard({ symbol }: { symbol: string }) {
     ];
 
     const isPositive = prediction.direction === 'BULLISH';
-    const mainColor = isPositive ? '#10E55A' : '#EF4444';
+    const mainColor = '#10E55A'; // Override: strict neon green terminal theme
 
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
@@ -77,8 +77,8 @@ export default function PricePredictionCard({ symbol }: { symbol: string }) {
 
             <div className="flex items-start justify-between mb-6 relative z-10">
                 <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-lg bg-[#0a0a0a] border border-gray-800">
-                        <BrainCircuit className="h-5 w-5 text-teal-500" />
+                    <div className="p-2.5 rounded-lg bg-[#0a0a0a] border border-green-900/40">
+                        <BrainCircuit className="h-5 w-5 text-green-500" />
                     </div>
                     <div>
                         <h3 className="text-lg font-bold text-white tracking-tight">AI Price Forecast</h3>
@@ -94,7 +94,7 @@ export default function PricePredictionCard({ symbol }: { symbol: string }) {
                 </div>
                 <div className="text-right">
                     <p className="text-2xl font-bold text-white">${prediction.predicted_price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <p className={`text-sm font-semibold flex items-center justify-end gap-1 ${isPositive ? 'text-teal-400' : 'text-red-400'}`}>
+                    <p className={`text-sm font-semibold flex items-center justify-end gap-1 text-green-400`}>
                         {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                         {prediction.price_change_pct > 0 ? '+' : ''}{prediction.price_change_pct}% target
                     </p>
