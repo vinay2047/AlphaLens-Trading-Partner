@@ -463,3 +463,96 @@
 .scrollbar-hide-default::-webkit-scrollbar-thumb:hover {
     background-color: #71717A;
 }
+
+/* === Clerk Dark Theme Overrides === */
+/* Force dark backgrounds on Clerk's inline-styled elements */
+.cl-card,
+.cl-cardBox {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+.cl-formFieldInput,
+.cl-input {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border-radius: 0.75rem !important;
+}
+.cl-formFieldInput:focus,
+.cl-input:focus {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(16, 229, 90, 0.5) !important;
+    box-shadow: 0 0 0 2px rgba(16, 229, 90, 0.15) !important;
+}
+.cl-formFieldInput::placeholder {
+    color: #525252 !important;
+}
+.cl-socialButtonsBlockButton {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #e5e5e5 !important;
+    border-radius: 0.75rem !important;
+}
+.cl-socialButtonsBlockButton:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(16, 229, 90, 0.3) !important;
+}
+.cl-formButtonPrimary {
+    background-color: #10E55A !important;
+    color: #000000 !important;
+    border-radius: 0.75rem !important;
+    font-weight: 700 !important;
+    box-shadow: 0 0 20px rgba(16, 229, 90, 0.15) !important;
+}
+.cl-formButtonPrimary:hover {
+    background-color: #0fd654 !important;
+    box-shadow: 0 0 30px rgba(16, 229, 90, 0.35) !important;
+}
+.cl-footerActionLink,
+.cl-formFieldAction__password {
+    color: #10E55A !important;
+}
+.cl-footerActionLink:hover,
+.cl-formFieldAction__password:hover {
+    color: #12f060 !important;
+}
+.cl-dividerLine {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+}
+.cl-dividerText {
+    color: #525252 !important;
+}
+.cl-formFieldLabel {
+    color: #a3a3a3 !important;
+}
+.cl-headerTitle,
+.cl-headerSubtitle {
+    display: none !important;
+}
+.cl-identityPreviewText {
+    color: #d4d4d4 !important;
+}
+.cl-identityPreviewEditButton {
+    color: #10E55A !important;
+}
+.cl-alert {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    border-color: rgba(239, 68, 68, 0.2) !important;
+    color: #f87171 !important;
+    border-radius: 0.75rem !important;
+}
+.cl-footerActionText {
+    color: #737373 !important;
+}
+.cl-internal-b3fm6y {
+    background-color: transparent !important;
+}
+.cl-footer {
+    display: none !important;
+}
+/* OTP code input styling */
+.cl-otpCodeFieldInput {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
