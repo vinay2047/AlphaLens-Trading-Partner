@@ -91,11 +91,16 @@ const PortfolioPage = () => {
                     throw new Error(data.error || 'Unable to verify payment');
                 }
 
-                if (data.paymentStatus === 'paid') {
+                if (data.paymentStatus === 'paid' && data.credited) {
                     toast.success(`Successfully added $${amount} to your portfolio!`, {
                         description: 'Your AlphaFunds balance has been updated.',
                     });
-                    setTimeout(() => loadData(true), 1000);
+                    await loadData(true);
+                } else if (data.paymentStatus === 'paid') {
+                    toast.info('Payment received. Your balance will update shortly.', {
+                        description: 'Please refresh in a moment if funds are not reflected.',
+                    });
+                    await loadData(true);
                 } else {
                     toast.info('Your payment is still processing.');
                 }

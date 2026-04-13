@@ -2,14 +2,15 @@
  * AI Provider abstraction for AlphaLens.
  *
  * Supports multiple LLM backends via the AI_PROVIDER environment variable:
- *   - "gemini"  (default) – Google Gemini REST API
+ *   - "groq"    (default) – Groq Cloud (OpenAI-compatible, ultra-fast)
+ *   - "gemini"  – Google Gemini REST API
  *   - "minimax" – MiniMax (OpenAI-compatible)
  *   - "siray"   – Siray.ai (OpenAI-compatible)
  *
  * Each provider returns a plain-text string from the model.
  */
 
-export type AIProviderName = "gemini" | "minimax" | "siray";
+export type AIProviderName = "groq" | "gemini" | "minimax" | "siray";
 
 export interface AIProviderConfig {
   name: AIProviderName;
@@ -27,9 +28,17 @@ export function getProviderConfig(
   const name =
     provider ||
     (process.env.AI_PROVIDER as AIProviderName) ||
-    "gemini";
+    "groq";
 
   switch (name) {
+    case "groq":
+      return {
+        name: "groq",
+        apiKey: process.env.GROQ_API_KEY || "",
+        baseUrl: "https://api.groq.com/openai/v1",
+        model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
+      };
+
     case "minimax":
       return {
         name: "minimax",
@@ -54,25 +63,31 @@ export function getProviderConfig(
         apiKey: process.env.GEMINI_API_KEY || "",
         baseUrl:
           "https://generativelanguage.googleapis.com/v1beta/models",
-        model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
+        model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
       };
   }
 }
 
 /**
- * Get the fallback provider: if the primary is Gemini use MiniMax,
- * otherwise fall back to Gemini.
+ * Get the fallback provider. If the primary is Groq fall back to Gemini,
+ * otherwise fall back to Groq.
  */
 export function getFallbackProviderName(
   primary: AIProviderName
 ): AIProviderName {
-  if (primary === "gemini") {
-    // Prefer MiniMax as fallback when a key is available, else Siray
+  if (primary === "groq") {
+    // Fall back to Gemini when Groq fails
+    if (process.env.GEMINI_API_KEY) return "gemini";
     if (process.env.MINIMAX_API_KEY) return "minimax";
-    if (process.env.SIRAY_API_KEY) return "siray";
-    return "minimax"; // caller will see missing-key error
+    return "gemini";
   }
-  return "gemini";
+  if (primary === "gemini") {
+    if (process.env.GROQ_API_KEY) return "groq";
+    if (process.env.MINIMAX_API_KEY) return "minimax";
+    return "groq";
+  }
+  // For minimax/siray, fall back to groq
+  return "groq";
 }
 
 // ── Provider call implementations ──────────────────────────────────
@@ -159,7 +174,7 @@ export async function callAIProvider(
   if (config.name === "gemini") {
     return callGemini(prompt, config);
   }
-  // MiniMax and Siray both use OpenAI-compatible endpoints
+  // Groq, MiniMax, and Siray all use OpenAI-compatible endpoints
   return callOpenAICompatible(prompt, config);
 }
 
@@ -171,7 +186,7 @@ export async function callAIProviderWithFallback(
   prompt: string
 ): Promise<string> {
   const primaryName =
-    (process.env.AI_PROVIDER as AIProviderName) || "gemini";
+    (process.env.AI_PROVIDER as AIProviderName) || "groq";
   const fallbackName = getFallbackProviderName(primaryName);
 
   try {
